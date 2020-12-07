@@ -1,0 +1,24 @@
+{
+    "name": "tualo/bsc",
+    "description": "Tualo Office Application",
+    "type": "library",
+    "require": {
+        "pug-php/pug": "^3.4",
+        "psr/log": "^1.1",
+        "phpseclib/phpseclib": "^2.0",
+        "ramsey/uuid": "^4.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "tualo\\Office\\Basic\\": "src/"
+        },
+        "files": ["src/functions.php"]
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Hoffmann",
+            "email": "thomas.hoffmann@tualo.de"
+        }
+    ]
+}

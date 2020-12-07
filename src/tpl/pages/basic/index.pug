@@ -1,0 +1,21 @@
+doctype html
+html(lang='de')
+  head
+    block head
+      meta(charset='utf-8')
+      meta(meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no")
+      title=title
+      link(href=shortcut_iconurl, rel="SHORTCUT ICON")
+      each val, index in stylesheets
+        link(rel="stylesheet",type="text/css",href=val.filename,id=val.key)
+      each val, index in javascripts
+        script(type="text/javascript",charset="UTF-8",src=val)
+
+  body
+    block scripts
+    block body
+      block content
+    //[if IE 6]>
+      h3.bad Shit, your browser too old. Please update it.
+      <![endif]
+    
