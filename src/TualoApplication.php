@@ -22,6 +22,13 @@ class TualoApplication{
      */
     private static $javascripts = array();
     private static $javascriptsTree;
+
+    /**
+     * @var array $modules Array of all modules
+     */
+    private static $modules = array();
+    private static $modulesTree;
+
     /**
      * @var bool $runmiddlewares flag indicating that the next middleware(s) can be executed
      */
@@ -221,7 +228,6 @@ class TualoApplication{
      */
     public static function stylesheet($filename='',$position=0, $key=NULL){
         if ($filename!=''){
-            echo $key."\n";
             if (is_null($key)){ $key='ID'.count( self::$stylesheets ); }
             self::$stylesheets[] = array('position'=>$position,'filename'=>$filename,'key'=>$key);
         }
@@ -252,11 +258,49 @@ class TualoApplication{
             usort( self::$javascripts, ["tualo\Office\Basic\TualoApplication","javascript_cmp"]);
             return array_unique(array_map("self::map_filename", self::$javascripts));
 
-    }
+        }
         //usort(self::$javascripts,   "self::compare_position"  );
         
         
         return array_map("self::map_filename", self::$javascripts);
+    }
+
+    public static function module($key='',$filename='',$dependOn=array(),$pos=0){
+        if ($filename!=''){
+            self::$modules[$key] = array('key'=>$key,'filename'=>$filename,'pos'=>$pos);
+            
+            if (is_null(self::$modulesTree)){
+                self::$modulesTree = new DependTree($key);
+                self::$modulesTree->mergeChilds($dependOn);
+            }else{
+                self::$modulesTree = self::$modulesTree->append($key,$dependOn);
+            }
+
+        }else{
+            usort( self::$modules, ["tualo\Office\Basic\TualoApplication","javascript_cmp"]);
+            return array_unique(array_map("self::map_filename", self::$modules));
+
+        }
+        //usort(self::$javascripts,   "self::compare_position"  );
+        
+        
+        return array_map("self::map_filename", self::$javascripts);
+    }
+
+    public static function javascriptLoader($filedata){
+        //$filedata =  "Ext.define('TualoOffice.dashboard.controller.Application')";
+        $matches=[];
+        
+        if (preg_match("#requires:\s*\[(?P<requires>[.\n]+)\]#m",$filedata,$matches)==1){
+            print_r($matches);
+        }
+
+        if (preg_match("#define\(\'(?P<define>[\w.]+)\'#m",$filedata,$matches)==1){
+            print_r($matches);
+        }
+        echo $filedata;
+
+        //exit();
     }
 
     /**
@@ -438,8 +482,7 @@ class TualoApplication{
             ];
             $fp = explode('.',$file);
             $ext = strtolower(array_pop($fp));
-
-             
+ 
             if (array_key_exists($ext, $mime_types)){
                 TualoApplication::contenttype( $mime_types[$ext] );
             }else{
@@ -450,7 +493,7 @@ class TualoApplication{
 
         header("Last-Modified: ".gmdate("D, d M Y H:i:s", $last_modified_time)." GMT"); 
         header("Etag: $etag");  
-
+        
         if (
             (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && ( strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $last_modified_time ))
             || 
@@ -459,7 +502,7 @@ class TualoApplication{
             header("HTTP/1.1 304 Not Modified"); 
             exit; 
         } 
-
+        
         return TualoApplication::body( file_get_contents( $file ) );
     }
     
@@ -483,6 +526,7 @@ class TualoApplication{
             }
         }
 
+        
         usort(self::$middlewares,     "self::compare_position");
         
         foreach(self::$middlewares as $middleware){
@@ -521,7 +565,6 @@ class TualoApplication{
                 
             self::$called_middlewares[$middleware['key']]=1;
             try{
-
                 call_user_func_array($middleware['function'],[$path]);
                 if (self::$output===true){ }
             }catch(\Exception $e){
@@ -618,7 +661,6 @@ class TualoApplication{
     public static function end(){
         self::timing('end');
 
-        //file_put_contents(self::get('basePath').'/temp/timing.json',json_encode(self::$timing_result));
         try{
 
             if (self::$output===true){

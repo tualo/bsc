@@ -29,7 +29,8 @@ class Index implements IRoute{
                 $params = array(
                     'title'             =>  TualoApplication::get('htmltitle','tualo office'),
                     'stylesheets'       =>  TualoApplication::stylesheet(),
-                    'javascripts'       =>  TualoApplication::javascript()
+                    'javascripts'       =>  TualoApplication::javascript(),
+                    'modules'       =>  TualoApplication::module()
 
                 );
                 if (defined('SHORTCUT_ICONURL')) {

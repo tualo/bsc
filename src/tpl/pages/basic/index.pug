@@ -10,6 +10,8 @@ html(lang='de')
         link(rel="stylesheet",type="text/css",href=val.filename,id=val.key)
       each val, index in javascripts
         script(type="text/javascript",charset="UTF-8",src=val)
+      each val, index in modules
+        script(type="module",charset="UTF-8",src=val)
 
   body
     block scripts
