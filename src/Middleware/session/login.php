@@ -84,6 +84,8 @@ TualoApplication::use('TualoApplicationSession_Login',function(){
                     TualoApplication::result('client',      $_SESSION['tualoapplication']['client']);
                     TualoApplication::result('clients',     $_SESSION['tualoapplication']['clients']);
                     TualoApplication::result('dbaccess',true);
+                    
+                    
                 }
 
             }else{

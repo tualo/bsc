@@ -660,7 +660,8 @@ class TualoApplication{
      */
     public static function end(){
         self::timing('end');
-
+        //echo json_encode(self::$timing_result,JSON_PRETTY_PRINT); exit();
+        //file_put_contents(self::get('basePath').'timing.txt',json_encode(self::$timing_result,JSON_PRETTY_PRINT));
         try{
 
             if (self::$output===true){

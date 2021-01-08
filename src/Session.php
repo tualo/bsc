@@ -66,7 +66,7 @@ class Session{
       try{
         if (
                 isset($_SESSION['db']['dbuser']) 
-            &&  (!is_object($this->clientdb) || is_null($this->clientdb))
+            /*&&  (!is_object($this->clientdb) || is_null($this->clientdb))*/
         ){
 
           $this->clientdb = $this->newDBByRow($_SESSION['db']);
