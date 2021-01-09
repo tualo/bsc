@@ -3,6 +3,7 @@ namespace tualo\Office\Basic\Middleware;
 use tualo\Office\Basic\TualoApplication;
 use tualo\Office\Basic\IMiddleware;
 use tualo\Office\Basic\Route;
+
 class Router implements IMiddleware{
 
     public static function load(){

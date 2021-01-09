@@ -528,7 +528,7 @@ class TualoApplication{
 
         
         usort(self::$middlewares,     "self::compare_position");
-        
+
         foreach(self::$middlewares as $middleware){
             if (self::$runmiddlewares===true) self::callMiddlewareIntern($middleware);
             self::timing($middleware['key']);

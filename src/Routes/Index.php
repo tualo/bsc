@@ -1,5 +1,5 @@
 <?php
-namespace tualo\Office\Basic\Middleware;
+namespace tualo\Office\Basic\Routes;
 use tualo\Office\Basic\TualoApplication;
 use tualo\Office\Basic\Route;
 use tualo\Office\Basic\IRoute;
@@ -7,6 +7,7 @@ use tualo\Office\Basic\IRoute;
 
 class Index implements IRoute{
     public static function register(){
+
 
         Route::add('/',function(){
 
