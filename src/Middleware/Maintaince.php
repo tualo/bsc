@@ -1,7 +1,7 @@
 <?php
-namespace tualo\Office\Basic\Middleware;
-use tualo\Office\Basic\TualoApplication;
-use tualo\Office\Basic\IMiddleware;
+namespace Tualo\Office\Basic\Middleware;
+use Tualo\Office\Basic\TualoApplication;
+use Tualo\Office\Basic\IMiddleware;
 class Maintaince implements IMiddleware{
     public static function register(){
         TualoApplication::set('maintance', $maintance = function (){

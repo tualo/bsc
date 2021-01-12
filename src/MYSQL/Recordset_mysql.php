@@ -1,5 +1,5 @@
 <?php
-namespace tualo\Office\Basic\MYSQL;
+namespace Tualo\Office\Basic\MYSQL;
 
 /**
  * @version 1.2.001

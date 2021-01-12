@@ -1,6 +1,5 @@
 <?php
-namespace tualo\Office\Basic;
-
+namespace Tualo\Office\Basic;
 
 
 /**
@@ -255,7 +254,7 @@ class TualoApplication{
             }
 
         }else{
-            usort( self::$javascripts, ["tualo\Office\Basic\TualoApplication","javascript_cmp"]);
+            usort( self::$javascripts, ["Tualo\Office\Basic\TualoApplication","javascript_cmp"]);
             return array_unique(array_map("self::map_filename", self::$javascripts));
 
         }
@@ -277,7 +276,7 @@ class TualoApplication{
             }
 
         }else{
-            usort( self::$modules, ["tualo\Office\Basic\TualoApplication","javascript_cmp"]);
+            usort( self::$modules, ["Tualo\Office\Basic\TualoApplication","javascript_cmp"]);
             return array_unique(array_map("self::map_filename", self::$modules));
 
         }
@@ -521,7 +520,7 @@ class TualoApplication{
         
         foreach($classes as $cls){
             $class = new \ReflectionClass($cls);
-            if ( $class->implementsInterface('tualo\Office\Basic\IMiddleware') ) {
+            if ( $class->implementsInterface('Tualo\Office\Basic\IMiddleware') ) {
                 $cls::register();
             }
         }

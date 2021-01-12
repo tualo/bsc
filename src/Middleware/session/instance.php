@@ -1,6 +1,6 @@
 <?php
-use tualo\Office\Basic\TualoApplication;
-use tualo\Office\Basic\Session;
+use Tualo\Office\Basic\TualoApplication;
+use Tualo\Office\Basic\Session;
 
 TualoApplication::use('TualoApplicationSessionInit',function(){
     try{

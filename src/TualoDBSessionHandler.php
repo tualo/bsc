@@ -1,8 +1,8 @@
 <?php
 
-namespace tualo\Office\Basic;
+namespace Tualo\Office\Basic;
 
-use tualo\Office\Basic\MYSQL\Database;
+use Tualo\Office\Basic\MYSQL\Database;
 
 
 class TualoDBSessionHandler implements \SessionHandlerInterface , \SessionIdInterface {

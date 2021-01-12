@@ -1,6 +1,6 @@
 <?php
 
-namespace tualo\Office\Basic\BASIC;
+namespace Tualo\Office\Basic\BASIC;
 
 class  Database_basic{
     public  $version;

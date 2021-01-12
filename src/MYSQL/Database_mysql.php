@@ -1,8 +1,8 @@
 <?php
-namespace tualo\Office\Basic\MYSQL;
+namespace Tualo\Office\Basic\MYSQL;
 
-use tualo\Office\Basic\BASIC\Database_basic;
-use tualo\Office\Basic\MYSQL\Recordset_mysql;
+use Tualo\Office\Basic\BASIC\Database_basic;
+use Tualo\Office\Basic\MYSQL\Recordset_mysql;
 
 class Database_mysql extends Database_basic
 {

@@ -1,7 +1,7 @@
 <?php
-namespace tualo\Office\Basic\MYSQL;
+namespace Tualo\Office\Basic\MYSQL;
 
-use tualo\Office\Basic\BASIC\Recordset_mysql;
+use Tualo\Office\Basic\BASIC\Recordset_mysql;
 
 class Recordset extends Recordset_mysql{
 	function dummy(){

@@ -9,8 +9,8 @@
         "ramsey/uuid": "^4.1"
     },
     "autoload": {
-        "psr-0": {
-            "tualo\\Office\\Basic\\": "src/"
+        "psr-4": {
+            "Tualo\\Office\\Basic\\": "src/"
         },
         "files": ["src/functions.php"]
     },

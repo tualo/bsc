@@ -1,8 +1,8 @@
 <?php
-namespace tualo\Office\Basic\Middleware;
-use tualo\Office\Basic\TualoApplication;
-use tualo\Office\Basic\IMiddleware;
-use tualo\Office\Basic\Route;
+namespace Tualo\Office\Basic\Middleware;
+use Tualo\Office\Basic\TualoApplication;
+use Tualo\Office\Basic\IMiddleware;
+use Tualo\Office\Basic\Route;
 
 class Router implements IMiddleware{
 
@@ -10,7 +10,7 @@ class Router implements IMiddleware{
         $classes = get_declared_classes();
         foreach($classes as $cls){
             $class = new \ReflectionClass($cls);
-            if ( $class->implementsInterface('tualo\Office\Basic\IRoute') ) {
+            if ( $class->implementsInterface('Tualo\Office\Basic\IRoute') ) {
                 $cls::register();
             }
         }

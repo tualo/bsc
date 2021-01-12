@@ -1,5 +1,5 @@
 <?php
-use tualo\Office\Basic\TualoApplication;
+use Tualo\Office\Basic\TualoApplication;
 
 TualoApplication::use('TualoApplicationSession_Logout',function(){
     try{

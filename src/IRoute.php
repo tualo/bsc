@@ -1,5 +1,5 @@
 <?php
-namespace tualo\Office\Basic;
+namespace Tualo\Office\Basic;
 
 interface IRoute
 {

@@ -1,8 +1,8 @@
 <?php
-namespace tualo\Office\Basic\Routes;
-use tualo\Office\Basic\TualoApplication;
-use tualo\Office\Basic\Route;
-use tualo\Office\Basic\IRoute;
+namespace Tualo\Office\Basic\Routes;
+use Tualo\Office\Basic\TualoApplication;
+use Tualo\Office\Basic\Route;
+use Tualo\Office\Basic\IRoute;
 
 
 class Index implements IRoute{

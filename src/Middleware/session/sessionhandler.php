@@ -1,6 +1,6 @@
 <?php
-use tualo\Office\Basic\TualoApplication;
-use tualo\Office\Basic\TualoDBSessionHandler;
+use Tualo\Office\Basic\TualoApplication;
+use Tualo\Office\Basic\TualoDBSessionHandler;
 
 TualoApplication::use('TualoApplicationSessionHandler',function(){
     if (defined('__USE_DB_SESSION_HANLDER__')){
