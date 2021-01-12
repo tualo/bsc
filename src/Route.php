@@ -7,6 +7,7 @@ class Route{
     private static $basepath = '/';
     private static $pathNotFound = null;
     private static $methodNotAllowed = null;
+    public static $finished=false;
 
     public static function add($expression, $function, $method = 'get', $needActiveSession=false){
         if (!is_array($method)){
@@ -47,6 +48,7 @@ class Route{
     public static function runpath($path,$method){
         $path_match_found = false;
         $route_match_found = false;
+        $route_method_found = false;
 
 
         $session_is_active = !is_null(TualoApplication::get('session'))&&(TualoApplication::get('session')->getDB());
@@ -67,8 +69,7 @@ class Route{
             $route['expression'] = $route['expression'].'$';
 
             // Check path match	
-            
-            if(preg_match('#'.$route['expression'].'#',$path,$matches)){
+            if(preg_match('#'.$route['expression'].'#',$path,$matches) &&(!self::$finished) ){
                 $path_match_found = true;
                 // Check method match
 
@@ -78,9 +79,11 @@ class Route{
                         array_shift($matches);// Remove basepath
                     }
                     call_user_func_array($route['function'], array($matches));
-                    $route_match_found = true;
+                    $route_method_found = true;
                     // Do not check other routes
-                    break;
+                    if (self::$finished){
+                        break;
+                    }
                 }
             }
         }
@@ -89,16 +92,18 @@ class Route{
         if(!$route_match_found){
 
             // But a matching path exists
-            if($path_match_found){
-  //              header("HTTP/1.0 405 Method Not Allowed");
+            if(!$route_method_found){
+                header("HTTP/1.0 405 Method Not Allowed");
                 if(self::$methodNotAllowed){
                     call_user_func_array(self::$methodNotAllowed, Array($path,$method));
                 }
             }else{
+                /*
                 header("HTTP/1.0 404 Not Found");
                 if(self::$pathNotFound){
                     call_user_func_array(self::$pathNotFound, Array($path));
                 }
+                */
             }
 
         }
