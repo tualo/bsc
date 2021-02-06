@@ -51,7 +51,9 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
                     view_macc_clients.username dbuser,
                     view_macc_clients.password dbpass,
                     view_macc_clients.host dbhost,
-                    view_macc_clients.port dbport
+                    view_macc_clients.port dbport,
+                    macc_users.typ,
+                    macc_users.login login
             
                 from
                     oauth
@@ -65,6 +67,8 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
                     join loginnamen 
                         on 
                             oauth.username = loginnamen.login
+                    join macc_users 
+                            on macc_users.login = loginnamen.login
                 where
                     oauth.id = {id}
                     and (validuntil>=now() or validuntil is null)
@@ -88,7 +92,7 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
                         join macc_users_clients
                             on  oauth.username = macc_users_clients.login
                         join view_macc_clients
-                        
+
                             on macc_users_clients.client =view_macc_clients.id
                         join loginnamen 
                             on oauth.username = loginnamen.login
