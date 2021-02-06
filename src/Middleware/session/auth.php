@@ -98,7 +98,7 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
                         or validuntil is null)
             
                 ';
-                $row = $this->db->singleRow($sql,['id'=>$token]);
+                $row = $session->db->singleRow($sql,['id'=>$token]);
                 if ($row!==false){
                     $path = $session->db->singleValue('select path from oauth_path where id = {id} ',array('id'=>$token),'path');
                     if ($path!==false){
