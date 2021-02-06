@@ -20,7 +20,8 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
             if(isset($_SERVER['REDIRECT_URL'])) $parsed_url = parse_url($_SERVER['REDIRECT_URL']);
             if(isset($parsed_url['path'])){ $path = $parsed_url['path']; }else{ $path = '/'; }
     
-            if(preg_match('#/~/(?P<oauth>\w+)/'.'*#',$path,$matches)){
+            if(preg_match('#/~/(?P<oauth>\w+)/*#',$path,$matches)){
+                $_SESSION['tualoapplication']['oauth'] = $matches['oauth'];
                 if (isset($_SERVER['REDIRECT_URL'])){
                     $_SERVER['REQUEST_URI']=str_replace('/~/'.$matches['oauth'].'/','/',$_SERVER['REDIRECT_URL']);
                     unset($_SERVER['REDIRECT_URL']);
@@ -163,6 +164,20 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
                 session_commit();
                 exit();
             }
+        }elseif (
+                isset($_SESSION['tualoapplication']['loggedIn'])
+            &&  ($_SESSION['tualoapplication']['loggedIn']===true)
+            &&  isset($_SESSION['tualoapplication']['oauth'])
+            &&  (!is_null($session))
+        ){
+
+            if (isset($_SERVER['REDIRECT_URL'])){
+                $_SERVER['REQUEST_URI']=str_replace('/~/'.$_SESSION['tualoapplication']['oauth'].'/','/',$_SERVER['REDIRECT_URL']);
+                unset($_SERVER['REDIRECT_URL']);
+            }else{
+                $_SERVER['REQUEST_URI']=str_replace('/~/'.$_SESSION['tualoapplication']['oauth'].'/','/',$_SERVER['REQUEST_URI']);
+            }
+
         }
     }catch(\Exception $e){
         TualoApplication::set('maintanceMode','on');
