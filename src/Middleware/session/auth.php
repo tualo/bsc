@@ -92,7 +92,7 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
                         join loginnamen 
                             on oauth.username = loginnamen.login
                         join macc_users 
-                            on macc_users.id = loginnamen.login
+                            on macc_users.login = loginnamen.login
                     where
                         oauth.id = {id}
                         and oauth.client = \'*\'
