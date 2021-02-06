@@ -71,31 +71,32 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
                 union 
             
                     select
-                    oauth.id,
-                    macc_users_clients.client dbname,
-                    oauth.username,
-                    concat(loginnamen.vorname,\' \',loginnamen.nachname) fullname, 
-                    view_macc_clients.username dbuser,
-                    view_macc_clients.password dbpass,
-                    view_macc_clients.host dbhost,
-                    view_macc_clients.port dbport
+                        oauth.id,
+                        macc_users_clients.client dbname,
+                        oauth.username,
+                        concat(loginnamen.vorname,\' \',loginnamen.nachname) fullname, 
+                        view_macc_clients.username dbuser,
+                        view_macc_clients.password dbpass,
+                        view_macc_clients.host dbhost,
+                        view_macc_clients.port dbport,
+                        macc_users.typ,
+                        macc_users.id login
             
                     from
-                    oauth
-                    join
-                    macc_users_clients
-                    on 
-                    oauth.username = macc_users_clients.login
-                    join
-                    view_macc_clients
-                    on macc_users_clients.client =view_macc_clients.id
-                    join
-                    loginnamen on oauth.username = loginnamen.login
+                        oauth
+                        join macc_users_clients
+                            on  oauth.username = macc_users_clients.login
+                        join view_macc_clients
+                            on macc_users_clients.client =view_macc_clients.id
+                        join loginnamen 
+                            on oauth.username = loginnamen.login
+                        join macc_users 
+                            on macc_users.id = loginnamen.login
                     where
-                    oauth.id = {id}
-                    and oauth.client = \'*\'
-                    and (validuntil>=now()
-                        or validuntil is null)
+                        oauth.id = {id}
+                        and oauth.client = \'*\'
+                        and (validuntil>=now()
+                            or validuntil is null)
             
                 ';
                 $row = $session->db->singleRow($sql,['id'=>$token]);
@@ -119,21 +120,6 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
                         $byPath = true;
                         $_SESSION['session_condition']['path']=TualoApplication::get('requestPath').$path;
                     }
-
-                    /*
-if (isset($_REQUEST['oauth_client'])&&( count($oauth)>1 )) $this->selectDBByClient( $_REQUEST['oauth_client'] );
-
-
-
-          if (!isset($_REQUEST['cmp'])&&(isset($_REQUEST['changetoken']) )&&($_REQUEST['changetoken']==1)){
-            $token = $this->changeToken($token);
-            $this->db->direct('update oauth set lastcontact=now() where id={id}',array('id'=>$token) );
-            $validUntil = date('Y-m-d H:i:s',time() + 3600*24*30); // 30 Tage
-            $this->oauthValidUntil($token,$validUntil);
-            echo json_encode(array('success'=>true,'token'=>$token,'msg'=>'token changed'));
-            exit();
-          }
-                    */
 
                     
                     $_SESSION['db']['dbhost'] = $row['dbhost'];
