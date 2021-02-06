@@ -164,10 +164,10 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
                     TualoApplication::result('msg','Anmeldung fehlerhaft');
                 }
 
-                TualoApplication::contenttype('application/json');
-                TualoApplication::end();
+                //TualoApplication::contenttype('application/json');
+                //TualoApplication::end();
                 session_commit();
-                exit();
+                //exit();
             }
         }elseif (
                 isset($_SESSION['tualoapplication']['loggedIn'])
