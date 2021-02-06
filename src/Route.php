@@ -52,7 +52,6 @@ class Route{
 
 
         $session_is_active = !is_null(TualoApplication::get('session'))&&(TualoApplication::get('session')->getDB());
-
         foreach(self::$routes as $route){
 
             if (($session_is_active===false)&&($route['needActiveSession']===true)){
@@ -72,7 +71,7 @@ class Route{
             if(preg_match('#'.$route['expression'].'#',$path,$matches) &&(!self::$finished) ){
                 $path_match_found = true;
                 // Check method match
-
+                
                 if(strtolower($method) == strtolower($route['method'])){
                     array_shift($matches);// Always remove first element. This contains the whole string
                     if(self::$basepath!=''&&self::$basepath!='/'){

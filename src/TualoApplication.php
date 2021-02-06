@@ -1,6 +1,9 @@
 <?php
 namespace Tualo\Office\Basic;
 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
 
 /**
  * TualoApplication Class
@@ -69,6 +72,7 @@ class TualoApplication{
     private static $time_start = 0;
     private static $json_timing = false;
     private static $total_time_start = 0;
+    private static $logger = [];
 
 
     private static function map_filename($item){ return $item['filename'];}
@@ -77,6 +81,19 @@ class TualoApplication{
             return 0;
         }
         return ($a['position'] < $b['position']) ? -1 : 1;
+    }
+
+    public static function logger($channel)
+    {
+        if (!isset(self::$logger[$channel])){
+
+            $log = new Logger($channel);
+            if (defined('__LOGGER_FILE__')){
+                $log->pushHandler(new StreamHandler(__LOGGER_FILE__, Logger::WARNING));
+            }
+            self::$logger[$channel] = $log;
+        }
+        return self::$logger[$channel];
     }
     
     public static function showDebug($var){

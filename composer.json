@@ -6,7 +6,8 @@
         "pug-php/pug": "^3.4",
         "psr/log": "^1.1",
         "phpseclib/phpseclib": "^2.0",
-        "ramsey/uuid": "^4.1"
+        "ramsey/uuid": "^4.1",
+        "monolog/monolog": "*"
     },
     "autoload": {
         "psr-4": {
