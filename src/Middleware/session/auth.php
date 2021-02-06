@@ -88,6 +88,7 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
                         join macc_users_clients
                             on  oauth.username = macc_users_clients.login
                         join view_macc_clients
+                        
                             on macc_users_clients.client =view_macc_clients.id
                         join loginnamen 
                             on oauth.username = loginnamen.login
