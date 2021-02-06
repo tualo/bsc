@@ -1,4 +1,6 @@
 <?php
+use Tualo\Office\Basic\TualoApplication;
+
 TualoApplication::use('TualoApplicationSession_Auth',function(){
     try{
         $session = TualoApplication::get('session');
