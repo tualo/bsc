@@ -1,5 +1,5 @@
 <?php
-TualoApplication::use('TualoApplicationSession_Login',function(){
+TualoApplication::use('TualoApplicationSession_Auth',function(){
     try{
         $session = TualoApplication::get('session');
 
