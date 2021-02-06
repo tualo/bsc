@@ -81,7 +81,7 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
                         view_macc_clients.host dbhost,
                         view_macc_clients.port dbport,
                         macc_users.typ,
-                        macc_users.id login
+                        macc_users.login login
             
                     from
                         oauth
