@@ -50,9 +50,12 @@ class Route{
         $route_match_found = false;
         $route_method_found = false;
 
+        TualoApplication::timing("start routes loop",'');
 
-        $session_is_active = !is_null(TualoApplication::get('session'))&&(TualoApplication::get('session')->getDB());
+        //$session_is_active = !is_null(TualoApplication::get('session'))&&(TualoApplication::get('session')->getDB());
+        $session_is_active = (isset($_SESSION['tualoapplication']['loggedIn'])  &&  ($_SESSION['tualoapplication']['loggedIn']===true));
         foreach(self::$routes as $route){
+            TualoApplication::timing("route expression (".$route['expression']." - ".$route['method']." request ".$path." - ".$method.")");
 
             if (($session_is_active===false)&&($route['needActiveSession']===true)){
                 continue; 
@@ -74,10 +77,14 @@ class Route{
                 
                 if(strtolower($method) == strtolower($route['method'])){
                     array_shift($matches);// Always remove first element. This contains the whole string
+                    TualoApplication::timing("route expression array_shift matches");
                     if(self::$basepath!=''&&self::$basepath!='/'){
                         array_shift($matches);// Remove basepath
                     }
-                    call_user_func_array($route['function'], array($matches));
+                    TualoApplication::timing("route before call_user_func_array");
+                    //call_user_func_array($route['function'], array($matches));
+                    $route['function']($matches);
+                    TualoApplication::timing("after call_user_func_array");
                     $route_method_found = true;
                     // Do not check other routes
                     if (self::$finished){

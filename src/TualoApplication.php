@@ -204,7 +204,9 @@ class TualoApplication{
         if (self::$total_time_start==0) self::$total_time_start=microtime(true); 
         $time_end = microtime(true);
         self::$timing_result[] = array('key'=>$key,'total'=>$time_end-self::$total_time_start,'last'=>$time_end-self::$time_start,'data'=>$data);
+        self::logger('TualoApplicationTiming')->error(number_format($time_end-self::$total_time_start,5)."s ".number_format($time_end-self::$time_start,5)."s (".$key.")");
         self::$time_start=$time_end;
+
     }
 
 
@@ -531,7 +533,7 @@ class TualoApplication{
      * @return $this
      */
     public static function run(){
-        self::timing('run');
+        self::timing('run start middlewares');
         
         $classes = get_declared_classes();
         
@@ -553,6 +555,7 @@ class TualoApplication{
             self::end();
         }
         
+        self::timing('run end middlewares');
     }
 
     public static function runMiddleware($name){
