@@ -13,7 +13,7 @@ class Index implements IRoute{
 
             TualoApplication::contenttype('text/html');
             if (!file_exists(TualoApplication::get('cachePath').'/pugcahe')){
-                mkdir(TualoApplication::get('cachePath').'/pugcahe');
+                mkdir(TualoApplication::get('cachePath').'/pugcahe',0777,true);
             }
             
             $pug = new \Pug([
