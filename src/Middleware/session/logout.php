@@ -1,6 +1,6 @@
 <?php
 use Tualo\Office\Basic\TualoApplication;
-
+/*
 TualoApplication::use('TualoApplicationSession_Logout',function(){
     try{
         $session = TualoApplication::get('session');
@@ -24,4 +24,4 @@ TualoApplication::use('TualoApplicationSession_Logout',function(){
         TualoApplication::addError($e->getMessage());
     }
 },$middlewareOrder,[],true);
-
+*/

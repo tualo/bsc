@@ -1,6 +1,7 @@
 <?php
 
 namespace Tualo\Office\Basic;
+use Tualo\Office\Basic\TualoApplication;
 
 
 class Session{
@@ -33,10 +34,13 @@ class Session{
     }
 
     private function newDBByRow($row){
+      /*
       if (defined('__DB_SSL_KEY__')&&defined('__DB_SSL_CERT__')&&defined('__DB_SSL_CA__')){
         return new MYSQL\Database($row['dbuser'],$row['dbpass'],$row['dbname'],$row['dbhost'],$row['dbport'],__DB_SSL_KEY__,__DB_SSL_CERT__,__DB_SSL_CA__);
       }
-      return new MYSQL\Database($row['dbuser'],$row['dbpass'],$row['dbname'],$row['dbhost'],$row['dbport']);
+      */
+      $db = new MYSQL\Database($row['dbuser'],$row['dbpass'],$row['dbname'],$row['dbhost'],$row['dbport']);
+      return $db;
     }
 
 
@@ -49,13 +53,20 @@ class Session{
 
 
       if(defined('__SESSION_DSN__')&&defined('__SESSION_USER__')&&defined('__SESSION_PASSWORD__')&&defined('__SESSION_HOST__')&&defined('__SESSION_PORT__')){
-        $this->db = $this->newDBByRow([
-          'dbhost'=>__SESSION_HOST__,
-          'dbpass'=>__SESSION_PASSWORD__,
-          'dbuser'=>__SESSION_USER__,
-          'dbname'=>__SESSION_DSN__,
-          'dbport'=>__SESSION_PORT__
-        ]);
+        $db = null;
+        try{
+          $this->db = $this->newDBByRow([
+            'dbhost'=>__SESSION_HOST__,
+            'dbpass'=>__SESSION_PASSWORD__,
+            'dbuser'=>__SESSION_USER__,
+            'dbname'=>__SESSION_DSN__,
+            'dbport'=>__SESSION_PORT__
+          ]);
+        }catch(\Exception $e){
+          echo "Bitte richten Sie die Sitzungsdatenbank ein.";
+          exit();
+
+        }
       }
       if (is_object($this->db)) $this->db->mysqli->set_charset('utf8');
     }
@@ -101,19 +112,17 @@ class Session{
             $this->clientdb->execute_with_hash('set @sessionseniority = getSessionCurrentSeniority() ',$_SESSION);
           }catch(\Exception $e){ }
           
-          try{
+          $this->clientdb->execute_with_hash('SET lc_time_names = {lc_time_name};',array('lc_time_name'=>'de_DE'));
+          $this->clientdb->execute_with_hash('set @sessiondb = {sessiondb}',array('sessiondb'=>$this->db->dbname));
 
-              $this->clientdb->execute_with_hash('SET lc_time_names = {lc_time_name};',array('lc_time_name'=>'de_DE'));
-              $this->clientdb->execute_with_hash('set @sessiondb = {sessiondb}',array('sessiondb'=>$this->db->dbname));
+          $this->db->execute_with_hash('set @sessionuser = {username}',$_SESSION);
+          $this->db->execute_with_hash('set @sessionuserfullname = {fullname}',$_SESSION);
 
-              $this->db->execute_with_hash('set @sessionuser = {username}',$_SESSION);
-              $this->db->execute_with_hash('set @sessionuserfullname = {fullname}',$_SESSION);
-
-          }catch(\Exception $e){ echo $e->getMessage(); }
 
         }
       }catch(\Exception $e){
-        echo $e->getMessage();
+        //echo $e->getMessage();
+        TualoApplication::logger('TualoApplication')->error($e->getMessage(),$_SESSION['db']);
       }
       return $this->clientdb;
     }

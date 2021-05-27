@@ -54,24 +54,24 @@ class Database_mysql extends Database_basic
 
         if ( ($ssl_key!='') && ($ssl_cert!='') && ($ssl_ca!='') ){
             $this->mysqli->ssl_set($ssl_key,$ssl_cert,$ssl_ca ,NULL,NULL);
-            $c = $this->mysqli->real_connect($host, ($user), ($pass), $db, $port,NULL, MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT );
+            $c = @$this->mysqli->real_connect($host, ($user), ($pass), $db, $port,NULL, MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT );
         }else{
-            $c = $this->mysqli->real_connect($host, ($user), ($pass), $db, $port );
+            $c = @$this->mysqli->real_connect($host, ($user), ($pass), $db, $port );
         }
         
         if (!$c){
             throw new \Exception('Verbindungsfehler, die Datenbank kann nicht erreicht werden ('.$this->mysqli->connect_error.') '.$this->mysqli->connect_errno);
         }else{
-            $this->mysqli->set_charset('latin1');
-            $this->charset = 'latin1';
+            $this->mysqli->set_charset('utf8');
+            $this->charset = 'utf8';
             if ($this->mysqli->connect_errno) {
                 
             } else {
-            $this->host=$host;
-            $this->user=$user;
-            $this->pass=$pass;
-            $this->db=$db;
-            $this->port=$port;
+                $this->host=$host;
+                $this->user=$user;
+                $this->pass=$pass;
+                $this->db=$db;
+                $this->port=$port;
             }
 
             $this->autocommit($this->commit_state);
