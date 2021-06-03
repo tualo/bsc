@@ -2,6 +2,7 @@
 
 
 -- SOURCE FILE: ./src//000-ddl/000.ddl.sql 
+call addfieldifnotexists('ds_column_form_label','fieldgroup','varchar(36) default ""');
 
 create table if not exists `virtual_table_jointypes`(
     id varchar(25) not null primary key

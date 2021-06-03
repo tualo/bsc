@@ -2626,6 +2626,18 @@ group by
 -- SOURCE FILE: ./src//500-ui/060-form/066.view_ds_form.sql 
 delimiter ;
 
+
+create or replace view view_ds_form_requires as
+select 
+        ds_reference_tables.reference_table_name `table_name`,
+        JSON_ARRAYAGG( concat('Tualo.DataSets.form.',UCASE(LEFT(ds_reference_tables.table_name, 1)), lower(SUBSTRING(ds_reference_tables.table_name, 2)))) requires
+from 
+        ds_reference_tables 
+where 
+        ds_reference_tables.active=1
+group by ds_reference_tables.reference_table_name
+;
+
 create or replace view view_ds_form as
 select 
     concat(
@@ -2643,7 +2655,15 @@ select
 
             "layout", JSON_OBJECT( 'type', 'card','animation' , JSON_OBJECT('type','slide') ),
             "items",  JSON_MERGE('[]',ifnull(  view_ds_formtabs_pertable.js, '[]' )),
-            "requires", JSON_MERGE('[]',  if( suppressRequires(),  '[]',  ifnull( req.requiresJS, '[]') ) )
+            "requires", 
+            JSON_MERGE('[]', 
+                    JSON_MERGE('[]',  
+                        if( suppressRequires(),  '[]',  
+                            ifnull( req.requiresJS, '[]')
+                        ) 
+                    ) -- ,  
+                    -- ifnull( view_ds_form_requires.requires, '[]') 
+            )
                         -- if( suppressRequires()=1,  '[]',   req.requiresJS) )
         ),
     ')',char(59)) js,
@@ -2651,6 +2671,8 @@ select
     ds.table_name
 from
     ds
+    left join view_ds_form_requires 
+        on ds.table_name = view_ds_form_requires.table_name
     left join view_ds_formtabs_pertable 
         on ds.table_name = view_ds_formtabs_pertable.table_name
     left join (
@@ -2799,7 +2821,8 @@ select
                 )
         ),
     ')',char(59)) js,
-    view_ds_listcolumn.js jsx,
+    JSON_MERGE('[]',ifnull(view_ds_listcolumn.js,'[]')) jsx,
+    -- view_ds_listcolumn.js 
     ds.table_name
 from
     ds

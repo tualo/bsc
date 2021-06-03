@@ -15,7 +15,9 @@ class Logout implements IRoute{
                 &&  (isset($_REQUEST['logout']))
                 &&  ($_REQUEST['logout']==1)
                 &&  (!is_null($session))
-            ){
+            )
+            {
+                @session_start();
                 TualoApplication::result('success',true);
                 TualoApplication::result('msg','Bye');
                 TualoApplication::contenttype('application/json');
