@@ -294,6 +294,7 @@ class Database_mysql extends Database_basic
             if (
                 (strtoupper(substr($sql_statement, 0, 6)) == 'SELECT') ||
                 (strtoupper(substr($sql_statement, 0, 4)) == 'SHOW') ||
+                (strtoupper(substr($sql_statement, 0, 4)) == 'WITH') ||
                 (strtoupper(substr($sql_statement, 0, 5)) == 'CHECK') ||
                 (strtoupper(substr($sql_statement, 0, 6)) == 'REPAIR') ||
                 (strtoupper(substr($sql_statement, 0, 7)) == 'EXPLAIN')

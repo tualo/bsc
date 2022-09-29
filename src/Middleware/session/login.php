@@ -4,6 +4,8 @@ use Tualo\Office\Basic\TualoApplication;
 TualoApplication::use('TualoApplicationSession_Login',function(){
     try{
         $session = TualoApplication::get('session');
+
+        
         if (
                 isset($_SESSION['tualoapplication']['loggedIn'])
             &&  ($_SESSION['tualoapplication']['loggedIn']===false)
@@ -11,7 +13,6 @@ TualoApplication::use('TualoApplicationSession_Login',function(){
             &&  (isset($_REQUEST['password']))
             &&  (!is_null($session))
         ){
-            
             
             TualoApplication::result('success',false);
             TualoApplication::result('msg','');

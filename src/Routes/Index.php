@@ -43,7 +43,7 @@ class Index implements IRoute{
             }catch(\Exception $e){
                 echo $e->getMessage();
             }
-        });
+        },['get','post']);
 
     }
 }

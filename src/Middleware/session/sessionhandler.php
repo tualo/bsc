@@ -9,5 +9,6 @@ TualoApplication::use('TualoApplicationSessionHandler',function(){
             session_set_save_handler(new TualoDBSessionHandler(), true);
         }
     }
+    
 },$middlewareOrder,[],true);
 

@@ -51,6 +51,15 @@ class Session{
       if (!isset($_SESSION['tualoapplication'])) $_SESSION['tualoapplication']=[];
       if (!isset($_SESSION['tualoapplication']['loggedIn'])) $_SESSION['tualoapplication']['loggedIn']=false;
 
+      if (
+          ($_SESSION['tualoapplication']['loggedIn']===true) && 
+          ($_SESSION['tualoapplication']['username']=='') && 
+          ($_SESSION['tualoapplication']['client']=='')
+      ){
+        $_SESSION['tualoapplication']['loggedIn']=false;
+      }
+
+
 
       if(defined('__SESSION_DSN__')&&defined('__SESSION_USER__')&&defined('__SESSION_PASSWORD__')&&defined('__SESSION_HOST__')&&defined('__SESSION_PORT__')){
         $db = null;
@@ -68,6 +77,7 @@ class Session{
 
         }
       }
+      // echo __LINE__; exit();
       if (is_object($this->db)) $this->db->mysqli->set_charset('utf8');
     }
 
