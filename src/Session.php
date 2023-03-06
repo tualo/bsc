@@ -3,7 +3,6 @@
 namespace Tualo\Office\Basic;
 use Tualo\Office\Basic\TualoApplication;
 
-
 class Session{
 
     // THE only instance of the class
@@ -100,7 +99,6 @@ class Session{
     }
 
     public function getDB() {
-      TualoApplication::logger('TualoApplication')->warning('getDB',[__FILE__]);
       if ($_SESSION['tualoapplication']['loggedIn']===false) return null;
       
 
@@ -109,7 +107,7 @@ class Session{
                 isset($_SESSION['db']['dbuser']) 
             /*&&  (!is_object($this->clientdb) || is_null($this->clientdb))*/
         ){
-
+          TualoApplication::logger('TualoApplication')->info('getDB new',[__FILE__]);
           $this->clientdb = $this->newDBByRow($_SESSION['db']);
         }
         if (is_object($this->clientdb)){

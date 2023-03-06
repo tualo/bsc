@@ -67,6 +67,26 @@ class  Database_basic{
       }
     }
 
+    public function directMap($statement,$hash=array(),$key='',$value='') {
+      $res = [];
+      $vals = $this->direct($statement,$hash,$key);
+      foreach($vals as $key=>$v){
+        $res[$key]=$v[$value];
+      }
+      return $res;
+    }
+
+
+    public function directArray($statement,$hash=array(),$value='') {
+      $res = [];
+      $vals = $this->direct($statement,$hash);
+      //print_r($vals );
+      foreach($vals as $key=>$v){
+        $res[]=$v[$value];
+      }
+      return $res;
+    }
+
     public function directHash($statement,$hash=array(),$key='') {
       $res = array();
       $rs = $this->execute_with_hash($statement,$hash);
