@@ -3,12 +3,12 @@
     "description": "Tualo Office Application",
     "type": "library",
     "require": {
-        "pug-php/pug": "^3.4",
-        "psr/log": "^1.1",
-        "phpseclib/phpseclib": "^2.0",
-        "ramsey/uuid": "^4.1",
+        "pug-php/pug": "*",
+        "psr/log": "*",
+        "phpseclib/phpseclib": "*",
+        "ramsey/uuid": "*",
         "monolog/monolog": "*",
-        "vanilla/garden-cli": "~2.0"
+        "vanilla/garden-cli": "*"
     },
     "autoload": {
         "psr-4": {

@@ -31,26 +31,15 @@ class Database_mysql extends Database_basic
     public function __construct($user, $pass, $db, $host, $port = 3306,$ssl_key='',$ssl_cert='',$ssl_ca='')
     {
         parent::__construct($user, $pass, $db, $host);
-
-        
-        if (strpos($host, ':') !== false) {
-            list($host, $port) = explode(':', $host);
-        }
+        if (strpos($host, ':') !== false) { list($host, $port) = explode(':', $host); }
 
         $this->dbname = $db;
-        syslog(LOG_CRIT,"$host $db $user");
-
         $this->mysqli = new mysqli;
         $this->mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 10);
         $this->mysqli->options(MYSQLI_OPT_SSL_VERIFY_SERVER_CERT,false);
         $c = false;
 
-        // remove later
-
-        if (($ssl_key=='')&&(defined("__DB_SSL_KEY__"))){ $ssl_key=__DB_SSL_KEY__; }
-        if (($ssl_cert=='')&&(defined("__DB_SSL_CERT__"))){ $ssl_cert=__DB_SSL_CERT__; }
-        if (($ssl_ca=='')&&(defined("__DB_SSL_CA__"))){ $ssl_ca=__DB_SSL_CA__; }
-
+     
 
         if ( ($ssl_key!='') && ($ssl_cert!='') && ($ssl_ca!='') ){
             $this->mysqli->ssl_set($ssl_key,$ssl_cert,$ssl_ca ,NULL,NULL);
@@ -58,7 +47,6 @@ class Database_mysql extends Database_basic
         }else{
             $c = @$this->mysqli->real_connect($host, ($user), ($pass), $db, $port );
         }
-        
         if (!$c){
             throw new \Exception('Verbindungsfehler, die Datenbank kann nicht erreicht werden ('.$this->mysqli->connect_error.') '.$this->mysqli->connect_errno);
         }else{

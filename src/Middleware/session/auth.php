@@ -13,7 +13,7 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
 
             &&  (!is_null($session))
         ){
-            
+            //if (is_null($session->db)) throw new \Exception("Session DB not loaded");
             $path = '';
             $method = $_SERVER['REQUEST_METHOD'];
             $parsed_url = parse_url($_SERVER['REQUEST_URI']);//Parse Uri

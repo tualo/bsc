@@ -29,23 +29,31 @@ class Session{
               }
           }
       
-      }catch(Execption $e){
+      }catch(\Exception $e){
       }
     }
 
     private function newDBByRow($row){
-      /*
-      if (defined('__DB_SSL_KEY__')&&defined('__DB_SSL_CERT__')&&defined('__DB_SSL_CA__')){
-        return new MYSQL\Database($row['dbuser'],$row['dbpass'],$row['dbname'],$row['dbhost'],$row['dbport'],__DB_SSL_KEY__,__DB_SSL_CERT__,__DB_SSL_CA__);
-      }
-      */
-      $db = new MYSQL\Database($row['dbuser'],$row['dbpass'],$row['dbname'],$row['dbhost'],$row['dbport']);
+      
+      $config = TualoApplication::get('configuration');
+      if(isset($config["FORCE_DB_HOST"])) $row['dbhost']=$config["FORCE_DB_HOST"];
+      if(isset($config["FORCE_DB_PORT"])) $row['dbport']=$config["FORCE_DB_PORT"];
+      
+      $row += [
+        'sslkey'=>isset($config["__DB_SSL_KEY__"])?$config["__DB_SSL_KEY__"]:'',
+        'sslcert'=>isset($config["__DB_SSL_CERT__"])?$config["__DB_SSL_CERT__"]:'',
+        'sslca'=>isset($config["__DB_SSL_CA__"])?$config["__DB_SSL_CA__"]:''
+      ];
+          
+      $db = new MYSQL\Database($row['dbuser'],$row['dbpass'],$row['dbname'],$row['dbhost'],$row['dbport'],$row['sslkey'],$row['sslcert'],$row['sslca']);
       return $db;
     }
 
 
     private function __construct() {
       session_start();
+      
+      $config = TualoApplication::get('configuration');
       
       if (!isset($_SESSION['db'])) $_SESSION['db']=[];
       if (!isset($_SESSION['tualoapplication'])) $_SESSION['tualoapplication']=[];
@@ -59,31 +67,43 @@ class Session{
         $_SESSION['tualoapplication']['loggedIn']=false;
       }
 
+      if(
+        isset($config["__SESSION_DSN__"]) &&
+        isset($config["__SESSION_USER__"]) &&
+        isset($config["__SESSION_PASSWORD__"]) &&
+        isset($config["__SESSION_HOST__"]) &&
+        isset($config["__SESSION_PORT__"])
 
-
-      if(defined('__SESSION_DSN__')&&defined('__SESSION_USER__')&&defined('__SESSION_PASSWORD__')&&defined('__SESSION_HOST__')&&defined('__SESSION_PORT__')){
+      ){
         $db = null;
+        $db_config = [
+          'dbhost'=>$config["__SESSION_HOST__"],
+          'dbpass'=>$config["__SESSION_PASSWORD__"],
+          'dbuser'=>$config["__SESSION_USER__"],
+          'dbname'=>$config["__SESSION_DSN__"],
+          'dbport'=>$config["__SESSION_PORT__"]
+        ];
+
         try{
-          $this->db = $this->newDBByRow([
-            'dbhost'=>__SESSION_HOST__,
-            'dbpass'=>__SESSION_PASSWORD__,
-            'dbuser'=>__SESSION_USER__,
-            'dbname'=>__SESSION_DSN__,
-            'dbport'=>__SESSION_PORT__
-          ]);
+          $this->db = $this->newDBByRow($db_config);
         }catch(\Exception $e){
-          echo "Bitte richten Sie die Sitzungsdatenbank ein.";
+          TualoApplication::logger('BSC('.__FILE__.')')->error( $e->getMessage() );
+          echo "Bitte richten Sie die Sitzungsdatenbank ein. *";
           exit();
 
         }
+      }else{
+        echo "Bitte richten Sie die Sitzungsdatenbank ein.";
+        exit();
       }
-      // echo __LINE__; exit();
       if (is_object($this->db)) $this->db->mysqli->set_charset('utf8');
     }
 
     public function getDB() {
+      TualoApplication::logger('TualoApplication')->warning('getDB',[__FILE__]);
       if ($_SESSION['tualoapplication']['loggedIn']===false) return null;
       
+
       try{
         if (
                 isset($_SESSION['db']['dbuser']) 

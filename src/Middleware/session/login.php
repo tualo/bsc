@@ -77,7 +77,7 @@ TualoApplication::use('TualoApplicationSession_Login',function(){
                 // Test DB Access
                 if ( is_null( $session->getDB() ) ){
                     TualoApplication::result('success',false);
-                    TualoApplication::result('msg','Felher beim Zugriff auf die Datenbank');
+                    TualoApplication::result('msg','Felher beim Zugriff auf die Datenbank (418)');
                     $session->destroy();
                 }else{
                     TualoApplication::result('fullname',    $_SESSION['tualoapplication']['fullname']);

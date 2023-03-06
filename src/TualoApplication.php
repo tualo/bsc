@@ -3,7 +3,7 @@ namespace Tualo\Office\Basic;
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
-
+// composer require symfony/monolog-bundle
 
 /**
  * TualoApplication Class
@@ -86,15 +86,22 @@ class TualoApplication{
     public static function logger($channel)
     {
         if (!isset(self::$logger[$channel])){
-
             $log = new Logger($channel);
-            if (defined('__LOGGER_FILE__')){
-                $log->pushHandler(new StreamHandler(__LOGGER_FILE__, Logger::WARNING));
+            $cnf = self::get('configuration');
+            if (isset($cnf['__LOGGER_FILE__'])){
+                $level=Logger::WARNING;
+                if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__']=='WARNING') $level=Logger::WARNING;
+                if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__']=='ERROR') $level=Logger::ERROR;
+                if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__']=='NOTICE') $level=Logger::NOTICE;
+                if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__']=='INFO') $level=Logger::INFO;
+                if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__']=='DEBUG') $level=Logger::DEBUG;
+                $log->pushHandler(new StreamHandler($cnf['__LOGGER_FILE__'], $level));
             }
             self::$logger[$channel] = $log;
         }
         return self::$logger[$channel];
     }
+
     
     public static function showDebug($var){
         self::$appendDebug = $var;
@@ -111,73 +118,6 @@ class TualoApplication{
         return 0;
     }
     
-    public static function initComponents(){
-        
-        if(!is_null(TualoApplication::get('session')) && is_null(TualoApplication::get('session')->db)){
-            
-        }else{
-            $sql = '
-                select
-                    macc_component.id,
-                    macc_component.des,
-                    macc_component.version,
-                    group_concat(concat(database(),\'|\',macc_component_access.rolle) ORDER BY rolle DESC SEPARATOR \';\') groups
-                from
-                    macc_component left join macc_component_access on macc_component.id = macc_component_access.komponente
-                where id<>\'\'
-                group by des, id
-            ';
-            $componentlist=[];
-            if(is_null(TualoApplication::get('session')->db)) throw new \Exception("Session DB not available");
-            $_componentlist = TualoApplication::get('session')->db->direct( $sql );
-            if ($_SESSION['tualoapplication']['loggedIn']==false){
-                $_componentlist=explode(' ',BASIC_COMPONENTS);
-                foreach($_componentlist as $item){
-                    $componentlist[]=[
-                        'includePath' => TualoApplication::get('basePath').'/cmp/'.$item,
-                        'id'=>$item
-                    ];
-                }
-            }else{
-                foreach($_componentlist as $item){
-                
-                    if (is_dir(TualoApplication::get('basePath').'/cmp/'.$item['id'])){
-                        $item['includePath'] = TualoApplication::get('basePath').'/cmp/'.$item['id'];
-                    }
-                    if ( is_dir( TualoApplication::get('basePath').'/packages/'.$item['version'].'/'.$item['id']) ){
-                        $item['includePath'] = TualoApplication::get('basePath').'/packages/'.$item['version'].'/'.$item['id'];
-                    }
-                    $componentlist[]=$item;
-                }
-            }
-            foreach($componentlist as $item){
-                if (isset($item['includePath'] )){
-                    self::$componentlist[]=$item;
-                }else{
-                    //syslog(LOG_WARNING,"Component ".$item['id']." - ".$item['version']." not found");
-                }
-            }
-        }
-        
-
-    }
-    public static function components($simple=false){
-        $_componentlist=explode(' ',BASIC_COMPONENTS);
-        foreach($_componentlist as $item){
-            $componentlist[]=[
-                'includePath' => TualoApplication::get('basePath').'/cmp/'.$item,
-                'id'=>$item
-            ];
-        }
-
-        if ($simple){
-            $l=[];
-            foreach(self::$componentlist as $elm) $l[]=$elm['id'];
-            foreach($componentlist as $elm) $l[]=$elm['id'];
-            return $l;
-        }
-        return self::$componentlist;
-    }
 /*
 
     }
@@ -245,11 +185,12 @@ class TualoApplication{
      * @return array An Array of filenames
      */
     public static function stylesheet($filename='',$position=0, $key=NULL){
+        $cb = self::class."::compare_position";
         if ($filename!=''){
             if (is_null($key)){ $key='ID'.count( self::$stylesheets ); }
             self::$stylesheets[] = array('position'=>$position,'filename'=>$filename,'key'=>$key);
         }
-        usort(self::$stylesheets,     "self::compare_position");
+        usort(self::$stylesheets,     $cb );
         //return array_map("self::map_filename",self::$stylesheets);
         return self::$stylesheets;
     }
@@ -262,6 +203,7 @@ class TualoApplication{
      * @return array An Array of filenames
      */
     public static function javascript($key='',$filename='',$dependOn=array(),$pos=0){
+        $cb = self::class."::map_filename";
         if ($filename!=''){
             self::$javascripts[$key] = array('key'=>$key,'filename'=>$filename,'pos'=>$pos);
             
@@ -274,16 +216,17 @@ class TualoApplication{
 
         }else{
             usort( self::$javascripts, ["Tualo\Office\Basic\TualoApplication","javascript_cmp"]);
-            return array_unique(array_map("self::map_filename", self::$javascripts));
+            return array_unique(array_map($cb, self::$javascripts));
 
         }
         //usort(self::$javascripts,   "self::compare_position"  );
         
         
-        return array_map("self::map_filename", self::$javascripts);
+        return array_map($cb, self::$javascripts);
     }
 
     public static function module($key='',$filename='',$dependOn=array(),$pos=0){
+        $cb = self::class."::map_filename";
         if ($filename!=''){
             self::$modules[$key] = array('key'=>$key,'filename'=>$filename,'pos'=>$pos);
             
@@ -296,13 +239,9 @@ class TualoApplication{
 
         }else{
             usort( self::$modules, ["Tualo\Office\Basic\TualoApplication","javascript_cmp"]);
-            return array_unique(array_map("self::map_filename", self::$modules));
-
+            return array_unique(array_map($cb, self::$modules));
         }
-        //usort(self::$javascripts,   "self::compare_position"  );
-        
-        
-        return array_map("self::map_filename", self::$javascripts);
+        return array_map($cb, self::$javascripts);
     }
 
     public static function javascriptLoader($filedata){
@@ -544,8 +483,8 @@ class TualoApplication{
             }
         }
 
-        
-        usort(self::$middlewares,     "self::compare_position");
+        $cb=self::class."::compare_position";
+        usort(self::$middlewares,     $cb);
 
         foreach(self::$middlewares as $middleware){
             if (self::$runmiddlewares===true) self::callMiddlewareIntern($middleware);
@@ -567,12 +506,11 @@ class TualoApplication{
     }
 
     private static function callMiddlewareIntern($middleware){
-        $components = self::components(true);
+        
+        
         $run=self::canRunMiddleWare($middleware);
         if(isset(self::$called_middlewares[$middleware['key']])) $run =false;
-        // if(!in_array($middleware['cmp'],$components)) $run=false;
-        // echo (($run)?'OK':'Nope')." ".$middleware['key']."\n";
-
+        
         if ($run===true){
             $parsed_url = parse_url($_SERVER['REQUEST_URI']);//Parse Uri
             if(isset($_SERVER['REDIRECT_URL'])) $parsed_url = parse_url($_SERVER['REDIRECT_URL']);
