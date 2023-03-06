@@ -78,6 +78,7 @@ TualoApplication::use('TualoApplicationSession_Login',function(){
                 if ( is_null( $session->getDB() ) ){
                     TualoApplication::result('success',false);
                     TualoApplication::result('msg','Felher beim Zugriff auf die Datenbank (418)');
+                    TualoApplication::logger('BSC')->error('Felher beim Zugriff auf die Datenbank (418)');
                     $session->destroy();
                 }else{
                     TualoApplication::result('fullname',    $_SESSION['tualoapplication']['fullname']);
