@@ -86,8 +86,10 @@ class TualoApplication{
     public static function logger($channel)
     {
         if (!isset(self::$logger[$channel])){
-            $log = new Logger($channel);
+            $logger = new Logger($channel);
             $cnf = self::get('configuration');
+
+            /**** ALT */
             if (isset($cnf['__LOGGER_FILE__'])){
                 $level=Logger::WARNING;
                 if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__']=='WARNING') $level=Logger::WARNING;
@@ -95,9 +97,54 @@ class TualoApplication{
                 if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__']=='NOTICE') $level=Logger::NOTICE;
                 if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__']=='INFO') $level=Logger::INFO;
                 if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__']=='DEBUG') $level=Logger::DEBUG;
-                $log->pushHandler(new StreamHandler($cnf['__LOGGER_FILE__'], $level));
+                $logger->pushHandler(new StreamHandler($cnf['__LOGGER_FILE__'], $level));
             }
-            self::$logger[$channel] = $log;
+
+            /** neu */
+            if (
+                (isset($cnf['logger-file']))&&
+                (isset($cnf['logger-file']['filename']))&&
+                (isset($cnf['logger-file']['level']))
+            ){
+                $logger->pushHandler(new StreamHandler(
+                    $cnf['logger-file']['filename'], 
+                    \Monolog\Level::fromName( $cnf['logger-file']['level'] ) ??  \Monolog\Level::DEBUG 
+                ));
+            }
+
+            if (
+                (isset($cnf['logger-slack']))&&
+                (isset($cnf['logger-slack']['token']))&&
+                (isset($cnf['logger-slack']['channel']))
+            ){
+                $slackHandler = new \Monolog\Handler\SlackHandler(
+                    $cnf['logger-slack']['token'],
+                    $cnf['logger-slack']['channel'],
+                    isset($cnf['logger-slack']['botname'])?$cnf['logger-slack']['botname']:null,
+                    isset($cnf['logger-slack']['useAttachment'])?boolval($cnf['logger-slack']['useAttachment']):false,
+                    isset($cnf['logger-slack']['iconEmoji'])?$cnf['logger-slack']['iconEmoji']:null,
+                    \Monolog\Level::fromName($cnf['logger-slack']['level'])??\Monolog\Level::Critical
+                );
+                $logger->pushHandler($slackHandler);
+            }
+
+            if (
+                (isset($cnf['logger-slackwebhook']))&&
+                (isset($cnf['logger-slackwebhook']['url']))&&
+                (isset($cnf['logger-slackwebhook']['channel']))
+            ){
+                $slackHandler = new \Monolog\Handler\SlackHandler(
+                    $cnf['logger-slackwebhook']['url'],
+                    $cnf['logger-slackwebhook']['channel'],
+                    isset($cnf['logger-slackwebhook']['botname'])?$cnf['logger-slack']['botname']:null,
+                    isset($cnf['logger-slackwebhook']['useAttachment'])?boolval($cnf['logger-slack']['useAttachment']):false,
+                    isset($cnf['logger-slackwebhook']['iconEmoji'])?$cnf['logger-slack']['iconEmoji']:null,
+                    \Monolog\Level::fromName($cnf['logger-slackwebhook']['level'])??\Monolog\Level::Critical
+                );
+                $logger->pushHandler($slackHandler);
+
+            }
+            self::$logger[$channel] = $logger;
         }
         return self::$logger[$channel];
     }
@@ -486,8 +533,17 @@ class TualoApplication{
         $cb=self::class."::compare_position";
         usort(self::$middlewares,     $cb);
 
+
+        $parsed_url = parse_url($_SERVER['REQUEST_URI']);//Parse Uri
+        if(isset($_SERVER['REDIRECT_URL'])) $parsed_url = parse_url($_SERVER['REDIRECT_URL']);
+        if(isset($parsed_url['path'])){
+            $path = $parsed_url['path'];
+        }else{
+            $path = '/';
+        }
+
         foreach(self::$middlewares as $middleware){
-            if (self::$runmiddlewares===true) self::callMiddlewareIntern($middleware);
+            if (self::$runmiddlewares===true) self::callMiddlewareIntern($middleware,$path);
             self::timing($middleware['key']);
         }
         if (self::$runmiddlewares===true){
@@ -497,29 +553,15 @@ class TualoApplication{
         self::timing('run end middlewares');
     }
 
-    public static function runMiddleware($name){
-        foreach(self::$middlewares as $middleware){
-            if($middleware['key']==$name){
-                self::callMiddlewareIntern($middleware);
-            }
-        }
-    }
+    
 
-    private static function callMiddlewareIntern($middleware){
+    private static function callMiddlewareIntern($middleware,$path){
         
         
         $run=self::canRunMiddleWare($middleware);
         if(isset(self::$called_middlewares[$middleware['key']])) $run =false;
         
         if ($run===true){
-            $parsed_url = parse_url($_SERVER['REQUEST_URI']);//Parse Uri
-            if(isset($_SERVER['REDIRECT_URL'])) $parsed_url = parse_url($_SERVER['REDIRECT_URL']);
-            if(isset($parsed_url['path'])){
-                $path = $parsed_url['path'];
-            }else{
-                $path = '/';
-            }
-                
             self::$called_middlewares[$middleware['key']]=1;
             try{
                 call_user_func_array($middleware['function'],[$path]);

@@ -97,7 +97,7 @@ TualoApplication::use('TualoApplicationSession_Login',function(){
 
             TualoApplication::contenttype('application/json');
             TualoApplication::end();
-            session_commit();
+            //session_commit();
             exit();
 
         }else{

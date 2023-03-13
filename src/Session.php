@@ -6,9 +6,10 @@ use Tualo\Office\Basic\TualoApplication;
 class Session{
 
     // THE only instance of the class
+    public static $client_db_instance;
     private static $instance;
     public $db;
-    public $clientdb;
+    
     public $client;
 
     public static function getInstance(){
@@ -17,6 +18,11 @@ class Session{
       }
       return self::$instance;
     }
+
+
+
+    
+
 
     public function inputToRequest(){
       try{
@@ -32,7 +38,7 @@ class Session{
       }
     }
 
-    private function newDBByRow($row){
+    public static function newDBByRow($row){
       
       $config = TualoApplication::get('configuration');
       if(isset($config["FORCE_DB_HOST"])) $row['dbhost']=$config["FORCE_DB_HOST"];
@@ -84,7 +90,7 @@ class Session{
         ];
 
         try{
-          $this->db = $this->newDBByRow($db_config);
+          $this->db = self::newDBByRow($db_config);
         }catch(\Exception $e){
           TualoApplication::logger('BSC('.__FILE__.')')->error( $e->getMessage() );
           echo "Bitte richten Sie die Sitzungsdatenbank ein. *";
@@ -102,46 +108,50 @@ class Session{
       if ($_SESSION['tualoapplication']['loggedIn']===false) return null;
       
 
+      TualoApplication::timing("session getDB");
+
       try{
         if (
-                isset($_SESSION['db']['dbuser']) 
-            /*&&  (!is_object($this->clientdb) || is_null($this->clientdb))*/
+            isset($_SESSION['db']['dbuser']) 
+            &&  (is_null(self::$client_db_instance) )
         ){
+          TualoApplication::timing("session new by row");
           TualoApplication::logger('TualoApplication')->info('getDB new',[__FILE__]);
-          $this->clientdb = $this->newDBByRow($_SESSION['db']);
+          self::$client_db_instance = self::newDBByRow($_SESSION['db']);
         }
-        if (is_object($this->clientdb)){
-
-          $this->clientdb->mysqli->set_charset('utf8');
-          $this->clientdb->execute_with_hash('set @sessionuser = {username}',$_SESSION['tualoapplication']);
-          $this->clientdb->execute_with_hash('set @sessionuserfullname = {fullname}',$_SESSION['tualoapplication']);
+        if (is_object( self::$client_db_instance )){
+          TualoApplication::timing("session getDB existing");
+          $clientdb =  self::$client_db_instance;
+          $clientdb->mysqli->set_charset('utf8');
+          $clientdb->execute_with_hash('set @sessionuser = {username}',$_SESSION['tualoapplication']);
+          $clientdb->execute_with_hash('set @sessionuserfullname = {fullname}',$_SESSION['tualoapplication']);
 
           $this->db->execute_with_hash('set @sessionuser = {username}',$_SESSION['tualoapplication']);
           $this->db->execute_with_hash('set @sessionuserfullname = {fullname}',$_SESSION['tualoapplication']);
 
           if (isset($_SESSION['buchungskreis'])) $this->db->execute_with_hash('set @sessionbuchungskreis = {buchungskreis}',$_SESSION);
-          if (isset($_SESSION['buchungskreis'])) $this->clientdb->execute_with_hash('set @sessionbuchungskreis = {buchungskreis}',$_SESSION);
+          if (isset($_SESSION['buchungskreis'])) $clientdb->execute_with_hash('set @sessionbuchungskreis = {buchungskreis}',$_SESSION);
 
           if (isset($_SESSION['geschaeftsstelle'])) $this->db->execute_with_hash('set @sessionoffice = {geschaeftsstelle}',$_SESSION);
-          if (isset($_SESSION['geschaeftsstelle'])) $this->clientdb->execute_with_hash('set @sessionoffice = {geschaeftsstelle}',$_SESSION);
+          if (isset($_SESSION['geschaeftsstelle'])) $clientdb->execute_with_hash('set @sessionoffice = {geschaeftsstelle}',$_SESSION);
           
           if (isset($_SESSION['seniority'])) $this->db->execute_with_hash('set @sessionseniority = {seniority}',$_SESSION);
-          if (isset($_SESSION['seniority'])) $this->clientdb->execute_with_hash('set @sessionseniority = {seniority}',$_SESSION);
+          if (isset($_SESSION['seniority'])) $clientdb->execute_with_hash('set @sessionseniority = {seniority}',$_SESSION);
 
           try{
-            $this->clientdb->execute_with_hash('set @sessionbuchungskreis = getSessionCurrentBKR() ',$_SESSION);
+            $clientdb->execute_with_hash('set @sessionbuchungskreis = getSessionCurrentBKR() ',$_SESSION);
           }catch(\Exception $e){ }
         
           try{
-            $this->clientdb->execute_with_hash('set @sessionoffice = getSessionCurrentOffice() ',$_SESSION);
+            $clientdb->execute_with_hash('set @sessionoffice = getSessionCurrentOffice() ',$_SESSION);
           }catch(\Exception $e){ }
         
           try{
-            $this->clientdb->execute_with_hash('set @sessionseniority = getSessionCurrentSeniority() ',$_SESSION);
+            $clientdb->execute_with_hash('set @sessionseniority = getSessionCurrentSeniority() ',$_SESSION);
           }catch(\Exception $e){ }
           
-          $this->clientdb->execute_with_hash('SET lc_time_names = {lc_time_name};',array('lc_time_name'=>'de_DE'));
-          $this->clientdb->execute_with_hash('set @sessiondb = {sessiondb}',array('sessiondb'=>$this->db->dbname));
+          $clientdb->execute_with_hash('SET lc_time_names = {lc_time_name};',array('lc_time_name'=>'de_DE'));
+          $clientdb->execute_with_hash('set @sessiondb = {sessiondb}',array('sessiondb'=>$this->db->dbname));
 
           $this->db->execute_with_hash('set @sessionuser = {username}',$_SESSION);
           $this->db->execute_with_hash('set @sessionuserfullname = {fullname}',$_SESSION);
@@ -152,7 +162,7 @@ class Session{
         //echo $e->getMessage();
         TualoApplication::logger('TualoApplication')->error($e->getMessage(),$_SESSION['db']);
       }
-      return $this->clientdb;
+      return $clientdb;
     }
 
     public function id() {

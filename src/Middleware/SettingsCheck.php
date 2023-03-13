@@ -6,6 +6,7 @@ class SettingsCheck implements IMiddleware{
     public static function register(){
         TualoApplication::use('TualoApplication_PHP_Settingscheck',function(){
             try{
+                /*
                 $pfname = TualoApplication::get('basePath').'/cache/pid';
                 ini_set('html_errors', false);
 
@@ -27,6 +28,7 @@ class SettingsCheck implements IMiddleware{
                         error_log("session.cookie_samesite should be Strict");
                     }
                 }
+                */
         
             }catch(\Exception $e){
                 TualoApplication::set('maintanceMode','on');

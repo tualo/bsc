@@ -10,7 +10,7 @@ class Logout implements IRoute{
         Route::add('/logout',function(){
             $session = TualoApplication::get('session');
             if (
-                    isset($_SESSION['tualoapplication']['loggedIn'])
+                isset($_SESSION['tualoapplication']['loggedIn'])
                 // &&  ($_SESSION['tualoapplication']['loggedIn']===true)
                 &&  (isset($_REQUEST['logout']))
                 &&  ($_REQUEST['logout']==1)
@@ -23,7 +23,7 @@ class Logout implements IRoute{
                 TualoApplication::contenttype('application/json');
                 TualoApplication::end();
                 $session->destroy();
-                session_commit();
+                // session_commit();
                 exit();
             }
             TualoApplication::logger('TualoApplication')->warning('logout',$_SESSION);

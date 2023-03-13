@@ -156,6 +156,7 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
                         TualoApplication::result('dbaccess',true);
 
                         TualoApplication::result('success',true);
+                        TualoApplication::logger('BSC')->debug('Login '.$_SESSION['tualoapplication']['username'].' ');
                         TualoApplication::result('msg','Login OK');
         
                     }

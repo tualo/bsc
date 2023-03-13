@@ -1,5 +1,6 @@
 <?php
 namespace Tualo\Office\Basic\MYSQL;
+use Tualo\Office\Basic\TualoApplication;
 
 use Tualo\Office\Basic\BASIC\Database_basic;
 use Tualo\Office\Basic\MYSQL\Recordset_mysql;
@@ -33,24 +34,31 @@ class Database_mysql extends Database_basic
         parent::__construct($user, $pass, $db, $host);
         if (strpos($host, ':') !== false) { list($host, $port) = explode(':', $host); }
 
+        TualoApplication::timing("db __construct");
+
         $this->dbname = $db;
         $this->mysqli = new mysqli;
         $this->mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 10);
         $this->mysqli->options(MYSQLI_OPT_SSL_VERIFY_SERVER_CERT,false);
         $c = false;
 
-     
+        TualoApplication::timing("db __construct options");
 
         if ( ($ssl_key!='') && ($ssl_cert!='') && ($ssl_ca!='') ){
             $this->mysqli->ssl_set($ssl_key,$ssl_cert,$ssl_ca ,NULL,NULL);
             $c = @$this->mysqli->real_connect($host, ($user), ($pass), $db, $port,NULL, MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT );
+            TualoApplication::timing("db __construct connect ssl");
         }else{
             $c = @$this->mysqli->real_connect($host, ($user), ($pass), $db, $port );
+            TualoApplication::timing("db __construct connect plain");
         }
+        TualoApplication::timing("db __construct connect step a");
         if (!$c){
+            TualoApplication::logger("Database")->critical("Database not reachable $host:$port, $user, $db ".gethostname());
             throw new \Exception('Verbindungsfehler, die Datenbank kann nicht erreicht werden ('.$this->mysqli->connect_error.') '.$this->mysqli->connect_errno);
         }else{
-            $this->mysqli->set_charset('utf8');
+            TualoApplication::timing("db __construct connect step x");
+            // $this->mysqli->set_charset('utf8');
             $this->charset = 'utf8';
             if ($this->mysqli->connect_errno) {
                 
@@ -62,9 +70,10 @@ class Database_mysql extends Database_basic
                 $this->port=$port;
             }
 
-            $this->autocommit($this->commit_state);
+            // $this->autocommit($this->commit_state);
             $this->state = true;
         }
+        TualoApplication::timing("db __construct connect ready");
 
     }
 
@@ -254,6 +263,7 @@ class Database_mysql extends Database_basic
     }
     public function execute($sql_statement)
     {
+        //TualoApplication::timing(self::class.' execute start '.__LINE__);
         $this->check_start();
         $sql_statement = trim($sql_statement);
         $this->log($sql_statement );
@@ -290,7 +300,10 @@ class Database_mysql extends Database_basic
                 $rs = false;
                 $this->lastSQL = $sql_statement;
                 
+                //TualoApplication::timing(self::class.' mysqli->query start '.__LINE__);
                 $res = $this->mysqli->query($sql_statement);
+                //TualoApplication::timing(self::class.' mysqli->query stop '.__LINE__);
+
                 if ($res !== false) {
                     try {
                         $rs = new Recordset_mysql($res);
@@ -310,6 +323,8 @@ class Database_mysql extends Database_basic
                         $this->warnings[] = array('errno'=>$e->errno,'message'=>$e->message,'sqlstate'=>$e->sqlstate);
                     } while ($e->next()); 
                 }
+                //TualoApplication::timing(self::class.' execute return '.__LINE__);
+
                 return $rs;
             } else {
                 $this->lastSQL = $sql_statement;
@@ -324,6 +339,7 @@ class Database_mysql extends Database_basic
 
 
                 if ($res) {
+                    //TualoApplication::timing(self::class.' execute return '.__LINE__);
                     return $res;
                 } else {
                     throw new \Exception($this->GetError() );
@@ -331,6 +347,7 @@ class Database_mysql extends Database_basic
                 }
             }
         } else {
+            //TualoApplication::timing(self::class.' execute return false '.__LINE__);
             return false;
         }
         $this->check_stop($sql_statement);
