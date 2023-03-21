@@ -92,11 +92,11 @@ class TualoApplication{
             /**** ALT */
             if (isset($cnf['__LOGGER_FILE__'])){
                 $level=Logger::WARNING;
-                if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__']=='WARNING') $level=Logger::WARNING;
-                if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__']=='ERROR') $level=Logger::ERROR;
-                if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__']=='NOTICE') $level=Logger::NOTICE;
-                if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__']=='INFO') $level=Logger::INFO;
-                if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__']=='DEBUG') $level=Logger::DEBUG;
+                if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__']=='WARNING') $level=\Monolog\Level::Warning;
+                if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__']=='ERROR') $level=\Monolog\Level::Error;
+                if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__']=='NOTICE') $level=\Monolog\Level::Notice;
+                if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__']=='INFO') $level=\Monolog\Level::Info;
+                if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__']=='DEBUG') $level=\Monolog\Level::Debug;
                 $logger->pushHandler(new StreamHandler($cnf['__LOGGER_FILE__'], $level));
             }
 
@@ -108,7 +108,7 @@ class TualoApplication{
             ){
                 $logger->pushHandler(new StreamHandler(
                     $cnf['logger-file']['filename'], 
-                    \Monolog\Level::fromName( $cnf['logger-file']['level'] ) ??  \Monolog\Level::DEBUG 
+                    \Monolog\Level::fromName( $cnf['logger-file']['level'] ) ??  \Monolog\Level::Debug 
                 ));
             }
 
@@ -249,10 +249,10 @@ class TualoApplication{
      * @param int $position ordered position
      * @return array An Array of filenames
      */
-    public static function javascript($key='',$filename='',$dependOn=array(),$pos=0){
+    public static function javascript($key='',$filename='',$dependOn=array(),$pos=0,$attr=[]){
         $cb = self::class."::map_filename";
         if ($filename!=''){
-            self::$javascripts[$key] = array('key'=>$key,'filename'=>$filename,'pos'=>$pos);
+            self::$javascripts[$key] = array('key'=>$key,'filename'=>$filename,'pos'=>$pos,'attr'=>$attr);
             
             if (is_null(self::$javascriptsTree)){
                 self::$javascriptsTree = new DependTree($key);
