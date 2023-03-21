@@ -9,6 +9,7 @@ html(lang='de')
       each val, index in stylesheets
         link(rel="stylesheet",type="text/css",href=val.filename,id=val.key)
       each val, index in javascripts
+        // span !{print_r(val.attr,true)}
         script(type="text/javascript",charset="UTF-8",src=val,id=val.attr.id,data-app=val.attr.data-app)
       each val, index in modules
         script(type="module",charset="UTF-8",src=val)

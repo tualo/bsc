@@ -263,13 +263,14 @@ class TualoApplication{
 
         }else{
             usort( self::$javascripts, ["Tualo\Office\Basic\TualoApplication","javascript_cmp"]);
-            return array_unique(array_map($cb, self::$javascripts));
+            return self::$javascripts; 
+            //array_unique(array_map($cb, self::$javascripts));
 
         }
         //usort(self::$javascripts,   "self::compare_position"  );
         
-        
-        return array_map($cb, self::$javascripts);
+        return self::$javascripts; 
+        // return array_map($cb, self::$javascripts);
     }
 
     public static function module($key='',$filename='',$dependOn=array(),$pos=0){
