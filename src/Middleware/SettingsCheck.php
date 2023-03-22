@@ -6,6 +6,16 @@ class SettingsCheck implements IMiddleware{
     public static function register(){
         TualoApplication::use('TualoApplication_PHP_Settingscheck',function(){
             try{
+                $settings = ini_get_all();
+                if (@$settings['session.save_handler']['local_value']=='redis'){
+                    if (
+                            !isset($settings['session.save_path'])
+                        || (strpos(@$settings['session.save_path']['local_value'],'tcp')===0)
+                    ){
+                        TualoApplication::logger('BSC')->error("redis save handler not set ".__FILE__." (".__LINE__.")");
+                    }
+                }
+                
                 /*
                 $pfname = TualoApplication::get('basePath').'/cache/pid';
                 ini_set('html_errors', false);
