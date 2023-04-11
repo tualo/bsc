@@ -212,7 +212,7 @@ class TualoApplication{
             str_replace('/index.php','',$_SERVER['PHP_SELF'])
         ]);
         $curlURL = $baseURL.''.$route;
-        $command = 'echo "curl \""'.$curlURL.'"\" | at "'.$time.'""';
+        $command = 'echo "curl \""'.$curlURL.'"\" | at "'.$time.'"';
         echo $command; exit();
         exec($command);
     }
