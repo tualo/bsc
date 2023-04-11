@@ -204,7 +204,7 @@ class TualoApplication{
             $anyclient=false,
             $path=$route
         );
-        $session->oauthValidDays($token,1);
+        $session->oauthSingleUse($token);
         $baseURL = implode('',[
             $_SERVER['REQUEST_SCHEME'].'://',
             $_SERVER['SERVER_NAME'],
