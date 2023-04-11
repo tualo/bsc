@@ -224,7 +224,7 @@ class Session{
             join oauth on a.id=oauth.id
           where
             client=\'*\' and
-            username=@sessionuser
+            username={username}
           ';
           $list = $this->db->direct($sql,array('p'=>implode(',',$test) ));
 
@@ -238,9 +238,12 @@ class Session{
             join oauth on a.id=oauth.id
           where
             client={client} and
-            username=@sessionuser
+            username{username}
           ';
-          $list = $this->db->direct($sql,array('p'=>implode(',',$test) ,'client'=>$_SESSION['tualoapplication']['client']));
+          $list = $this->db->direct($sql,array('p'=>implode(',',$test) ,
+          'client'=>$_SESSION['tualoapplication']['client'],
+          'username'=>$_SESSION['tualoapplication']['username']
+          ));
         }
         
         if (count($list)>0){
@@ -253,11 +256,13 @@ class Session{
       if ($force==true){
         $token = (Uuid::uuid4())->toString();
 
-        $sql = 'insert into oauth (id,client,username) values ({id},{client},@sessionuser) ';
+        $sql = 'insert into oauth (id,client,username) values ({id},{client},{username}) ';
         if ($anyclient){
           $oauth = $this->db->direct($sql,array('id'=>$token,'client'=>'*' ));
         }else{
-          $oauth = $this->db->direct($sql,array('id'=>$token,'client'=>$_SESSION['tualoapplication']['client'] ));
+          $oauth = $this->db->direct($sql,array('id'=>$token,
+          'client'=>$_SESSION['tualoapplication']['client'],
+          'username'=>$_SESSION['tualoapplication']['username'] ));
         
         }
 
