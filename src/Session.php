@@ -235,7 +235,7 @@ class Session{
             client={client} and
             username=@sessionuser
           ';
-          $list = $this->db->direct($sql,array('p'=>implode(',',$test) ,'client'=>$this->client));
+          $list = $this->db->direct($sql,array('p'=>implode(',',$test) ,'client'=>$_SESSION['tualoapplication']['client']));
         }
         
         if (count($list)>0){
@@ -252,7 +252,7 @@ class Session{
         if ($anyclient){
           $oauth = $this->db->direct($sql,array('id'=>$token,'client'=>'*' ));
         }else{
-          $oauth = $this->db->direct($sql,array('id'=>$token,'client'=>$this->client ));
+          $oauth = $this->db->direct($sql,array('id'=>$token,'client'=>$_SESSION['tualoapplication']['client'] ));
         
         }
 
