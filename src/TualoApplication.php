@@ -211,8 +211,8 @@ class TualoApplication{
             ':'.$_SERVER['SERVER_PORT'],
             str_replace('/index.php','',$_SERVER['PHP_SELF'])
         ]);
-        $curlURL = $baseURL.''.$route;
-        $command = 'echo "curl \""'.$curlURL.'"\" | at "'.$time.'"';
+        $curlURL = $baseURL.'~/'.$token.'/'.$route;
+        $command = 'echo "curl '.$curlURL.'" | at "'.$time.'"';
         echo $command; exit();
         exec($command);
     }
