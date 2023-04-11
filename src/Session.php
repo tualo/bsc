@@ -2,6 +2,7 @@
 
 namespace Tualo\Office\Basic;
 use Tualo\Office\Basic\TualoApplication;
+use Ramsey\Uuid\Uuid;
 
 class Session{
 
@@ -173,6 +174,144 @@ class Session{
       $_SESSION['db']=[];
       $_SESSION['tualoapplication']=[];
       $_SESSION['tualoapplication']['loggedIn'] = false;
+      return true;
+    }
+
+
+
+
+    /**
+     * OAuth
+     * 
+     */
+
+
+    public function oauthValidUntil($token,$validUntil){
+      // alter table oauth add validuntil datetime default null;
+      $this->db->direct('update oauth set validuntil={validuntil} where id={token}',array('token'=>$token,'validuntil'=>$validUntil));
+    }
+
+    public function oauthValidDays($token,$days){
+      // alter table oauth add validuntil datetime default null;
+      $this->db->direct('update oauth set validuntil=date_add(current_date,interval {days} day) where id={token}',array('token'=>$token,'validuntil'=>$days));
+    }
+
+
+    public function registerOAuth($params=array(),$force=false,$anyclient=false,$path=''){
+      try{
+      if ($force!==true){
+        $test = array();
+        foreach( $params as $key=>$value){
+          $test[]=$key.'='.$value;
+        }
+        sort($test);
+        if (count($test)==0){
+          throw new \Exception("registerOAuth needs at least cmp parameter", 1);
+        }
+        
+        if ($anyclient){
+          $sql  = '
+          select
+            oauth.id,
+            oauth.client
+          from
+            (select id,group_concat( concat(param,\'=\',property) order by concat(param,\'=\',property) asc separator \',\') p from oauth_resources_property group by id having p={p}) a
+            join oauth on a.id=oauth.id
+          where
+            client=\'*\' and
+            username=@sessionuser
+          ';
+          $list = $this->db->direct($sql,array('p'=>implode(',',$test) ));
+
+        }else{
+          $sql  = '
+          select
+            oauth.id,
+            oauth.client
+          from
+            (select id,group_concat( concat(param,\'=\',property) order by concat(param,\'=\',property) asc separator \',\') p from oauth_resources_property group by id having p={p}) a
+            join oauth on a.id=oauth.id
+          where
+            client={client} and
+            username=@sessionuser
+          ';
+          $list = $this->db->direct($sql,array('p'=>implode(',',$test) ,'client'=>$this->client));
+        }
+        
+        if (count($list)>0){
+          $token=$list[0]['id'];
+        }else{
+          $force=true;
+        }
+      }
+
+      if ($force==true){
+        $token = (Uuid::uuid4())->toString();
+
+        $sql = 'insert into oauth (id,client,username) values ({id},{client},@sessionuser) ';
+        if ($anyclient){
+          $oauth = $this->db->direct($sql,array('id'=>$token,'client'=>'*' ));
+        }else{
+          $oauth = $this->db->direct($sql,array('id'=>$token,'client'=>$this->client ));
+        
+        }
+
+        if ($path!=''){
+
+          $this->db->direct('create table if not exists oauth_path (id varchar(32) primary key, path varchar(255), CONSTRAINT `fk_oauth_path_id` FOREIGN KEY (`id`) REFERENCES `oauth` (`id`) ON DELETE CASCADE ON UPDATE CASCADE ) ');
+
+          $this->db->direct('insert into oauth_path (id,path) values ({id},{path}) on duplicate key update path=values(path) ',array('path'=>$path,'id'=> $token));
+        
+        }
+
+        foreach( $params as $key=>$value){
+          $this->registerOAuthParam($token,$key,$value);
+        }
+      }
+    }catch(\Exception $e){
+      echo $this->db->last_sql;
+    }
+      return $token;
+    }
+
+    public function registerOAuthParam($token,$param,$property){
+
+      $sql = 'insert into oauth_resources (id,param) values ({id},{param}) on duplicate key update param=values(param)';
+      $this->db->direct($sql,array('id'=>$token,'param'=>$param));
+
+      $sql = 'insert into oauth_resources_property (id,param,property) values ({id},{param},{property}) on duplicate key update property=values(property)';
+      $this->db->direct($sql,array('id'=>$token,'param'=>$param,'property'=>$property));
+
+      return true;
+    }
+
+    public function getHeader($hkey){
+      $headers =  getallheaders();
+
+      foreach($headers as $key=>$val){
+        if ($hkey==$key){
+          return $val;
+        }
+      }
+      return false;
+    }
+
+
+    public function changeToken($token=''){
+      if ($token==''){
+        $token = $this->getHeader('Authorization');
+      }
+      $newtoken = (Uuid::uuid4())->toString();
+      $this->db->direct('update oauth set id = {newtoken} where id={oldtoken} ',array('newtoken'=>$newtoken,'oldtoken'=>$token));
+      return $newtoken;
+    }
+
+    public function setOauthForcedValues($token='',$value){
+      $def = $this->db->direct('explain oauth_resources_property',array(),'field');
+      if (!isset($def['forcedvalue'])){
+        $this->db->direct('alter table oauth_resources_property add forcedvalue tinyint default 0');
+      }
+      $this->db->direct('update oauth_resources_property set forcedvalue = {value} where id={token} ',array('token'=>$token,'value'=>$value));
       return true;
     }
 

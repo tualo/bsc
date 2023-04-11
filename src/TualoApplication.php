@@ -196,6 +196,27 @@ class TualoApplication{
 
     }
 
+    public static function executeDefferedRoute($route,$time="now + 1min"){
+        $session = self::get('session');
+        $token = $session->registerOAuth(
+            $params=['cmp'=>'cmp_ds'],
+            $force=true,
+            $anyclient=false,
+            $path=$route
+        );
+        $session->oauthValidDays($token,1);
+        $baseURL = implode('',[
+            $_SERVER['REQUEST_SCHEME'].'://',
+            $_SERVER['SERVER_NAME'],
+            ':'.$_SERVER['SERVER_PORT'],
+            str_replace('/index.php','',$_SERVER['PHP_SELF'])
+        ]);
+        $curlURL = $baseURL.''.$route;
+        $command = 'echo "curl \""'.$curlURL.'"\" | at "'.$time.'""';
+        echo $command; exit();
+        exec($command);
+    }
+
 
     public static function jsonReturnField($f){
         self::$returnField = $f;
