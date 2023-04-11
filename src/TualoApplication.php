@@ -211,6 +211,8 @@ class TualoApplication{
             ':'.$_SERVER['SERVER_PORT'],
             str_replace('/index.php','',$_SERVER['PHP_SELF'])
         ]);
+        $cnf = self::get('configuration');
+        if (isset($cnf['use_base_url'])) $baseURL= $cnf['use_base_url'];
         $curlURL = $baseURL.'/~/'.$token.''.$route;
         $command = 'echo "curl '.$curlURL.'" | at "'.$time.'"';
         exec($command);
