@@ -34,7 +34,7 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
                 $token = $matches['oauth'];
                 $_SESSION['session_condition']=array();
                 $session->db->direct('delete from oauth where validuntil<now()');
-                // $session->db->direct('delete from oauth where singleuse=1');
+                $session->db->direct('delete from oauth where singleuse=1');
                 
             
                 $result = array();

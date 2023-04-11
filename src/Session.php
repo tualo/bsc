@@ -191,6 +191,11 @@ class Session{
       $this->db->direct('update oauth set validuntil={validuntil} where id={token}',array('token'=>$token,'validuntil'=>$validUntil));
     }
 
+    public function oauthSingleUse($token){
+      // alter table oauth add validuntil datetime default null;
+      $this->db->direct('update oauth set singleuse=1 where id={token}',array('token'=>$token ));
+    }
+
     public function oauthValidDays($token,$days){
       // alter table oauth add validuntil datetime default null;
       $this->db->direct('update oauth set validuntil=date_add(current_date,interval {days} day) where id={token}',array('token'=>$token,'validuntil'=>$days));
