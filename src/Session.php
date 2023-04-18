@@ -99,7 +99,7 @@ class Session{
 
         }
       }else{
-        echo "Bitte richten Sie die Sitzungsdatenbank ein.";
+        echo "*Bitte richten Sie die Sitzungsdatenbank ein.";
         exit();
       }
       if (is_object($this->db)) $this->db->mysqli->set_charset('utf8');
@@ -316,7 +316,7 @@ class Session{
       return $newtoken;
     }
 
-    public function setOauthForcedValues($token='',$value){
+    public function setOauthForcedValues($token='',$value=''){
       $def = $this->db->direct('explain oauth_resources_property',array(),'field');
       if (!isset($def['forcedvalue'])){
         $this->db->direct('alter table oauth_resources_property add forcedvalue tinyint default 0');
