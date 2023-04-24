@@ -224,6 +224,22 @@ class Database_mysql extends Database_basic
       return $sql;
     }
 
+    public function moreResults(){
+        $results = [];
+        while($this->mysqli->more_results()){
+            $this->mysqli->next_result();
+            if ($result = $this->mysqli->use_result()) {
+                $res = [];
+                while ($row = $result->fetch_row()) {
+                    $res[]=$row;
+                }
+                $results[]=$res;
+                $result->close();
+            }
+        }
+        return $results;
+    }
+
     public function execute_with_hash($sql_statement, $hash, $decode = false)
     {
         /*
@@ -329,7 +345,6 @@ class Database_mysql extends Database_basic
             } else {
                 $this->lastSQL = $sql_statement;
                 $res = $this->mysqli->query($sql_statement);
-
                 if ($this->mysqli->warning_count!=0) { 
                     $e = $this->mysqli->get_warnings(); 
                     do { 
@@ -360,6 +375,10 @@ class Database_mysql extends Database_basic
         }else{
             return $str;
         }
+    }
+
+    public function getWarnings(){
+        return $this->warnings;
     }
 
     public function execute_with_params($sql_statement, $params, $debug = false)
