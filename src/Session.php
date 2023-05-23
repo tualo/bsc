@@ -110,7 +110,7 @@ class Session{
       
 
       TualoApplication::timing("session getDB");
-
+      $clientdb = null;
       try{
         if (
             isset($_SESSION['db']['dbuser']) 
@@ -163,6 +163,12 @@ class Session{
         //echo $e->getMessage();
         TualoApplication::logger('TualoApplication')->error($e->getMessage(),$_SESSION['db']);
       }
+      /*
+      if (is_null($clientdb)){
+        $this->destroy();
+        return false;
+      }
+      */
       return $clientdb;
     }
 

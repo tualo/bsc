@@ -8,7 +8,13 @@ TualoApplication::use('TualoApplicationSession_Login',function(){
         
         if (
                 isset($_SESSION['tualoapplication']['loggedIn'])
-            &&  ($_SESSION['tualoapplication']['loggedIn']===false)
+            &&  (
+                    ($_SESSION['tualoapplication']['loggedIn']===false)
+                    || (
+                        isset($_REQUEST['forcelogin']) &&
+                        $_REQUEST['forcelogin']==1
+                    )
+                )
             &&  (isset($_REQUEST['username']))
             &&  (isset($_REQUEST['password']))
             &&  (!is_null($session))
@@ -54,6 +60,7 @@ TualoApplication::use('TualoApplicationSession_Login',function(){
                 LIMIT 1
             ';
             $row = $session->db->singleRow($sql,$hash);
+
             if (false !== $row){
 
                 TualoApplication::result('success',true);
@@ -97,13 +104,15 @@ TualoApplication::use('TualoApplicationSession_Login',function(){
 
             TualoApplication::contenttype('application/json');
             TualoApplication::end();
-            //session_commit();
+            session_commit();
             exit();
 
         }else{
 
         }
     }catch(\Exception $e){
+        //echo $e->getMessage();
+
         TualoApplication::set('maintanceMode','on');
         TualoApplication::addError($e->getMessage());
     }
