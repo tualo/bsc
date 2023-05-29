@@ -12,6 +12,7 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
             &&  ($_SESSION['tualoapplication']['loggedIn']===false)
 
             &&  (!is_null($session))
+            &&  (isset( $_SERVER['REQUEST_METHOD'] ))
         ){
             //if (is_null($session->db)) throw new \Exception("Session DB not loaded");
             $path = '';
