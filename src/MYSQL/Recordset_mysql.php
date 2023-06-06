@@ -149,9 +149,11 @@ class Recordset_mysql {
 				$cname = $fname;
 				if ($byName){
 					$cname = $x['name'];
+					/*
 					if ($utf8){
 						$ds[$cname] = utf8_encode($this->rs_ref[$x['index']]);
 					}else{
+						*/
 						
 						if ($this->dbTypes){
 							switch($x['type_string']){
@@ -171,11 +173,14 @@ class Recordset_mysql {
 						}else{
 							$ds[$cname] = $this->rs_ref[$x['index']];
 						}
-					}
+					// }
 				}else{
+					/*
 					if ($utf8){
 						$ds[$cname] = utf8_encode($this->rs_ref[$x['index']]);
 					}else{
+					*/
+
 						if ($this->dbTypes){
 
 							switch($x['type_string']){
@@ -198,7 +203,7 @@ class Recordset_mysql {
 						}else{
 							$ds[$cname] = $this->rs_ref[$x['index']];
 						}
-					}
+					//}
 				}
 			}
 			if ($id!=''){
@@ -235,9 +240,11 @@ class Recordset_mysql {
 						if ($byName){
 							$cname = $x['name'];
 						}
+						/*
 						if ($utf8){
 							$ds[$cname] = utf8_encode($this->rs_ref[$x['index']]);
 						}else{
+							*/
 							if ($this->dbTypes){
 								switch($x['type_string']){
 									case 'd':
@@ -256,7 +263,7 @@ class Recordset_mysql {
 							}else{
 								$ds[$cname] = $this->rs_ref[$x['index']];
 							}
-						}
+						// }
 					}
 					if ($id!=''){
 						if (is_array($id)){
