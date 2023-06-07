@@ -598,6 +598,8 @@ class TualoApplication{
 
     private static $called_middlewares=[];
     private static function canRunMiddleWare($middleware){
+        $is_web=http_response_code()!==FALSE;
+        if ($is_web===false) return false;
         $headers = getallheaders();
         $result = true;
         if(isset(self::$called_middlewares[$middleware['key']])) return false;
