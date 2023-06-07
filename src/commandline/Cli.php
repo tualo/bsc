@@ -10,7 +10,7 @@ require_once 'vendor/autoload.php';
 TualoApplication::set('basePath', getcwd() );
 TualoApplication::set('cachePath', TualoApplication::get('basePath').'/cache/' );
 if (!file_exists(TualoApplication::get('basePath').'/configuration')){
-    mkdir(TualoApplication::get('basePath').'/configuration',0600,true);
+    mkdir(TualoApplication::get('basePath').'/configuration');
 }
 if (!file_exists(TualoApplication::get('basePath').'/configuration/.htconfig')){
     exec('which sencha', $sencha_command, $return_var);
