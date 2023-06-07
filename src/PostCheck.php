@@ -12,22 +12,36 @@ class PostCheck implements IPostCheck{
           App::run();
           $session = App::get('session');
           $sessiondb = $session->db;
-          $dbs = $sessiondb->direct('select username dbuser, password dbpass, id dbname, host dbhost, port dbport from macc_clients ');
-          foreach($dbs as $db){
-            if (!is_null($clientName) && $clientName!=$db['dbname']){ 
-                continue;
-            }else{
-                App::set('clientDB',$session->newDBByRow($db));
-                self::formatPrintLn(['blue'],'checks on '.$db['dbname'].':  ');
-                $classes = get_declared_classes();
-                foreach($classes as $cls){
-                    $class = new \ReflectionClass($cls);
-                    if ( $class->implementsInterface('Tualo\Office\Basic\IPostCheck') ) {
-                        $cls::test($config);
+          if (is_null($sessiondb)){
+            throw new \Exception('no session db');
+
+            self::formatPrintLn(['yellow'],' there is not database configuration, performing basic check');
+            $classes = get_declared_classes();
+            foreach($classes as $cls){
+                $class = new \ReflectionClass($cls);
+                if ( $class->implementsInterface('Tualo\Office\Basic\IPostCheck') ) {
+                    $cls::test($config);
+                }
+            }
+            
+          }else{
+            $dbs = $sessiondb->direct('select username dbuser, password dbpass, id dbname, host dbhost, port dbport from macc_clients ');
+            foreach($dbs as $db){
+                if (!is_null($clientName) && $clientName!=$db['dbname']){ 
+                    continue;
+                }else{
+                    App::set('clientDB',$session->newDBByRow($db));
+                    self::formatPrintLn(['blue'],'checks on '.$db['dbname'].':  ');
+                    $classes = get_declared_classes();
+                    foreach($classes as $cls){
+                        $class = new \ReflectionClass($cls);
+                        if ( $class->implementsInterface('Tualo\Office\Basic\IPostCheck') ) {
+                            $cls::test($config);
+                        }
                     }
                 }
             }
-          }
+            }
     }
 
     public static function test(array $config){
@@ -57,6 +71,7 @@ class PostCheck implements IPostCheck{
   public static function tableCheck(array $tables)
   {
     $clientdb = App::get('clientDB');
+    if (is_null($clientdb)) return;
     foreach( $tables as $tablename => $tabledef){
         $columns = [];
         try{ 
@@ -73,6 +88,7 @@ class PostCheck implements IPostCheck{
 
   public static function procedureCheck(array $procedures){
     $clientdb = App::get('clientDB');
+    if (is_null($clientdb)) return;
     foreach( $procedures as $procedurename => $procedure_md5){
         $columns = [];
         try{ 
