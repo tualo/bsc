@@ -31,6 +31,10 @@ class PostCheck implements IPostCheck{
     }
 
     public static function test(array $config){
+        if (!file_exists(App::get('basePath').'/tm')){
+            copy(App::get('basePath').'/vendor/tualo/bsc/src/commandline/client-script',App::get('basePath').'/tm');
+            chmod(App::get('basePath').'/tm',0755);
+        }
     }
 
     public static function formatPrint(array $format=[],string $text = '') {

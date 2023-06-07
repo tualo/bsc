@@ -16,6 +16,9 @@ TualoApplication::set('configuration',$settings);
 // Define the cli options.
 $cli = new Cli();
 
+($GLOBALS["argv"][0]='./tm');
+
+//$cli->meta("filename", "tualo office commandline client.");
 $cli
     ->command('setup')
     ->description('tualo office - setup')
@@ -41,39 +44,18 @@ $cli
 
     ->command('postcheck')
     ->description('runs postcheck commands for all modules')
-    ->opt('client', 'only use this client', false, 'string')
-    ;
-
+    ->opt('client', 'only use this client', false, 'string');
     
+    
+
     $args = $cli->parse($argv, true);
 
 if($args->getCommand()=='setup'){
     echo $args->getOpt('createsessiondb','session').PHP_EOL;
     echo $args->getOpt('createclientdb','sample').PHP_EOL;
-
-    // mysql -A -e "create database sessions CHARACTER SET utf8 COLLATE utf8_general_ci" 
-    // mysql -A sessions < module-dev/bsc/src/commandline/tpl/sessions.sql 
-
-    // mysql -A -e "create database testdb CHARACTER SET utf8 COLLATE utf8_general_ci" 
-    // mysql --force=true -A testdb < module-dev/bsc/src/commandline/tpl/db.sql 
-    // mysql -A testdb < module-dev/bsc/src/commandline/tpl/sessionviews.sql 
 }
 
 
 if($args->getCommand()=='postcheck'){
-    //echo $args->getOpt('client').' testing' .PHP_EOL;
-
     Tualo\Office\Basic\PostCheck::loopClients($settings,$args->getOpt('client'));
-    /*
-
-    $classes = get_declared_classes();
-    $interfaces = get_declared_interfaces();
-    foreach($classes as $cls){
-        $class = new \ReflectionClass($cls);
-        if ( $class->implementsInterface('Tualo\Office\Basic\IPostCheck') ) {
-            $cls::test($settings);
-        }
-    }
-    */
-    
 }
