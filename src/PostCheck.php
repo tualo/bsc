@@ -11,8 +11,7 @@ class PostCheck implements IPostCheck{
           $_SERVER['REQUEST_METHOD']='none';
           App::run();
           $session = App::get('session');
-          $sessiondb = $session->db;
-          if (is_null($sessiondb)){
+          if (is_null($session)){
 
             self::formatPrintLn(['yellow'],' there is not database configuration, performing basic check');
             $classes = get_declared_classes();
@@ -24,6 +23,7 @@ class PostCheck implements IPostCheck{
             }
             
           }else{
+            $sessiondb = $session->db;
             $dbs = $sessiondb->direct('select username dbuser, password dbpass, id dbname, host dbhost, port dbport from macc_clients ');
             foreach($dbs as $db){
                 if (!is_null($clientName) && $clientName!=$db['dbname']){ 
