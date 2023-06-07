@@ -682,6 +682,8 @@ class TualoApplication{
      */
     public static function end(){
         self::timing('end');
+        $is_web=http_response_code()!==FALSE;
+       
         //echo json_encode(self::$timing_result,JSON_PRETTY_PRINT); exit();
         //file_put_contents(self::get('basePath').'timing.txt',json_encode(self::$timing_result,JSON_PRETTY_PRINT));
         try{
@@ -701,10 +703,10 @@ class TualoApplication{
                         $data =   json_encode(self::$result,JSON_PRETTY_PRINT);
                     }
  
-                    header('Content-Type: '.self::contenttype());
+                    if ($is_web) header('Content-Type: '.self::contenttype());
                     echo $data;
                 }else{
-                    header('Content-Type: '.self::contenttype());
+                    if ($is_web) header('Content-Type: '.self::contenttype());
                     echo  self::$resultbody;
                 }
             }else{

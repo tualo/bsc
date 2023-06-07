@@ -100,7 +100,11 @@ class Route{
 
             // But a matching path exists
             if(!$route_method_found){
-                header("HTTP/1.0 405 Method Not Allowed");
+
+                $is_web=http_response_code()!==FALSE;
+                if ($is_web){
+                    header("HTTP/1.0 405 Method Not Allowed");
+                }
 
                 TualoApplication::logger('TualoApplication')->warning("*$path* *$method* is not allowed",self::$routes);
 

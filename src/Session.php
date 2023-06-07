@@ -57,7 +57,10 @@ class Session{
 
 
     private function __construct() {
-      session_start();
+      $is_web=http_response_code()!==FALSE;
+      if ($is_web){
+        session_start();
+      }
       
       $config = TualoApplication::get('configuration');
       

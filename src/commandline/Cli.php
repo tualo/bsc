@@ -9,6 +9,41 @@ require_once 'vendor/autoload.php';
 
 TualoApplication::set('basePath', getcwd() );
 TualoApplication::set('cachePath', TualoApplication::get('basePath').'/cache/' );
+if (!file_exists(TualoApplication::get('basePath').'/configuration')){
+    mkdir(TualoApplication::get('basePath').'/configuration',0600,true);
+}
+if (!file_exists(TualoApplication::get('basePath').'/configuration/.htconfig')){
+    exec('which sencha', $sencha_command, $return_var);
+    if (isset($sencha_command[0])){
+        $sencha_command=$sencha_command[0];
+    }else{
+        $sencha_command='sencha';
+    }
+    exec('echo $HOME', $home_command, $return_var);
+    if (isset($home_command[0])){
+        $home_command=$home_command[0];
+    }else{
+        $home_command='~';
+    }
+
+    file_put_contents(TualoApplication::get('basePath').'/configuration/.htconfig',
+    implode("\n",
+        [
+            '__DRIVER__          =MYSQL',
+            '__SESSION_DSN__     =sessions',
+            '__SESSION_USER__    =sessionuser',
+            '__SESSION_PASSWORD__=',
+            '__SESSION_HOST__    =127.0.0.1',
+            '__SESSION_PORT__    =3306',
+            '__COOKIE_PATH__     =/',
+            '[ext-compiler]',
+            "sencha_compiler_command=".$sencha_command[0],
+            'sencha_compiler_sdk='.$home_command.'/sencha/ext-7.6.0',
+            'sencha_compiler_toolkit=classic'
+        ]
+    )
+    );
+}
 TualoApplication::set('configurationFile',TualoApplication::get('basePath').'/configuration/.htconfig');
 $settings = parse_ini_file((string)TualoApplication::get('configurationFile'),true);
 TualoApplication::set('configuration',$settings);
