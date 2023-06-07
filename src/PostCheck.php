@@ -13,7 +13,6 @@ class PostCheck implements IPostCheck{
           $session = App::get('session');
           $sessiondb = $session->db;
           if (is_null($sessiondb)){
-            throw new \Exception('no session db');
 
             self::formatPrintLn(['yellow'],' there is not database configuration, performing basic check');
             $classes = get_declared_classes();
