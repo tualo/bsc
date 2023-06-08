@@ -15,3 +15,7 @@ if (class_exists("Tualo\Office\Basic\Middleware\Router")){ }
 if (class_exists("Tualo\Office\Basic\Routes\Index")){ }
 if (class_exists("Tualo\Office\Basic\Routes\Logout")){ }
 //require_once __DIR__.'/Routes/Download.php';
+
+
+require_once "PostCheckCommandline.php";
+require_once "MaintainceCommandline.php";
