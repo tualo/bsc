@@ -6,6 +6,9 @@ use Tualo\Office\Basic\IPreCheck;
 // Require composer's autoloader.
 require_once 'vendor/autoload.php';
 
+$is_web=http_response_code()!==FALSE;
+if ($is_web) exit();
+
 
 TualoApplication::set('basePath', getcwd() );
 TualoApplication::set('cachePath', TualoApplication::get('basePath').'/cache/' );

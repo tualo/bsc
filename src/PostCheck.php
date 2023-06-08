@@ -51,6 +51,23 @@ class PostCheck implements IPostCheck{
         if (!file_exists(App::get('basePath').'/index.php')){
             copy(App::get('basePath').'/vendor/tualo/bsc/src/commandline/index.php',App::get('basePath').'/index.php');
         }
+
+        if (!file_exists(App::get('basePath').'/.htaccess')){
+            $prompt = [
+                "\t".'do you want to copy the .htacces now? [y|n|c] '
+            ];
+            while(in_array($line = readline(implode("\n",$prompt)),['yes','y','n','no','c'])){
+                if ($line=='c') exit();
+                if ($line=='y'){
+                    copy(App::get('basePath').'/vendor/tualo/bsc/src/commandline/tpl/tpl.htaccess',App::get('basePath').'/.htaccess');
+                    self::formatPrintLn(['green'],"\t done");
+                    break;
+                }
+                if ($line=='n'){
+                    break;
+                }
+            }
+        }
     }
 
     public static function formatPrint(array $format=[],string $text = '') {
