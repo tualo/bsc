@@ -59,7 +59,9 @@ $cli = new Cli();
 ($GLOBALS["argv"][0]='./tm');
 
 //$cli->meta("filename", "tualo office commandline client.");
+/*
 $cli
+
     ->command('setup')
     ->description('tualo office - setup')
     ->opt('createsessiondb', 'new session db name', false)
@@ -74,7 +76,7 @@ $cli
     ->description('tualo office commandline client.')
     ->opt('on', 'enable maintaince mode.', false, 'boolean')
     ->opt('off', 'disable maintaince mode.', false, 'boolean')
-    /*
+ 
     ->opt('host:h', 'Connect to host.', true)
     ->opt('port:P', 'Port number to use.', false, 'integer')
     ->opt('user:u', 'User for login if not current user.', true)
@@ -82,33 +84,15 @@ $cli
     ->opt('database:d', 'The name of the database to dump.', true);
     */
 
-    ->command('postcheck')
-    ->description('runs postcheck commands for all modules')
-    ->opt('client', 'only use this client', false, 'string');
     
-
-    
-    $classes = get_declared_classes();
-    foreach($classes as $cls){
-        $class = new \ReflectionClass($cls);
-        if ( $class->implementsInterface('Tualo\Office\Basic\ICommandline') ) {
-            $cls::setup($cli);
-        }
+$classes = get_declared_classes();
+foreach($classes as $cls){
+    $class = new \ReflectionClass($cls);
+    if ( $class->implementsInterface('Tualo\Office\Basic\ICommandline') ) {
+        $cls::setup($cli);
     }
-
-
-    $args = $cli->parse($argv, true);
-
-if($args->getCommand()=='setup'){
-    echo $args->getOpt('createsessiondb','session').PHP_EOL;
-    echo $args->getOpt('createclientdb','sample').PHP_EOL;
 }
-
-
-if($args->getCommand()=='postcheck'){
-    Tualo\Office\Basic\PostCheck::loopClients($settings,$args->getOpt('client'));
-}
-
+$args = $cli->parse($argv, true);
 foreach($classes as $cls){
     $class = new \ReflectionClass($cls);
     if ( $class->implementsInterface('Tualo\Office\Basic\ICommandline') ) {
