@@ -54,7 +54,7 @@ class PostCheck implements IPostCheck{
 
         if (!file_exists(App::get('basePath').'/.htaccess')){
             $prompt = [
-                "\t".'do you want to copy the .htacces now? [y|n|c] '
+                "\t".'do you want to copy the .htaccess now? [y|n|c] '
             ];
             while(in_array($line = readline(implode("\n",$prompt)),['yes','y','n','no','c'])){
                 if ($line=='c') exit();
