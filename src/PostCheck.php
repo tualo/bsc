@@ -11,7 +11,7 @@ class PostCheck implements IPostCheck{
           $_SERVER['REQUEST_METHOD']='none';
           App::run();
           $session = App::get('session');
-          if (is_null($session)){
+          if (is_null($session->db)){
             self::formatPrintLn(['red'],'there is not database configuration');
             self::formatPrintLn(['yellow'],'performing basic check');
             $classes = get_declared_classes();
