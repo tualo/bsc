@@ -97,8 +97,11 @@ class Session{
           $this->db = self::newDBByRow($db_config);
         }catch(\Exception $e){
           TualoApplication::logger('BSC('.__FILE__.')')->error( $e->getMessage() );
-          echo "Bitte richten Sie die Sitzungsdatenbank ein. *";
-          exit();
+          $is_web=http_response_code()!==FALSE;
+          if ($is_web){
+            echo "Bitte richten Sie die Sitzungsdatenbank ein. *";
+            exit();
+          }
 
         }
       }else{
