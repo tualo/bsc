@@ -3,6 +3,8 @@
 use Garden\Cli\Cli;
 use Tualo\Office\Basic\TualoApplication;
 use Tualo\Office\Basic\IPreCheck;
+use Tualo\Office\Basic\ICommandline;
+
 // Require composer's autoloader.
 require_once 'vendor/autoload.php';
 
@@ -84,7 +86,16 @@ $cli
     ->description('runs postcheck commands for all modules')
     ->opt('client', 'only use this client', false, 'string');
     
+
     
+    $classes = get_declared_classes();
+    foreach($classes as $cls){
+        $class = new \ReflectionClass($cls);
+        if ( $class->implementsInterface('Tualo\Office\Basic\ICommandline') ) {
+            $cls::setup($cli);
+        }
+    }
+
 
     $args = $cli->parse($argv, true);
 
@@ -96,4 +107,13 @@ if($args->getCommand()=='setup'){
 
 if($args->getCommand()=='postcheck'){
     Tualo\Office\Basic\PostCheck::loopClients($settings,$args->getOpt('client'));
+}
+
+foreach($classes as $cls){
+    $class = new \ReflectionClass($cls);
+    if ( $class->implementsInterface('Tualo\Office\Basic\ICommandline') ) {
+        if($args->getCommand()==$cls::getCommandName()){
+            $cls::run($args);
+        }
+    }
 }
