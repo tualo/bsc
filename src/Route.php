@@ -41,6 +41,7 @@ class Route{
         }else{
             $path = '/';
         }
+        $path = preg_replace('/\/\//','/',$path);
         $method = $_SERVER['REQUEST_METHOD'];
         self::runpath($path,$method);
     }
