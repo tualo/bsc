@@ -19,5 +19,11 @@ class PostCheckCommandline implements ICommandline{
     }
     public static function run(Args $args){
         PostCheck::loopClients(App::get('configuration'),$args->getOpt('client'));
+        if (!file_exists(App::get('basePath').'/cache')){
+            mkdir( App::get('basePath').'/cache');
+        }
+        if (!file_exists(App::get('basePath').'/temp')){
+            mkdir( App::get('basePath').'/temp');
+        }
     }
 }
