@@ -1,5 +1,6 @@
 <?php
 use Tualo\Office\Basic\TualoApplication;
+use Tualo\Office\Basic\Session;
 
 TualoApplication::use('TualoApplicationSession_Auth',function(){
     try{
@@ -21,13 +22,19 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
             if(isset($parsed_url['path'])){ $path = $parsed_url['path']; }else{ $path = '/'; }
             if(preg_match('#/~/(?P<oauth>[\w\-]+)/*#',$path,$matches)){
                 if($_SESSION['tualoapplication']['loggedInType'] != 'oauth'){
-                    session_reset();
+                    session_destroy();
+                    TualoApplication::set('session',Session::getInstance());
+                    exit();
                 }
             }else{
                 if($_SESSION['tualoapplication']['loggedInType'] != 'none'){
-                    session_reset();
+                    session_destroy();
+                    TualoApplication::set('session',Session::getInstance());
+                    exit();
                 }
             }
+
+
         }
 
         if (
