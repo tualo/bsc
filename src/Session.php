@@ -59,7 +59,19 @@ class Session{
     private function __construct() {
       $is_web=http_response_code()!==FALSE;
       if ($is_web){
-        session_start();
+
+        $path = '';
+        $cookieName = 'BACKEND';
+        $parsed_url = parse_url($_SERVER['REQUEST_URI']);//Parse Uri
+        if(isset($_SERVER['REDIRECT_URL'])) $parsed_url = parse_url($_SERVER['REDIRECT_URL']);
+        if(isset($parsed_url['path'])){ $path = $parsed_url['path']; }else{ $path = '/'; }
+        if(preg_match('#/~/(?P<oauth>[\w\-]+)/*#',$path,$matches)){
+          $cookieName = 'FRONTEND';
+        }
+        
+        session_start([
+          'name' => $cookieName
+        ]);
       }
       
       $config = TualoApplication::get('configuration');
