@@ -5,12 +5,34 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
     try{
         $session = TualoApplication::get('session');
 
-
+        if(!isset($_SESSION['tualoapplication']['loggedInType'])){
+            $_SESSION['tualoapplication']['loggedInType'] = 'none';
+        }
+        if (
+                isset($_SESSION['tualoapplication']['loggedIn'])
+            &&  ($_SESSION['tualoapplication']['loggedIn']===true)
+            &&  (!is_null($session))
+            &&  (isset( $_SERVER['REQUEST_METHOD'] ))
+        ){
+            
+            $path = '';
+            $parsed_url = parse_url($_SERVER['REQUEST_URI']);//Parse Uri
+            if(isset($_SERVER['REDIRECT_URL'])) $parsed_url = parse_url($_SERVER['REDIRECT_URL']);
+            if(isset($parsed_url['path'])){ $path = $parsed_url['path']; }else{ $path = '/'; }
+            if(preg_match('#/~/(?P<oauth>[\w\-]+)/*#',$path,$matches)){
+                if($_SESSION['tualoapplication']['loggedInType'] != 'oauth'){
+                    session_reset();
+                }
+            }else{
+                if($_SESSION['tualoapplication']['loggedInType'] != 'none'){
+                    session_reset();
+                }
+            }
+        }
 
         if (
                 isset($_SESSION['tualoapplication']['loggedIn'])
             &&  ($_SESSION['tualoapplication']['loggedIn']===false)
-
             &&  (!is_null($session))
             &&  (isset( $_SERVER['REQUEST_METHOD'] ))
         ){
@@ -140,6 +162,8 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
                     $_SESSION['db']['dbport'] = $row['dbport'];
                     $_SESSION['db']['dbname'] = $row['dbname'];
                     
+                    $_SESSION['tualoapplication']['loggedInType'] = 'oauth';
+
                     $_SESSION['tualoapplication']['loggedIn'] = true;
                     $_SESSION['tualoapplication']['typ'] = $row['typ'];
                     $_SESSION['tualoapplication']['username'] = $row['login'];
