@@ -12,14 +12,17 @@ class Index implements IRoute{
         Route::add('/',function(){
 
             TualoApplication::contenttype('text/html');
-            if (!file_exists(TualoApplication::get('cachePath').'/pugcahe')){
-                mkdir(TualoApplication::get('cachePath').'/pugcahe',0777,true);
+            if (!file_exists(TualoApplication::get('cachePath').'/pugcache')){
+                mkdir(TualoApplication::get('cachePath').'/pugcache',0777,true);
             }
             
             $pug = new \Pug([
                 'pretty' => true,
-                'cache' => TualoApplication::get('cachePath').'/pugcahe'
+                'cache' => TualoApplication::get('cachePath').'/pugcache'
             ]);
+
+            //'unsafe-eval'
+            header("Content-Security-Policy: default-src 'self'");
 
             try{
                 $pugfile = TualoApplication::get('basePath').'/pages/custom/index.pug';
