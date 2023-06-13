@@ -192,6 +192,8 @@ class Session{
       $_SESSION['tualoapplication']['client'] = '';
       $_SESSION['tualoapplication']['clients'] = '';
       $_SESSION['tualoapplication']['loggedIn'] = false;
+      $_SESSION['session_condition']=[];
+
       return true;
     }
 

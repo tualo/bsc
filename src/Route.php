@@ -53,6 +53,10 @@ class Route{
 
         TualoApplication::timing("start routes loop",'');
 
+        if (isset($_SESSION['session_condition'])&&isset($_SESSION['session_condition']['path'])){
+            TualoApplication::logger('ROUTERUN')->debug("use path",$_SESSION['session_condition']['path']);
+        }
+
         //$session_is_active = !is_null(TualoApplication::get('session'))&&(TualoApplication::get('session')->getDB());
         $session_is_active = (isset($_SESSION['tualoapplication']['loggedIn'])  &&  ($_SESSION['tualoapplication']['loggedIn']===true));
         foreach(self::$routes as $route){
