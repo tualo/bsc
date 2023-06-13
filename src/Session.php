@@ -185,6 +185,12 @@ class Session{
     public function destroy() {
       $_SESSION['db']=[];
       $_SESSION['tualoapplication']=[];
+      $_SESSION['tualoapplication']['loggedInType'] = '';
+      $_SESSION['tualoapplication']['typ'] = '';
+      $_SESSION['tualoapplication']['username'] = '';
+      $_SESSION['tualoapplication']['fullname'] = '';
+      $_SESSION['tualoapplication']['client'] = '';
+      $_SESSION['tualoapplication']['clients'] = '';
       $_SESSION['tualoapplication']['loggedIn'] = false;
       return true;
     }

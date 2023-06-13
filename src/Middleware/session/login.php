@@ -74,6 +74,8 @@ TualoApplication::use('TualoApplicationSession_Login',function(){
                 $_SESSION['db']['dbname'] = $row['dbname'];
                 
                 $_SESSION['tualoapplication']['loggedIn'] = true;
+                $_SESSION['tualoapplication']['loggedInType'] = 'login';
+                
                 $_SESSION['tualoapplication']['typ'] = $row['typ'];
                 $_SESSION['tualoapplication']['username'] = $row['login'];
                 $_SESSION['tualoapplication']['fullname'] = $row['fullname'];

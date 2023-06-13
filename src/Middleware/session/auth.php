@@ -6,9 +6,7 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
     try{
         $session = TualoApplication::get('session');
 
-        if(!isset($_SESSION['tualoapplication']['loggedInType'])){
-            $_SESSION['tualoapplication']['loggedInType'] = 'none';
-        }
+        if(!isset($_SESSION['tualoapplication']['loggedInType'])) $_SESSION['tualoapplication']['loggedInType'] = 'none'; 
         if (
                 isset($_SESSION['tualoapplication']['loggedIn'])
             &&  ($_SESSION['tualoapplication']['loggedIn']===true)
@@ -22,15 +20,11 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
             if(isset($parsed_url['path'])){ $path = $parsed_url['path']; }else{ $path = '/'; }
             if(preg_match('#/~/(?P<oauth>[\w\-]+)/*#',$path,$matches)){
                 if($_SESSION['tualoapplication']['loggedInType'] != 'oauth'){
-                    session_destroy();
-                    TualoApplication::set('session',Session::getInstance());
-                    exit();
+                    Session::getInstance()->destroy();
                 }
             }else{
-                if($_SESSION['tualoapplication']['loggedInType'] != 'none'){
-                    session_destroy();
-                    TualoApplication::set('session',Session::getInstance());
-                    exit();
+                if($_SESSION['tualoapplication']['loggedInType'] != 'login'){
+                    Session::getInstance()->destroy();
                 }
             }
 

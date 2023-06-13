@@ -22,7 +22,9 @@ class Index implements IRoute{
             ]);
 
             //'unsafe-eval'
-            header("Content-Security-Policy: default-src 'self'");
+            header("Content-Security-Policy: base-uri 'none', base-uri 'self'; default-src 'self' data:; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; form-action 'self'; img-src 'self' data:");
+
+            
 
             try{
                 $pugfile = TualoApplication::get('basePath').'/pages/custom/index.pug';
