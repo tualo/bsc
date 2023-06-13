@@ -8,10 +8,14 @@ class ClientIP implements IMiddleware{
             try{
                 $config = TualoApplication::get('configuration');
                 $field = 'REMOTE_ADDR';
-                if (isset($config['__CMS_ALLOWED_IP_FIELD__'])){
+                if ((isset($config['__CMS_ALLOWED_IP_FIELD__']) && isset($_SERVER[$config['__CMS_ALLOWED_IP_FIELD__']]))){
                     $field = $config['__CMS_ALLOWED_IP_FIELD__'];
                 }
-                TualoApplication::set('clientIP',$_SERVER[$field]);
+                if (isset($_SERVER[$field])){
+                    TualoApplication::set('clientIP',$_SERVER[$field]);
+                }else{
+                    TualoApplication::set('clientIP','not set');
+                }
             }catch(\Exception $e){
                 TualoApplication::set('maintanceMode','on');
                 TualoApplication::addError($e->getMessage());
