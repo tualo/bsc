@@ -100,9 +100,8 @@ class Route{
                             TualoApplication::logger('ROUTERUN')->debug("path matches");
                             $session_condition_allowed = true;
                         }else{
-                            TualoApplication::logger('ROUTERUN')->debug("path not matches");
                             header($_SERVER['SERVER_PROTOCOL'] . " 404 not found");
-                            
+                            TualoApplication::logger('ROUTERUN')->error("try to reach a path that is not allowed");
                             exit();
                         }
                         
@@ -133,7 +132,7 @@ class Route{
                     header("HTTP/1.0 405 Method Not Allowed");
                 }
 
-                TualoApplication::logger('TualoApplication')->warning("*$path* *$method* is not allowed",self::$routes);
+                TualoApplication::logger('TualoApplication')->warning("*$path* *$method* is not allowed ",[TualoApplication::get('clientIP')]);
 
 
                 if(self::$methodNotAllowed){
