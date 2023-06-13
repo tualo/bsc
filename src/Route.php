@@ -99,6 +99,11 @@ class Route{
                         if(preg_match('#'.$test_path.'#',$path,$session_condition_matches)){
                             TualoApplication::logger('ROUTERUN')->debug("path matches");
                             $session_condition_allowed = true;
+                        }else{
+                            TualoApplication::logger('ROUTERUN')->debug("path not matches");
+                            header($_SERVER['SERVER_PROTOCOL'] . " 404 not found");
+                            
+                            exit();
                         }
                         
                     }
