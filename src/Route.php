@@ -53,9 +53,6 @@ class Route{
 
         TualoApplication::timing("start routes loop",'');
 
-        if (isset($_SESSION['session_condition'])&&isset($_SESSION['session_condition']['path'])){
-            TualoApplication::logger('ROUTERUN')->debug("use path",$_SESSION['session_condition']['path']);
-        }
 
         //$session_is_active = !is_null(TualoApplication::get('session'))&&(TualoApplication::get('session')->getDB());
         $session_is_active = (isset($_SESSION['tualoapplication']['loggedIn'])  &&  ($_SESSION['tualoapplication']['loggedIn']===true));
@@ -89,7 +86,13 @@ class Route{
                     }
                     TualoApplication::timing("route before call_user_func_array");
                     //call_user_func_array($route['function'], array($matches));
+
+                    if (isset($_SESSION['session_condition'])&&isset($_SESSION['session_condition']['path'])){
+                        TualoApplication::logger('ROUTERUN')->debug("use path ".$_SESSION['session_condition']['path']." for ".$path);
+                    }
+
                     $route['function']($matches);
+
                     TualoApplication::timing("after call_user_func_array");
                     $route_method_found = true;
                     // Do not check other routes
