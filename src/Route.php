@@ -87,11 +87,25 @@ class Route{
                     TualoApplication::timing("route before call_user_func_array");
                     //call_user_func_array($route['function'], array($matches));
 
+                    $session_condition_allowed = true;
                     if (isset($_SESSION['session_condition'])&&isset($_SESSION['session_condition']['path'])){
                         TualoApplication::logger('ROUTERUN')->debug("use path ".$_SESSION['session_condition']['path']." for ".$path);
+
+                        $session_condition_allowed = false;
+                        $test_path = $_SESSION['session_condition']['path'];
+                        if (substr($test_path,strlen($test_path)-1,1)=='*'){
+                            $test_path = str_replace('*','(\.)*',$test_path);
+                        }
+                        if(preg_match('#'.$test_path.'#',$path,$session_condition_matches)){
+                            TualoApplication::logger('ROUTERUN')->debug("path matches");
+                            $session_condition_allowed = true;
+                        }
+                        
                     }
 
-                    $route['function']($matches);
+                    if ($session_condition_allowed===true){
+                        $route['function']($matches);
+                    }
 
                     TualoApplication::timing("after call_user_func_array");
                     $route_method_found = true;
