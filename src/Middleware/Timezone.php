@@ -10,7 +10,7 @@ class Timezone implements IMiddleware{
                 if (isset($config['TIMEZONE'])){
                     date_default_timezone_set($config['TIMEZONE']);
                 }else{
-                    TualoApplication::logger('TualoApplication')->warning("using default timezone ".date_default_timezone_get(),[TualoApplication::get('clientIP')]);
+                    TualoApplication::logger('TualoApplication')->debug("using default timezone ".date_default_timezone_get(),[TualoApplication::get('clientIP')]);
                 }
             }catch(\Exception $e){
                 TualoApplication::set('maintanceMode','on');
