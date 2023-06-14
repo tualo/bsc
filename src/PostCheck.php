@@ -93,7 +93,7 @@ class PostCheck implements IPostCheck{
         try{ 
             $columns = $clientdb->direct('explain `'.$tablename.'`'); 
             $columnnames = array_map(function($v){ return $v['field']; },$columns);
-            self::formatPrintLn(['green'],"\ttest table".$clientdb->dbname.'.'.$tablename.' exists  ');
+            self::formatPrintLn(['green'],"\ttest table ".$clientdb->dbname.'.'.$tablename.' exists  ');
         }catch(\Exception $e){ 
             self::formatPrintLn(['red'],"\ttest table ".$clientdb->dbname.'.'.$tablename.' failed  ');
             continue; 

@@ -215,6 +215,8 @@ class Database_mysql extends Database_basic
                 }else{
                     $sql = str_replace('{'.$p.'}', 'null', $sql);
                 }
+            }else if ($func == 'json'){
+                $sql = str_replace('{'.$p.'}', isset($hash[$field]) ? ' \''.($hash[$field]).'\' ' : 'null', $sql);
             }else{
                 $sql = str_replace('{'.$p.'}', isset($hash[$p]) ? ' \''.$this->escape_string($hash[$p]).'\' ' : 'null', $sql);
             }
@@ -226,8 +228,9 @@ class Database_mysql extends Database_basic
 
     public function moreResults(){
         $results = [];
+        
         while($this->mysqli->more_results()){
-            $this->mysqli->next_result();
+            
             if ($result = $this->mysqli->use_result()) {
                 $res = [];
                 while ($row = $result->fetch_row()) {
@@ -236,6 +239,7 @@ class Database_mysql extends Database_basic
                 $results[]=$res;
                 $result->close();
             }
+            $this->mysqli->next_result();
         }
         return $results;
     }
@@ -316,6 +320,7 @@ class Database_mysql extends Database_basic
                 $rs = false;
                 $this->lastSQL = $sql_statement;
                 
+
                 //TualoApplication::timing(self::class.' mysqli->query start '.__LINE__);
                 $res = $this->mysqli->query($sql_statement);
                 //TualoApplication::timing(self::class.' mysqli->query stop '.__LINE__);
