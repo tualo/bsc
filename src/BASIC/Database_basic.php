@@ -278,6 +278,34 @@ $element = array(
         return $default;
     }
 
+
+    public function explode_by_delimiter($sql){
+      $all_queries = [];
+      preg_match_all("/delimiter\s+(?P<delimiter>(\/\/|;))/i", $sql, $matches);
+      if (count($matches)>0){
+          
+          foreach($matches[0] as $index=>$delimiters){
+              if ($index==0){
+                  $startat = strpos($sql,$delimiters)+strlen($delimiters);
+                  $sql = substr($sql,$startat);
+              }
+              
+              if ($index +1 == count($matches[0])){
+                  
+                $all_queries = array_merge($all_queries,explode($matches['delimiter'][$index],$sql));
+
+              }else{
+                  $all_queries = array_merge($all_queries,explode($matches['delimiter'][$index],explode($matches[0][$index+1],$sql)[0]));
+                  $startat = strpos($sql,$matches[0][$index+1])+strlen($matches[0][$index+1]);
+                  $sql = substr($sql,$startat);
+              }
+              
+          } 
+      }
+
+      return $all_queries;
+    }
+
     public function split_delimiter($sql,$current_delimiter=';'){
       $sqls = array();
       $in_single_qoute=false;

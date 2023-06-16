@@ -102,19 +102,22 @@ class PostCheck implements IPostCheck{
 
   }
 
-  public static function procedureCheck(array $procedures){
+  public static function procedureCheck(array $procedures,string $missingHint='',string $differentHint=''){
     $clientdb = App::get('clientDB');
     if (is_null($clientdb)) return;
     foreach( $procedures as $procedurename => $procedure_md5){
         $columns = [];
         try{ 
-            $columns = $clientdb->singleValue('select md5(routine_definition) md5 from information_schema.routines WHERE routine_name like {procedurename}',['procedurename'=>$procedurename],'md5'); 
+            $columns = $clientdb->singleValue('select md5(routine_definition) md5 from information_schema.routines WHERE routine_schema = {clientdb} and routine_name like {procedurename}',['procedurename'=>$procedurename,'clientdb'=>$clientdb->dbname],'md5'); 
             if ($columns===false){
                 self::formatPrintLn(['red'],"\ttest stored procedure ".$clientdb->dbname.'.'.$procedurename.' does not exist');
+                self::formatPrintLn(['blue'],"\t".$missingHint);
             }else if ($columns==$procedure_md5){
                 self::formatPrintLn(['green'],"\ttest stored procedure ".$clientdb->dbname.'.'.$procedurename.' done  ');
             }else{
                 self::formatPrintLn(['yellow'],"\ttest stored procedure ".$clientdb->dbname.'.'.$procedurename.' other version ');
+                self::formatPrintLn(['blue'],"\t".$differentHint);
+                
             }
 
         }catch(\Exception $e){ 
