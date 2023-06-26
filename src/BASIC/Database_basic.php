@@ -100,6 +100,15 @@ class  Database_basic{
       }
     }
 
+    public function directSingleHash($statement,$hash=[]) {
+      $row = $this->singleRow($statement,$hash,'');
+      if ($row===false) return false;
+      $res = [];
+      foreach($row as $key=>$v){
+        $res[$key]=$v;
+      }
+      return $res;
+    }
 
     public function singleRow($statement,$hash=array(),$key=''){
       $rs = $this->execute_with_hash($statement,$hash);
