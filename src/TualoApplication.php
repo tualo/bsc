@@ -83,6 +83,7 @@ class TualoApplication{
         return ($a['position'] < $b['position']) ? -1 : 1;
     }
 
+
     public static function logger($channel)
     {
         if (!isset(self::$logger[$channel])){
