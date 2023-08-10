@@ -16,6 +16,7 @@ TualoApplication::use('TualoApplicationSession_Auth',function(){
                 }
             }
             $session->loginByToken($authToken);
+            header("Access-Control-Allow-Origin: *");
             session_commit();
         }
 
