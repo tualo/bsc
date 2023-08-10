@@ -83,6 +83,15 @@ class TualoApplication{
         return ($a['position'] < $b['position']) ? -1 : 1;
     }
 
+    public static function configuration(string $section,string $key, mixed $defaultReturn=false) : mixed {
+        $cnf = self::get('configuration');
+        if (($section=='') && (isset($cnf[$key]))){
+                return $cnf[$key];
+        }elseif (isset($cnf[$section]) && isset($cnf[$section][$key])){
+            return $cnf[$section][$key];
+        }
+        return $defaultReturn;
+    }
 
     public static function logger($channel)
     {
