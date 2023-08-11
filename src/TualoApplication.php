@@ -530,7 +530,8 @@ class TualoApplication{
 
         header("Last-Modified: ".gmdate("D, d M Y H:i:s", $last_modified_time)." GMT"); 
         header("Etag: $etag");  
-        
+        header('Cache-Control: public');
+                
         if (
             (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && ( strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $last_modified_time ))
             || 
