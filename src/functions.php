@@ -22,3 +22,4 @@ require_once "PostCheckCommandline.php";
 require_once "MaintainceCommandline.php";
 require_once "CreateSystemCommandline.php";
 require_once "Routes/RegisterClient.php";
+require_once "Checks/Tables.php";
