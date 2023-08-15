@@ -7,6 +7,7 @@ use Tualo\Office\ExtJSCompiler\Helper;
 use Tualo\Office\Basic\TualoApplication as App;
 use Tualo\Office\Basic\PostCheck;
 use Tualo\Office\DS\DataRenderer;
+use Ramsey\Uuid\Uuid;
 
 
 class CreateSystemCommandline implements ICommandline{
@@ -15,7 +16,7 @@ class CreateSystemCommandline implements ICommandline{
 
     public static function setup(Cli $cli){
         $cli->command(self::getCommandName())
-            ->description('runs postcheck commands for all modules')
+            ->description('create a new system')
             ->opt('client', 'only use this client', false, 'string');
     }
 
@@ -52,7 +53,7 @@ class CreateSystemCommandline implements ICommandline{
                 }
 
                 PostCheck::formatPrint(['blue'],"\tsetup sessions db... ");
-                exec('mysql -D '.$sessionDBName.' < '.__DIR__.'/commandline/sql/sessions.sql',$res,$err);
+                exec('mysql -D '.$sessionDBName.' < '.__DIR__.'/commandline/sql/plain-system-session.sql',$res,$err);
                 if ($err!=0){
                     PostCheck::formatPrintLn(['red'],'failed');
                     PostCheck::formatPrintLn(['red'],implode("\n",$res));
@@ -62,7 +63,23 @@ class CreateSystemCommandline implements ICommandline{
                 }
 
                 PostCheck::formatPrint(['blue'],"\tsetup client db... ");
-                exec('mysql --force=true -D '.$clientDBName.' < '.__DIR__.'/commandline/sql/tualooffice.ddl.sql',$res,$err);
+             
+                    /*
+                    `login` varchar(255) NOT NULL DEFAULT '',
+                    `passwd` varchar(255) DEFAULT NULL,
+                    `groupname` varchar(32) DEFAULT NULL,
+                    `typ` varchar(20) DEFAULT NULL,
+                    `initial` int(11) DEFAULT 0,
+                    `tpin` varchar(50) DEFAULT NULL,
+                    `salt` varchar(255) DEFAULT NULL,
+                    `pwtype` varchar(255) DEFAULT 'md5',
+                    PRIMARY KEY (`login`)
+                  )
+                INSERT INTO `macc_users_clients` VALUES ('thomas.hoffmann@tualo.de','clientdatabase');
+                INSERT INTO `macc_users_groups` VALUES ('thomas.hoffmann@tualo.de','administration',NULL),('thomas.hoffmann@tualo.de','_default_',NULL);
+                */
+
+                exec('mysql --force=true -D '.$clientDBName.' < '.__DIR__.'/commandline/sql/plain-system.sql',$res,$err);
                 if ($err!=0){
                     PostCheck::formatPrintLn(['red'],'failed');
                     PostCheck::formatPrintLn(['red'],implode("\n",$res));
@@ -70,6 +87,12 @@ class CreateSystemCommandline implements ICommandline{
                 }else{
                     PostCheck::formatPrintLn(['green'],'done');
                 }
+                
+                $clientUsername = 'admin';
+                $clientpassword = (Uuid::uuid4())->toString();
+                $sql = 'INSERT INTO `macc_clients` VALUES ("'.$clientDBName.'","'.$clientUsername.'","'.$clientpassword.'","localhost",3306)';
+                $sql = 'call ADD_TUALO_USER({username},{password},{password},{clientdatabase},{groupname})';
+
 
                 break;
             }

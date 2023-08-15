@@ -462,7 +462,9 @@ class Session{
     }
 
     public function getHeader($hkey){
-      $headers =  getallheaders();
+      $is_web=http_response_code()!==FALSE;
+      $headers=[];
+      if ($is_web) $headers = getallheaders();
 
       foreach($headers as $key=>$val){
         if ($hkey==$key){
