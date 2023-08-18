@@ -87,11 +87,12 @@ class CreateSystemCommandline implements ICommandline{
                 }else{
                     PostCheck::formatPrintLn(['green'],'done');
                 }
-                
+
                 $clientUsername = 'admin';
                 $clientpassword = (Uuid::uuid4())->toString();
                 $sql = 'INSERT INTO `macc_clients` VALUES ("'.$clientDBName.'","'.$clientUsername.'","'.$clientpassword.'","localhost",3306)';
-                $sql = 'call ADD_TUALO_USER({username},{password},{password},{clientdatabase},{groupname})';
+                PostCheck::formatPrint(['blue'],"\tcreate client user... ");
+                $sql = 'call ADD_TUALO_USER("'.$clientUsername.'","'.$clientUsername.'","'.$clientDBName.'","administration")';
 
 
                 break;
