@@ -146,7 +146,7 @@ class PostCheck implements IPostCheck
                 } else if ($columns == $procedure_md5) {
                     self::formatPrintLn(['green'], "\tmodule " . $displayName . " test stored procedure " . $clientdb->dbname . '.' . $procedurename . ' done  ');
                 } else {
-                    self::formatPrintLn(['yellow'], "\tmodule " . $displayName . " test stored procedure " . $clientdb->dbname . '.' . $procedurename . ' other version (got: '.$columns.' expected '.$procedure_md5.')');
+                    self::formatPrintLn(['yellow'], "\tmodule " . $displayName . " test stored procedure " . $clientdb->dbname . '.' . $procedurename . ' other version (got: '.$columns.', expected: '.$procedure_md5.')');
                     self::formatPrintLn(['blue'], "\t" . $differentHint);
                 }
             } catch (\Exception $e) {
