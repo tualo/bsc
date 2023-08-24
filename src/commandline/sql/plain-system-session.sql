@@ -1,52 +1,8 @@
 
---
--- Table structure for table `loginnamen`
---
-
-DROP TABLE IF EXISTS `loginnamen`;
-CREATE TABLE `loginnamen` (
-  `login` varchar(255) NOT NULL DEFAULT '',
-  `vorname` varchar(255) NOT NULL,
-  `nachname` varchar(255) NOT NULL,
-  `fax` varchar(255) DEFAULT NULL,
-  `telefon` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `kundenberater` varchar(255) DEFAULT NULL,
-  `mobile` varchar(30) DEFAULT NULL,
-  `aktiv` varchar(4) DEFAULT NULL,
-  `zeichen` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`login`)
-);
-
---
--- Dumping data for table `loginnamen`
---
-
-LOCK TABLES `loginnamen` WRITE;
-INSERT INTO `loginnamen` VALUES ('Neuer nutzer','Ronald','Nickel',NULL,NULL,'r.nickel@ronnic-arts.de',NULL,NULL,NULL,NULL),('r.nickel@ronnic-arts.de','Ronald','Nickel',NULL,NULL,'r.nickel@ronnic-arts.de',NULL,NULL,NULL,NULL),('thomas.hoffmann@tualo.de','Thomas','Hoffmann','','','thomas.hoffmann@tualo.de','','',NULL,NULL);
-UNLOCK TABLES;
-
---
--- Table structure for table `logins`
---
-
-DROP TABLE IF EXISTS `logins`;
-CREATE TABLE `logins` (
-  `id` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `passwordType` varchar(255) NOT NULL DEFAULT 'blowfish',
-  `firstName` varchar(255) DEFAULT NULL,
-  `lastName` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-);
 
 
---
--- Table structure for table `macc_clients`
---
 
-DROP TABLE IF EXISTS `macc_clients`;
-CREATE TABLE `macc_clients` (
+CREATE TABLE IF NOT EXISTS `macc_clients` (
   `id` varchar(255) NOT NULL,
   `username` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
@@ -55,43 +11,13 @@ CREATE TABLE `macc_clients` (
   PRIMARY KEY (`id`)
 );
 
---
--- Table structure for table `macc_component`
---
-
-DROP TABLE IF EXISTS `macc_component`;
-CREATE TABLE `macc_component` (
-  `id` varchar(50) NOT NULL,
-  `des` varchar(255) DEFAULT NULL,
-  `version` varchar(15) DEFAULT '',
-  PRIMARY KEY (`id`)
-);
-
---
--- Dumping data for table `macc_component`
---
-
-LOCK TABLES `macc_component` WRITE;
-UNLOCK TABLES;
-
---
--- Table structure for table `macc_component_access`
---
-
-DROP TABLE IF EXISTS `macc_component_access`;
-CREATE TABLE `macc_component_access` (
-  `komponente` varchar(255) NOT NULL DEFAULT '',
-  `rolle` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`komponente`,`rolle`)
-);
 
 
 --
 -- Table structure for table `macc_groups`
 --
 
-DROP TABLE IF EXISTS `macc_groups`;
-CREATE TABLE `macc_groups` (
+CREATE TABLE IF NOT EXISTS `macc_groups` (
   `name` varchar(255) NOT NULL,
   `aktiv` tinyint(4) DEFAULT NULL,
   `beschreibung` varchar(4000) DEFAULT NULL,
@@ -111,8 +37,7 @@ UNLOCK TABLES;
 -- Table structure for table `macc_menu`
 --
 
-DROP TABLE IF EXISTS `macc_menu`;
-CREATE TABLE `macc_menu` (
+CREATE TABLE IF NOT EXISTS `macc_menu` (
   `id` varchar(50) NOT NULL,
   `title` varchar(50) NOT NULL,
   `path` varchar(255) NOT NULL,
@@ -136,45 +61,13 @@ LOCK TABLES `macc_menu` WRITE;
 INSERT INTO `macc_menu` VALUES ('087743ec-3217-11ee-b860-002590c4e7c6','Benutzer','',NULL,'',1,NULL,'f30bc380-3216-11ee-ae05-002590c72640',0,1,'fa fa-users','#usereditor'),('1ace16ec-3217-11ee-ae05-002590c72640','Menü','',NULL,'',2,NULL,'f30bc380-3216-11ee-ae05-002590c72640',0,1,'fa fa-list','#menueditor'),('2392d8cd-3217-11ee-ae05-002590c72640','Gruppen','',NULL,'',0,NULL,'f30bc380-3216-11ee-ae05-002590c72640',0,1,'typcn typcn-group','#groupeditor'),('f30bc380-3216-11ee-ae05-002590c72640','Setup','',NULL,'',0,NULL,'',0,1,'fa fa-cogs','');
 UNLOCK TABLES;
 
---
--- Table structure for table `macc_session`
---
 
-DROP TABLE IF EXISTS `macc_session`;
-CREATE TABLE `macc_session` (
-  `sid` varchar(40) NOT NULL DEFAULT '',
-  `cnt` varchar(4000) DEFAULT NULL,
-  `datum` varchar(10) DEFAULT NULL,
-  `zeit` varchar(10) DEFAULT NULL,
-  `ip` varchar(50) DEFAULT NULL,
-  `client` varchar(255) DEFAULT NULL,
-  `username` varchar(255) DEFAULT NULL
-);
-
---
--- Dumping data for table `macc_session`
---
-
-LOCK TABLES `macc_session` WRITE;
-UNLOCK TABLES;
-DELIMITER ;;
-        macc_session_bi
-BEFORE INSERT
-ON      macc_session
-FOR EACH ROW
-BEGIN
-        IF NEW.sid = '' THEN
-                SIGNAL SQLSTATE '45001' SET MESSAGE_TEXT = 'Blank value on macc_session.sid';
-        END IF;
-END */;;
-DELIMITER ;
 
 --
 -- Table structure for table `macc_users`
 --
 
-DROP TABLE IF EXISTS `macc_users`;
-CREATE TABLE `macc_users` (
+CREATE TABLE IF NOT EXISTS `macc_users` (
   `login` varchar(255) NOT NULL DEFAULT '',
   `passwd` varchar(255) DEFAULT NULL,
   `groupname` varchar(32) DEFAULT NULL,
@@ -188,11 +81,40 @@ CREATE TABLE `macc_users` (
 
 
 --
+-- Table structure for table `loginnamen`
+--
+
+CREATE TABLE IF NOT EXISTS `loginnamen` (
+  `login` varchar(255) NOT NULL DEFAULT '',
+  `vorname` varchar(255) NOT NULL,
+  `nachname` varchar(255) NOT NULL,
+  `fax` varchar(255) DEFAULT NULL,
+  `telefon` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `kundenberater` varchar(255) DEFAULT NULL,
+  `mobile` varchar(30) DEFAULT NULL,
+  `aktiv` varchar(4) DEFAULT NULL,
+  `zeichen` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`login`),
+  constraint `fk_loginnamen_login` foreign key (`login`) references `macc_users` (`login`) on delete cascade on update cascade
+);
+
+
+DELIMITER ;;
+
+CREATE OR REPLACE TRIGGER `macc_users_ai` AFTER INSERT ON `macc_users` FOR EACH ROW
+BEGIN
+  insert into loginnamen (login,vorname,nachname,fax,telefon,email,kundenberater,mobile) values (new.login,'','','','','','','');
+END ;;
+
+
+DELIMITER ;
+
+--
 -- Table structure for table `macc_users_clients`
 --
 
-DROP TABLE IF EXISTS `macc_users_clients`;
-CREATE TABLE `macc_users_clients` (
+CREATE TABLE IF NOT EXISTS `macc_users_clients` (
   `login` varchar(255) NOT NULL,
   `client` varchar(255) NOT NULL,
   PRIMARY KEY (`login`,`client`),
@@ -207,12 +129,13 @@ CREATE TABLE `macc_users_clients` (
 -- Table structure for table `macc_users_groups`
 --
 
-DROP TABLE IF EXISTS `macc_users_groups`;
-CREATE TABLE `macc_users_groups` (
-  `id` varchar(100) NOT NULL DEFAULT '',
+CREATE TABLE IF NOT EXISTS `macc_users_groups` (
+  `id` varchar(255) NOT NULL DEFAULT '',
   `group` varchar(255) NOT NULL,
   `idx` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`,`group`)
+  PRIMARY KEY (`id`,`group`),
+  CONSTRAINT `fk_macc_users_groups_macc_users` FOREIGN KEY (`id`) REFERENCES `macc_users` (`login`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_macc_users_groups_macc_groups` FOREIGN KEY (`group`) REFERENCES `macc_groups` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
@@ -220,30 +143,23 @@ CREATE TABLE `macc_users_groups` (
 -- Table structure for table `oauth`
 --
 
-DROP TABLE IF EXISTS `oauth`;
-CREATE TABLE `oauth` (
+CREATE TABLE IF NOT EXISTS `oauth` (
   `id` varchar(36) NOT NULL,
   `client` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `create_time` datetime DEFAULT NULL,
   `lastcontact` datetime DEFAULT NULL,
   `validuntil` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_oauth_username` FOREIGN KEY (`id`) REFERENCES `macc_users` (`login`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
---
--- Dumping data for table `oauth`
---
-
-LOCK TABLES `oauth` WRITE;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `oauth_path`
 --
 
-DROP TABLE IF EXISTS `oauth_path`;
-CREATE TABLE `oauth_path` (
+CREATE TABLE IF NOT EXISTS `oauth_path` (
   `id` varchar(36) NOT NULL,
   `path` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -256,27 +172,20 @@ CREATE TABLE `oauth_path` (
 -- Table structure for table `oauth_resources`
 --
 
-DROP TABLE IF EXISTS `oauth_resources`;
-CREATE TABLE `oauth_resources` (
+CREATE TABLE IF NOT EXISTS `oauth_resources` (
   `id` varchar(36) NOT NULL,
   `param` varchar(50) NOT NULL,
   PRIMARY KEY (`id`,`param`),
   CONSTRAINT `fk_oauth_resources_id` FOREIGN KEY (`id`) REFERENCES `oauth` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
---
--- Dumping data for table `oauth_resources`
---
 
-LOCK TABLES `oauth_resources` WRITE;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `oauth_resources_property`
 --
 
-DROP TABLE IF EXISTS `oauth_resources_property`;
-CREATE TABLE `oauth_resources_property` (
+CREATE TABLE IF NOT EXISTS `oauth_resources_property` (
   `id` varchar(36) NOT NULL,
   `param` varchar(50) NOT NULL,
   `property` varchar(50) NOT NULL,
@@ -289,12 +198,13 @@ CREATE TABLE `oauth_resources_property` (
 -- Table structure for table `rolle_menu`
 --
 
-DROP TABLE IF EXISTS `rolle_menu`;
-CREATE TABLE `rolle_menu` (
+CREATE TABLE IF NOT EXISTS `rolle_menu` (
   `id` varchar(50) NOT NULL,
   `rolle` varchar(255) NOT NULL,
   `typ` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`,`rolle`)
+  PRIMARY KEY (`id`,`rolle`),
+  constraint `fk_rolle_menu_id` foreign key (`id`) references `macc_menu` (`id`) on delete cascade on update cascade,
+  constraint `fk_rolle_menu_rolle` foreign key (`rolle`) references `macc_groups` (`name`) on delete cascade on update cascade
 );
 
 --
@@ -305,58 +215,9 @@ LOCK TABLES `rolle_menu` WRITE;
 INSERT INTO `rolle_menu` VALUES ('087743ec-3217-11ee-b860-002590c4e7c6','administration',NULL),('1ace16ec-3217-11ee-ae05-002590c72640','administration',NULL),('2392d8cd-3217-11ee-ae05-002590c72640','administration',NULL),('f30bc380-3216-11ee-ae05-002590c72640','administration',NULL);
 UNLOCK TABLES;
 
---
--- Table structure for table `sessions`
---
-
-DROP TABLE IF EXISTS `sessions`;
-CREATE TABLE `sessions` (
-  `id` varchar(255) NOT NULL,
-  `createdate` timestamp NOT NULL DEFAULT current_timestamp(),
-  `lastdate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `databasename` varchar(255) DEFAULT NULL,
-  `databasehost` varchar(255) DEFAULT NULL,
-  `login` varchar(255) DEFAULT NULL,
-  `data` longtext DEFAULT NULL,
-  PRIMARY KEY (`id`)
-);
 
 
 
---
--- Table structure for table `setup`
---
-
-DROP TABLE IF EXISTS `setup`;
-CREATE TABLE `setup` (
-  `id` varchar(255) NOT NULL,
-  `rolle` varchar(255) NOT NULL,
-  `cmp` varchar(255) NOT NULL,
-  `daten` longtext DEFAULT NULL,
-  `vererbbar` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`,`rolle`,`cmp`)
-);
-
---
--- Dumping data for table `setup`
---
-
-LOCK TABLES `setup` WRITE;
-UNLOCK TABLES;
-
---
--- Temporary table structure for view `view_macc_clients`
---
-
-DROP TABLE IF EXISTS `view_macc_clients`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
- 1 AS `id`,
-  1 AS `username`,
-  1 AS `password`,
-  1 AS `host`,
-  1 AS `port` */;
-SET character_set_client = @saved_cs_client;
 
 --
 -- Routines 

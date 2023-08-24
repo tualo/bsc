@@ -17,7 +17,8 @@ class CreateSystemCommandline implements ICommandline{
     public static function setup(Cli $cli){
         $cli->command(self::getCommandName())
             ->description('create a new system')
-            ->opt('client', 'only use this client', false, 'string');
+            ->opt('db', 'db name', false, 'string')
+            ->opt('session', 'session db name', false, 'string');
     }
 
     
@@ -29,8 +30,13 @@ class CreateSystemCommandline implements ICommandline{
         while(in_array($line = readline(implode("\n",$prompt)),['yes','y','n','no','c'])){
             if ($line=='c') exit();
             if ($line=='y'){
-                $sessionDBName = readline("Enter the session db name: ");
-                $clientDBName = readline("Enter the client db name: ");
+                if (($clientDBName = $args->getOpt('db'))==''){
+                    $clientDBName = readline("Enter the client db name: ");
+                }
+                if (($sessionDBName = $args->getOpt('session'))==''){
+                    $sessionDBName = readline("Enter the session db name: ");
+                }
+                
 
                 PostCheck::formatPrint(['blue'],"\tcreate database ".$sessionDBName." using mysql client... ");
                 exec('mysql -e "create database if not exists '.$sessionDBName.';"',$res,$err);
@@ -53,7 +59,7 @@ class CreateSystemCommandline implements ICommandline{
                 }
 
                 PostCheck::formatPrint(['blue'],"\tsetup sessions db... ");
-                exec('mysql -D '.$sessionDBName.' < '.__DIR__.'/commandline/sql/plain-system-session.sql',$res,$err);
+                exec('mysql --force=true -D '.$sessionDBName.' < '.__DIR__.'/commandline/sql/plain-system-session.sql',$res,$err);
                 if ($err!=0){
                     PostCheck::formatPrintLn(['red'],'failed');
                     PostCheck::formatPrintLn(['red'],implode("\n",$res));
@@ -79,7 +85,7 @@ class CreateSystemCommandline implements ICommandline{
                 INSERT INTO `macc_users_groups` VALUES ('thomas.hoffmann@tualo.de','administration',NULL),('thomas.hoffmann@tualo.de','_default_',NULL);
                 */
 
-                exec('mysql --force=true -D '.$clientDBName.' < '.__DIR__.'/commandline/sql/plain-system.sql',$res,$err);
+                exec('cat '.__DIR__.'/commandline/sql/plain-system.sql | sed -E \'s#SESSIONDB#'.$sessionDBName.'#g\' | mysql --force=true -D '.$clientDBName.' ',$res,$err);
                 if ($err!=0){
                     PostCheck::formatPrintLn(['red'],'failed');
                     PostCheck::formatPrintLn(['red'],implode("\n",$res));
@@ -91,7 +97,7 @@ class CreateSystemCommandline implements ICommandline{
                 $clientUsername = 'admin';
                 $clientpassword = (Uuid::uuid4())->toString();
                 $sql = 'INSERT INTO `macc_clients` VALUES ("'.$clientDBName.'","'.$clientUsername.'","'.$clientpassword.'","localhost",3306)';
-                PostCheck::formatPrint(['blue'],"\tcreate client user... ");
+                PostCheck::formatPrint(['blue'],"\tcreate client user... admin: ".$clientpassword." ");
                 $sql = 'call ADD_TUALO_USER("'.$clientUsername.'","'.$clientUsername.'","'.$clientDBName.'","administration")';
 
 
