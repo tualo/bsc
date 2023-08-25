@@ -21735,11 +21735,9 @@ FOR record IN (
     update 
         `table_name`=values(`table_name`),
         `column_name`=values(`column_name`),
-        `default_value`=values(`default_value`),
         `default_max_value`=values(`default_max_value`),
         `default_min_value`=values(`default_min_value`),
         `update_value`=values(`update_value`),
-        `is_primary`=values(`is_primary`),
         `syncable`=values(`syncable`),
         `referenced_table`=values(`referenced_table`),
         `referenced_column_name`=values(`referenced_column_name`),
