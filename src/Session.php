@@ -234,8 +234,8 @@ class Session{
           // Test DB Access
           if ( is_null( $session->getDB() ) ){
               TualoApplication::result('success',false);
-              TualoApplication::result('msg','Felher beim Zugriff auf die Datenbank');
-              TualoApplication::logger('BSC')->error('Felher beim Zugriff auf die Datenbank (client db)');
+              TualoApplication::result('msg','Fehler beim Zugriff auf die Datenbank');
+              TualoApplication::logger('BSC')->error('Fehler beim Zugriff auf die Datenbank (client db)');
               $session->destroy();
           }else{
               TualoApplication::result('fullname',    $_SESSION['tualoapplication']['fullname']);

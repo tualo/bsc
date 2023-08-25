@@ -35,12 +35,12 @@ class Tables  extends PostCheck {
         $tables = [
             'view_session_groups'=>[
                 'columns'=>[
-                    'group'=>'varchar(100)'
+                    // 'group'=>'varchar(100)'
                 ]
             ],
             'view_session_users'=>[
                 'columns'=>[
-                    'login'=>'varchar(100)',
+                    // 'login'=>'varchar(100)',
                     'anzeigename'=>'text',
                     'telefon'=>'varchar(255)',
                     'zeichen'=>'varchar(255)',
