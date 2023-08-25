@@ -96,9 +96,12 @@ class CreateSystemCommandline implements ICommandline{
 
                 $clientUsername = 'admin';
                 $clientpassword = (Uuid::uuid4())->toString();
-                $sql = 'INSERT INTO `macc_clients` VALUES ("'.$clientDBName.'","'.$clientUsername.'","'.$clientpassword.'","localhost",3306)';
+                $sql = "INSERT INTO `macc_clients` VALUES (database(),user(),'','localhost',3306)";
+                exec('echo "'.$sql.'" | mysql --force=true -D '.$clientDBName.' ',$res,$err);
+                
                 PostCheck::formatPrint(['blue'],"\tcreate client user... admin: ".$clientpassword." ");
-                $sql = 'call ADD_TUALO_USER("'.$clientUsername.'","'.$clientUsername.'","'.$clientDBName.'","administration")';
+                $sql = "call ADD_TUALO_USER('".$clientUsername."','".$clientpassword."',database(),'administration')";
+                exec('echo "'.$sql.'" | mysql --force=true -D '.$clientDBName.' ',$res,$err);
 
 
                 break;
