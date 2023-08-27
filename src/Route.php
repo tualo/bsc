@@ -122,6 +122,7 @@ class Route{
         }
 
         // No matching route was found
+        if (!self::$finished)
         if(!$route_match_found){
 
             // But a matching path exists
@@ -139,12 +140,10 @@ class Route{
                     call_user_func_array(self::$methodNotAllowed, Array($path,$method));
                 }
             }else{
-                /*
                 header("HTTP/1.0 404 Not Found");
                 if(self::$pathNotFound){
                     call_user_func_array(self::$pathNotFound, Array($path));
                 }
-                */
             }
 
         }
