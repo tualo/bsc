@@ -464,6 +464,7 @@ class TualoApplication{
                 'html' => 'text/html',
                 'php' => 'text/html',
                 'css' => 'text/css',
+                'mjs'=> 'text/javascript',
                 'js' => 'application/javascript',
                 'json' => 'application/json',
                 'xml' => 'application/xml',
