@@ -33,6 +33,9 @@ class PostCheck implements IPostCheck
                 if (!is_null($clientName) && $clientName != $db['dbname']) {
                     continue;
                 } else {
+
+
+
                     App::set('clientDB', $session->newDBByRow($db));
                     self::formatPrintLn(['blue'], 'checks on ' . $db['dbname'] . ':  ');
                     $classes = get_declared_classes();
