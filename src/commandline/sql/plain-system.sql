@@ -3461,7 +3461,7 @@ CREATE TABLE IF NOT EXISTS `ds_reference_tables` (
   `table_name` varchar(128) NOT NULL,
   `reference_table_name` varchar(100) NOT NULL DEFAULT '',
   `columnsdef` longtext DEFAULT NULL,
-  `constraint_name` varchar(128) NOT NULL,
+  `constraint_name` varchar(128) NOT NULL primary key,
   `active` tinyint(4) DEFAULT 1,
   `searchable` tinyint(4) DEFAULT 0,
   `autosync` tinyint(4) DEFAULT 1,
