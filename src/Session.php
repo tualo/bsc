@@ -369,84 +369,81 @@ class Session{
 
 
     public function registerOAuth($params=array(),$force=false,$anyclient=false,$path=''){
-      try{
-      if ($force!==true){
-        $test = array();
-        foreach( $params as $key=>$value){
-          $test[]=$key.'='.$value;
-        }
-        sort($test);
-        if (count($test)==0){
-          throw new \Exception("registerOAuth needs at least cmp parameter", 1);
-        }
-        
-        if ($anyclient){
-          $sql  = '
-          select
-            oauth.id,
-            oauth.client
-          from
-            (select id,group_concat( concat(param,\'=\',property) order by concat(param,\'=\',property) asc separator \',\') p from oauth_resources_property group by id having p={p}) a
-            join oauth on a.id=oauth.id
-          where
-            client=\'*\' and
-            username={username}
-          ';
-          $list = $this->db->direct($sql,array('p'=>implode(',',$test) ));
+        if ($force!==true){
+          $test = array();
+          foreach( $params as $key=>$value){
+            $test[]=$key.'='.$value;
+          }
+          sort($test);
+          if (count($test)==0){
+            throw new \Exception("registerOAuth needs at least cmp parameter", 1);
+          }
+          
+          if ($anyclient){
+            $sql  = '
+            select
+              oauth.id,
+              oauth.client
+            from
+              (select id,group_concat( concat(param,\'=\',property) order by concat(param,\'=\',property) asc separator \',\') p from oauth_resources_property group by id having p={p}) a
+              join oauth on a.id=oauth.id
+            where
+              client=\'*\' and
+              username={username}
+            ';
+            $list = $this->db->direct($sql,array('p'=>implode(',',$test) ));
 
-        }else{
-          $sql  = '
-          select
-            oauth.id,
-            oauth.client
-          from
-            (select id,group_concat( concat(param,\'=\',property) order by concat(param,\'=\',property) asc separator \',\') p from oauth_resources_property group by id having p={p}) a
-            join oauth on a.id=oauth.id
-          where
-            client={client} and
-            username{username}
-          ';
-          $list = $this->db->direct($sql,array('p'=>implode(',',$test) ,
-          'client'=>$_SESSION['tualoapplication']['client'],
-          'username'=>$_SESSION['tualoapplication']['username']
-          ));
-        }
-        
-        if (count($list)>0){
-          $token=$list[0]['id'];
-        }else{
-          $force=true;
-        }
-      }
-
-      if ($force==true){
-        $token = (Uuid::uuid4())->toString();
-
-        $sql = 'insert into oauth (id,client,username) values ({id},{client},{username}) ';
-        if ($anyclient){
-          $oauth = $this->db->direct($sql,array('id'=>$token,'client'=>'*' ));
-        }else{
-          $oauth = $this->db->direct($sql,array('id'=>$token,
-          'client'=>$_SESSION['tualoapplication']['client'],
-          'username'=>$_SESSION['tualoapplication']['username'] ));
-        
+          }else{
+            $sql  = '
+            select
+              oauth.id,
+              oauth.client
+            from
+              (select id,group_concat( concat(param,\'=\',property) order by concat(param,\'=\',property) asc separator \',\') p from oauth_resources_property group by id having p={p}) a
+              join oauth on a.id=oauth.id
+            where
+              client={client} and
+              username{username}
+            ';
+            $list = $this->db->direct($sql,array('p'=>implode(',',$test) ,
+            'client'=>$_SESSION['tualoapplication']['client'],
+            'username'=>$_SESSION['tualoapplication']['username']
+            ));
+          }
+          
+          if (count($list)>0){
+            $token=$list[0]['id'];
+          }else{
+            $force=true;
+          }
         }
 
-        if ($path!=''){
+        if ($force==true){
+          $token = (Uuid::uuid4())->toString();
 
-          $this->db->direct('create table if not exists oauth_path (id varchar(32) primary key, path varchar(255), CONSTRAINT `fk_oauth_path_id` FOREIGN KEY (`id`) REFERENCES `oauth` (`id`) ON DELETE CASCADE ON UPDATE CASCADE ) ');
+          $sql = 'insert into oauth (id,client,username) values ({id},{client},{username}) ';
+          if ($anyclient){
+            $oauth = $this->db->direct($sql,array('id'=>$token,'client'=>'*' ));
+          }else{
+            $oauth = $this->db->direct($sql,array('id'=>$token,
+            'client'=>$_SESSION['tualoapplication']['client'],
+            'username'=>$_SESSION['tualoapplication']['username'] ));
+          
+          }
 
-          $this->db->direct('insert into oauth_path (id,path) values ({id},{path}) on duplicate key update path=values(path) ',array('path'=>$path,'id'=> $token));
-        
+          if ($path!=''){
+
+            $this->db->direct('create table if not exists oauth_path (id varchar(32) primary key, path varchar(255), CONSTRAINT `fk_oauth_path_id` FOREIGN KEY (`id`) REFERENCES `oauth` (`id`) ON DELETE CASCADE ON UPDATE CASCADE ) ');
+
+            $this->db->direct('insert into oauth_path (id,path) values ({id},{path}) on duplicate key update path=values(path) ',array('path'=>$path,'id'=> $token));
+          
+          }
+
+          foreach( $params as $key=>$value){
+            $this->registerOAuthParam($token,$key,$value);
+          }
         }
-
-        foreach( $params as $key=>$value){
-          $this->registerOAuthParam($token,$key,$value);
-        }
-      }
-    }catch(\Exception $e){
-      echo $this->db->last_sql;
-    }
+      
       return $token;
     }
 
