@@ -438,7 +438,7 @@ class TualoApplication{
      * @return self::$resultbody
      */
     public static function body($buffer){
-
+        self::$output=true;
         self::$resultbody .= $buffer;
         return self::$resultbody;
     }
