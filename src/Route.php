@@ -9,7 +9,7 @@ class Route{
     private static $methodNotAllowed = null;
     public static $finished=false;
 
-    public static function add($expression, $function, $method = 'get', $needActiveSession=false){
+    public static function add($expression, $function, $method = ['get'], $needActiveSession=false){
         if (!is_array($method)){
             $method=array($method);
         }

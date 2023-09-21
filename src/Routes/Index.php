@@ -27,9 +27,16 @@ class Index implements IRoute{
             
 
             try{
-                $pugfile = TualoApplication::get('basePath').'/pages/custom/index.pug';
-                if (!file_exists( $pugfile )) $pugfile = dirname(__DIR__).'/tpl/pages/basic/index.pug';
-                if ( defined( 'INDEX_PUG' ) && file_exists( INDEX_PUG ) ) $pugfile = INDEX_PUG;
+                // $pugfile = TualoApplication::get('basePath').'/pages/custom/index.pug';
+
+                $pugfile =  TualoApplication::configuration(
+                    'tualo-backend',
+                    'pugfile',
+                    dirname(__DIR__).'/tpl/pages/basic/index.pug'
+                );
+
+                // if (!file_exists( $pugfile )) $pugfile = dirname(__DIR__).'/tpl/pages/basic/index.pug';
+                // if ( defined( 'INDEX_PUG' ) && file_exists( INDEX_PUG ) ) $pugfile = INDEX_PUG;
 
 
                 $params = array(
@@ -39,9 +46,12 @@ class Index implements IRoute{
                     'modules'       =>  TualoApplication::module()
 
                 );
-                if (defined('SHORTCUT_ICONURL')) {
-                    $params[ 'shortcut_iconurl' ] = SHORTCUT_ICONURL;
-                }
+
+                $params[ 'shortcut_iconurl' ] =  TualoApplication::configuration(
+                    'tualo-backend',
+                    'shortcut_iconurl',
+                    'favicon-32x32.png'
+                );
 
                 TualoApplication::body( $pug->renderFile($pugfile,$params));
                 
