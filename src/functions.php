@@ -25,4 +25,6 @@ require_once "InstallViewSQLCommandline.php";
 
 require_once "Routes/RegisterClient.php";
 require_once "Routes/Logout.php";
+require_once "Routes/PublicRoute.php";
+
 require_once "Checks/Tables.php";
