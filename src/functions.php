@@ -21,7 +21,9 @@ require_once "Middleware/Timezone.php";
 require_once "PostCheckCommandline.php";
 require_once "MaintainceCommandline.php";
 require_once "CreateSystemCommandline.php";
+
 require_once "InstallViewSQLCommandline.php";
+require_once "InstallMenuSQLCommandline.php";
 
 require_once "Routes/RegisterClient.php";
 require_once "Routes/Logout.php";
