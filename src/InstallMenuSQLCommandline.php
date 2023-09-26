@@ -1,5 +1,5 @@
 <?php
-namespace Tualo\Office\PaperVote\Commands;
+namespace Tualo\Office\BSC\Commands;
 use Garden\Cli\Cli;
 use Garden\Cli\Args;
 use phpseclib3\Math\BigInteger\Engines\PHP;
