@@ -427,4 +427,9 @@ DELIMITER ;
 -- Final view structure for view `view_macc_clients`
 --
 
-CREATE VIEW `view_macc_clients` AS select `macc_clients`.`id` AS `id`,`macc_clients`.`username` AS `username`,`macc_clients`.`password` AS `password`,`macc_clients`.`host` AS `host`,`macc_clients`.`port` AS `port` from `macc_clients`;
+CREATE VIEW `view_macc_clients` AS 
+select 
+  './' `url`,
+  `macc_clients`.`id` AS `id`,`macc_clients`.`username` AS `username`,
+  `macc_clients`.`password` AS `password`,`macc_clients`.`host` AS `host`,`macc_clients`.`port` AS `port` from `macc_clients`
+;

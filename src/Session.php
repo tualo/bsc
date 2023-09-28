@@ -56,6 +56,40 @@ class Session{
     }
 
 
+    public function switchClient($client){
+      $hash = [
+        'username' => $_SESSION['tualoapplication']['username'],
+        'client' => $client
+      ];
+
+      $sql = '
+      SELECT
+        view_macc_clients.*
+      FROM macc_users_clients join view_macc_clients
+        on macc_users_clients.client = view_macc_clients.id
+      WHERE macc_users_clients.login = {username}
+        and macc_users_clients.client= {client}';
+      
+        $row = $this->db->singleRow($sql,$hash);
+      if ($row!==false){
+
+        @session_start(); 
+        $_SESSION['db']['dbhost'] = $row['host'];
+        $_SESSION['db']['dbuser'] = $row['username'];
+        $_SESSION['db']['dbpass'] = $row['password'];
+        $_SESSION['db']['dbport'] = $row['port'];
+        $_SESSION['db']['dbname'] = $row['id'];
+
+        
+        $_SESSION['redirect_url'] = isset($row['url'])?$row['url']:'./';
+
+        $_SESSION['tualoapplication']['client']=$this->client;
+        session_commit();
+      }else{
+        throw new \Exception("No Access");
+      }
+    }
+    
     private function __construct() {
       $is_web=http_response_code()!==FALSE;
 
