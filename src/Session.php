@@ -84,6 +84,7 @@ class Session{
         $_SESSION['redirect_url'] = isset($row['url'])?$row['url']:'./';
 
         $_SESSION['tualoapplication']['client'] = $row['id'];
+        
         session_commit();
       }else{
         throw new \Exception("No Access");
