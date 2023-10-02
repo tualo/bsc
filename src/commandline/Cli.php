@@ -53,6 +53,9 @@ TualoApplication::set('configurationFile',TualoApplication::get('basePath').'/co
 $settings = parse_ini_file((string)TualoApplication::get('configurationFile'),true);
 TualoApplication::set('configuration',$settings);
 
+ini_set('mysql.connect_timeout','0');   
+ini_set('max_execution_time', '0');  
+
 // Define the cli options.
 $cli = new Cli();
 
