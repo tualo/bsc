@@ -41,7 +41,7 @@ TualoApplication::use('TualoApplicationSession_Login',function(){
                     view_macc_clients.username dbuser,
                     view_macc_clients.password dbpass,
                     view_macc_clients.host dbhost,
-                    view_macc_clients.port dbport
+                    view_macc_clients.port dbport 
 
                 FROM
                     macc_users
@@ -73,6 +73,8 @@ TualoApplication::use('TualoApplicationSession_Login',function(){
                 $_SESSION['db']['dbpass'] = $row['dbpass'];
                 $_SESSION['db']['dbport'] = $row['dbport'];
                 $_SESSION['db']['dbname'] = $row['dbname'];
+
+                // $_SESSION['redirect_url'] = isset($row['url'])?$row['url']:'./';
                 
                 $_SESSION['tualoapplication']['loggedIn'] = true;
                 $_SESSION['tualoapplication']['loggedInType'] = 'login';

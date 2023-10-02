@@ -14,7 +14,7 @@ class PostCheckCommandline implements ICommandline{
     public static function setup(Cli $cli){
         $cli->command(self::getCommandName())
             ->description('runs postcheck commands for all modules')
-            ->opt('client', 'only use this client', false, 'string');
+            ->opt('client', 'only use this client', true, 'string');
             
     }
     public static function run(Args $args){

@@ -15,7 +15,7 @@ class InstallViewSQLCommandline implements ICommandline{
     public static function setup(Cli $cli){
         $cli->command(self::getCommandName())
             ->description('installs needed session views')
-            ->opt('client', 'only use this client', false, 'string');
+            ->opt('client', 'only use this client', true, 'string');
             
     }
 

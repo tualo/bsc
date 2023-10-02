@@ -15,7 +15,7 @@ class InstallMenuSQLCommandline implements ICommandline{
     public static function setup(Cli $cli){
         $cli->command(self::getCommandName())
             ->description('installs needed menu items ')
-            ->opt('client', 'only use this client', false, 'string');
+            ->opt('client', 'only use this client', true, 'string');
             
     }
 
