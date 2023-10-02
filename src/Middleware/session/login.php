@@ -27,7 +27,7 @@ TualoApplication::use('TualoApplicationSession_Login',function(){
             $hash['username'] = strtolower($_REQUEST['username']);
             $hash['password'] = ($_REQUEST['password']);
             $hash['mandant'] = strtolower( ( isset($_REQUEST['mandant'])?$_REQUEST['mandant']:( isset($_REQUEST['client'])?$_REQUEST['client']:'' ) ) );
-            $hash['mandant'] = TualoApplication::configuration('FORCE_CLIENT',$hash['mandant']);
+            $hash['mandant'] = TualoApplication::configuration('','FORCE_CLIENT',$hash['mandant']);
             
             $sql = '
                 SELECT
