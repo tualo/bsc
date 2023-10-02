@@ -51,10 +51,14 @@ if (!file_exists(TualoApplication::get('basePath').'/configuration/.htconfig')){
 }
 TualoApplication::set('configurationFile',TualoApplication::get('basePath').'/configuration/.htconfig');
 $settings = parse_ini_file((string)TualoApplication::get('configurationFile'),true);
-TualoApplication::set('configuration',$settings);
 
-ini_set('mysql.connect_timeout','0');   
-ini_set('max_execution_time', '0');  
+$settings['client.mysql.connect_timeout']='0';
+TualoApplication::set('configuration',$settings);
+if (isset($settings['php-client'])) {
+    foreach ($settings['php-client'] as $key => $value) {
+        ini_set($key, $value);
+    }
+}
 
 // Define the cli options.
 $cli = new Cli();

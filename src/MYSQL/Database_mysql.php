@@ -38,7 +38,7 @@ class Database_mysql extends Database_basic
 
         $this->dbname = $db;
         $this->mysqli = new mysqli;
-        $this->mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 10);
+        $this->mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT,  TualoApplication::configuration('','client.mysql.connect_timeout',10) );
         $this->mysqli->options(MYSQLI_OPT_SSL_VERIFY_SERVER_CERT,false);
         $c = false;
 
