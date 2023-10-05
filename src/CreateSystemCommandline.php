@@ -127,6 +127,7 @@ class CreateSystemCommandline implements ICommandline{
                     PostCheck::formatPrintLn(['green'],'done');
                 }
 
+                /*
                 if ((  $args->getOpt('createusers'))===true){
 
                     $clientOptions = "";
@@ -135,6 +136,7 @@ class CreateSystemCommandline implements ICommandline{
                     $clientOptions .= ' --password="'.$session_database_password.'" ';
                     
                 }
+                */
                 PostCheck::formatPrint(['blue'],"\tsetup sessions db... ");
                 exec('mysql '.$clientOptions.' --force=true -D '.$sessionDBName.' < '.__DIR__.'/commandline/sql/plain-system-session.sql',$res,$err);
                 if ($err!=0){
@@ -145,7 +147,7 @@ class CreateSystemCommandline implements ICommandline{
                     PostCheck::formatPrintLn(['green'],'done');
                 }
 
-
+                /*
                 if (( $args->getOpt('createusers'))===true){
 
                     $clientOptions = "";
@@ -154,6 +156,7 @@ class CreateSystemCommandline implements ICommandline{
                     $clientOptions .= ' --password="'.$client_database_password.'" ';
                     
                 }
+                */
 
                 PostCheck::formatPrint(['blue'],"\tsetup client db... ");
                 exec('cat '.__DIR__.'/commandline/sql/plain-system.sql | sed -E \'s#SESSIONDB#'.$sessionDBName.'#g\' | mysql '.$clientOptions.' --force=true -D '.$clientDBName.' ',$res,$err);
@@ -168,6 +171,7 @@ class CreateSystemCommandline implements ICommandline{
                 $clientUsername = 'admin';
                 $clientpassword = (Uuid::uuid4())->toString();
 
+                /*
                 if (( $args->getOpt('createusers'))===true){
 
                     $clientOptions = "";
@@ -176,6 +180,7 @@ class CreateSystemCommandline implements ICommandline{
                     $clientOptions .= ' --password="'.$session_database_password.'" ';
                     
                 }
+                */
                 
                 $sql = "INSERT INTO macc_clients (id,username,password,host,port) VALUES ('".$clientDBName."','".App::configuration('','__SESSION_USER__','localhost')."','','".App::configuration('','__SESSION_HOST__','localhost')."',".App::configuration('','__SESSION_PORT__','localhost').")";
                 exec('echo "'.$sql.'" | mysql '.$clientOptions.' --force=true -D '.$sessionDBName.' ',$res,$err);
