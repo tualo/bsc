@@ -74,28 +74,31 @@ class CreateSystemCommandline implements ICommandline{
                     PostCheck::formatPrint(['blue'],"\tsession database password: ".$session_database_password." \n");
 
 
+                    PostCheck::formatPrint(['blue'],"\tclient database user: ".$client_database_user." \n");
+                    PostCheck::formatPrint(['blue'],"\tclient database password: ".$client_database_password." \n");
+
                     exec('mysql '.$clientOptions.' -e "create user if not exists \''.$session_database_user.'\'@\'%\' identified by \''.$session_database_password.'\';"',$res,$err);
                     if ($err!=0){
                         PostCheck::formatPrintLn(['red'],'failed');
                         PostCheck::formatPrintLn(['red'],implode("\n",$res));
-                        exit();
+                        //exit();
                     }
 
                     exec('mysql '.$clientOptions.' -e "create user if not exists \''.$client_database_user.'\'@\'%\' identified by \''.$client_database_password.'\';"',$res,$err);
                     if ($err!=0){
                         PostCheck::formatPrintLn(['red'],'failed');
                         PostCheck::formatPrintLn(['red'],implode("\n",$res));
-                        exit();
+                        //exit();
                     }
 
-                    exec('mysql '.$clientOptions.' -e "grant all privileges on '.$sessionDBName.'.* to \''.$session_database_user.'\'@\'%\';"',$res,$err);
+                    exec('mysql '.$clientOptions.' -e "grant all on '.$sessionDBName.'.* to \''.$session_database_user.'\'@\'%\';"',$res,$err);
                     if ($err!=0){
                         PostCheck::formatPrintLn(['red'],'failed');
                         PostCheck::formatPrintLn(['red'],implode("\n",$res));
-                        exit();
+                        //exit();
                     }
 
-                    exec('mysql '.$clientOptions.' -e "grant all privileges on '.$clientDBName.'.* to \''.$client_database_user.'\'@\'%\';"',$res,$err);
+                    exec('mysql '.$clientOptions.' -e "grant all on '.$clientDBName.'.* to \''.$client_database_user.'\'@\'%\';"',$res,$err);
                     if ($err!=0){
                         PostCheck::formatPrintLn(['red'],'failed');
                         PostCheck::formatPrintLn(['red'],implode("\n",$res));
