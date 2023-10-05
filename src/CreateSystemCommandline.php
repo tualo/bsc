@@ -61,7 +61,7 @@ class CreateSystemCommandline implements ICommandline{
 
                 
 
-                if (($sessionDBName = $args->getOpt('createusers'))===true){
+                if (( $args->getOpt('createusers'))===true){
                     PostCheck::formatPrint(['blue'],"\tcreate database users ... ");
                     $session_database_password = (Uuid::uuid4())->toString();
                     $session_database_user = 'user_'.$sessionDBName;
@@ -124,7 +124,7 @@ class CreateSystemCommandline implements ICommandline{
                     PostCheck::formatPrintLn(['green'],'done');
                 }
 
-                if (($sessionDBName = $args->getOpt('createusers'))===true){
+                if ((  $args->getOpt('createusers'))===true){
 
                     $clientOptions = "";
                     if (($client_host = $args->getOpt('host'))!='') $clientOptions .= " --host=".$client_host." ";
@@ -143,7 +143,7 @@ class CreateSystemCommandline implements ICommandline{
                 }
 
 
-                if (($sessionDBName = $args->getOpt('createusers'))===true){
+                if (( $args->getOpt('createusers'))===true){
 
                     $clientOptions = "";
                     if (($client_host = $args->getOpt('host'))!='') $clientOptions .= " --host=".$client_host." ";
@@ -165,7 +165,7 @@ class CreateSystemCommandline implements ICommandline{
                 $clientUsername = 'admin';
                 $clientpassword = (Uuid::uuid4())->toString();
 
-                if (($sessionDBName = $args->getOpt('createusers'))===true){
+                if (( $args->getOpt('createusers'))===true){
 
                     $clientOptions = "";
                     if (($client_host = $args->getOpt('host'))!='') $clientOptions .= " --host=".$client_host." ";
