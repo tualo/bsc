@@ -61,7 +61,7 @@ class CreateSystemCommandline implements ICommandline{
 
                 
 
-                if (($sessionDBName = $args->getOpt('createuser'))===true){
+                if (($sessionDBName = $args->getOpt('createusers'))===true){
                     PostCheck::formatPrint(['blue'],"\tcreate database users ... ");
                     $session_database_password = (Uuid::uuid4())->toString();
                     $session_database_user = 'user_'.$sessionDBName;
@@ -72,7 +72,7 @@ class CreateSystemCommandline implements ICommandline{
 
                     PostCheck::formatPrint(['blue'],"\tsession database user: ".$session_database_user." \n");
                     PostCheck::formatPrint(['blue'],"\tsession database password: ".$session_database_password." \n");
-                    
+
 
                     exec('mysql '.$clientOptions.' -e "create user if not exists \''.$session_database_user.'\'@\'%\' identified by \''.$session_database_password.'\';"',$res,$err);
                     if ($err!=0){
@@ -124,7 +124,7 @@ class CreateSystemCommandline implements ICommandline{
                     PostCheck::formatPrintLn(['green'],'done');
                 }
 
-                if (($sessionDBName = $args->getOpt('createuser'))===true){
+                if (($sessionDBName = $args->getOpt('createusers'))===true){
 
                     $clientOptions = "";
                     if (($client_host = $args->getOpt('host'))!='') $clientOptions .= " --host=".$client_host." ";
@@ -143,7 +143,7 @@ class CreateSystemCommandline implements ICommandline{
                 }
 
 
-                if (($sessionDBName = $args->getOpt('createuser'))===true){
+                if (($sessionDBName = $args->getOpt('createusers'))===true){
 
                     $clientOptions = "";
                     if (($client_host = $args->getOpt('host'))!='') $clientOptions .= " --host=".$client_host." ";
@@ -165,7 +165,7 @@ class CreateSystemCommandline implements ICommandline{
                 $clientUsername = 'admin';
                 $clientpassword = (Uuid::uuid4())->toString();
 
-                if (($sessionDBName = $args->getOpt('createuser'))===true){
+                if (($sessionDBName = $args->getOpt('createusers'))===true){
 
                     $clientOptions = "";
                     if (($client_host = $args->getOpt('host'))!='') $clientOptions .= " --host=".$client_host." ";
