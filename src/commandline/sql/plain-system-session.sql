@@ -99,12 +99,11 @@ CREATE TABLE IF NOT EXISTS `loginnamen` (
   constraint `fk_loginnamen_login` foreign key (`login`) references `macc_users` (`login`) on delete cascade on update cascade
 );
 
-
 DELIMITER ;;
 
 CREATE OR REPLACE TRIGGER `macc_users_ai` AFTER INSERT ON `macc_users` FOR EACH ROW
 BEGIN
-  insert into loginnamen (login,vorname,nachname,fax,telefon,email,kundenberater,mobile) values (new.login,'','','','','','','');
+  insert ignore into loginnamen (login,vorname,nachname,fax,telefon,email,kundenberater,mobile) values (new.login,'','','','','','','');
 END ;;
 
 
@@ -139,6 +138,7 @@ CREATE TABLE IF NOT EXISTS `macc_users_groups` (
 );
 
 
+
 --
 -- Table structure for table `oauth`
 --
@@ -151,8 +151,9 @@ CREATE TABLE IF NOT EXISTS `oauth` (
   `lastcontact` datetime DEFAULT NULL,
   `validuntil` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_oauth_username` FOREIGN KEY (`id`) REFERENCES `macc_users` (`login`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_oauth_username` FOREIGN KEY (`username`) REFERENCES `macc_users` (`login`) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
 
 
 --
@@ -194,6 +195,7 @@ CREATE TABLE IF NOT EXISTS `oauth_resources_property` (
 );
 
 
+
 --
 -- Table structure for table `rolle_menu`
 --
@@ -207,7 +209,10 @@ CREATE TABLE IF NOT EXISTS `rolle_menu` (
   constraint `fk_rolle_menu_rolle` foreign key (`rolle`) references `macc_groups` (`name`) on delete cascade on update cascade
 );
 
+
+
 --
+
 -- Dumping data for table `rolle_menu`
 --
 
