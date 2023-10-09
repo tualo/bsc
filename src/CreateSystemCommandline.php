@@ -182,7 +182,7 @@ class CreateSystemCommandline implements ICommandline{
                 }
                 */
                 
-                $sql = "INSERT INTO macc_clients (id,username,password,host,port) VALUES ('".$clientDBName."','".App::configuration('','__SESSION_USER__','localhost')."','','".App::configuration('','__SESSION_HOST__','localhost')."',".App::configuration('','__SESSION_PORT__','localhost').")";
+                $sql = "INSERT IGNORE INTO macc_clients (id,username,password,host,port) VALUES ('".$clientDBName."','".App::configuration('','__SESSION_USER__','localhost')."','','".App::configuration('','__SESSION_HOST__','localhost')."',".App::configuration('','__SESSION_PORT__','localhost').")";
                 exec('echo "'.$sql.'" | mysql '.$clientOptions.' --force=true -D '.$sessionDBName.' ',$res,$err);
                 
                 PostCheck::formatPrint(['blue'],"\tcreate client user... admin: ".$clientpassword." \n");

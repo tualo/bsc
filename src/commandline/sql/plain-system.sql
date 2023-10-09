@@ -19401,7 +19401,7 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8mb3 */ ;
 /*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
 DELIMITER ;;
-CREATE PROCEDURE IF NOT EXISTS `addFieldIfNotExists`(
+CREATE OR REPLACE PROCEDURE `addFieldIfNotExists`(
     IN table_name_IN VARCHAR(100)
     , IN field_name_IN VARCHAR(100)
     , IN field_definition_IN VARCHAR(100)
@@ -19413,7 +19413,7 @@ BEGIN
 
         SET @ddl = CONCAT('ALTER TABLE ', table_name_IN);
         SET @ddl = CONCAT(@ddl, ' ', 'ADD COLUMN') ;
-        SET @ddl = CONCAT(@ddl, ' ', field_name_IN);
+        SET @ddl = CONCAT(@ddl, ' ', '`',field_name_IN,'`');
         SET @ddl = CONCAT(@ddl, ' ', field_definition_IN);
         PREPARE stmt FROM @ddl;
         EXECUTE stmt;

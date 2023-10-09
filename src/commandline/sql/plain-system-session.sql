@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `macc_groups` (
 --
 
 LOCK TABLES `macc_groups` WRITE;
-INSERT INTO `macc_groups` VALUES ('administration',1,'','unkategorisiert'),('_default_',1,NULL,'unkategorisiert');
+INSERT IGNORE INTO `macc_groups` VALUES ('administration',1,'','unkategorisiert'),('_default_',1,NULL,'unkategorisiert');
 UNLOCK TABLES;
 
 --
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `macc_menu` (
 --
 
 LOCK TABLES `macc_menu` WRITE;
-INSERT INTO `macc_menu` VALUES ('087743ec-3217-11ee-b860-002590c4e7c6','Benutzer','',NULL,'',1,NULL,'f30bc380-3216-11ee-ae05-002590c72640',0,1,'fa fa-users','#usereditor'),('1ace16ec-3217-11ee-ae05-002590c72640','Menü','',NULL,'',2,NULL,'f30bc380-3216-11ee-ae05-002590c72640',0,1,'fa fa-list','#menueditor'),('2392d8cd-3217-11ee-ae05-002590c72640','Gruppen','',NULL,'',0,NULL,'f30bc380-3216-11ee-ae05-002590c72640',0,1,'typcn typcn-group','#groupeditor'),('f30bc380-3216-11ee-ae05-002590c72640','Setup','',NULL,'',0,NULL,'',0,1,'fa fa-cogs','');
+INSERT IGNORE INTO `macc_menu` VALUES ('087743ec-3217-11ee-b860-002590c4e7c6','Benutzer','',NULL,'',1,NULL,'f30bc380-3216-11ee-ae05-002590c72640',0,1,'fa fa-users','#usereditor'),('1ace16ec-3217-11ee-ae05-002590c72640','Menü','',NULL,'',2,NULL,'f30bc380-3216-11ee-ae05-002590c72640',0,1,'fa fa-list','#menueditor'),('2392d8cd-3217-11ee-ae05-002590c72640','Gruppen','',NULL,'',0,NULL,'f30bc380-3216-11ee-ae05-002590c72640',0,1,'typcn typcn-group','#groupeditor'),('f30bc380-3216-11ee-ae05-002590c72640','Setup','',NULL,'',0,NULL,'',0,1,'fa fa-cogs','');
 UNLOCK TABLES;
 
 
@@ -217,7 +217,7 @@ CREATE TABLE IF NOT EXISTS `rolle_menu` (
 --
 
 LOCK TABLES `rolle_menu` WRITE;
-INSERT INTO `rolle_menu` VALUES ('087743ec-3217-11ee-b860-002590c4e7c6','administration',NULL),('1ace16ec-3217-11ee-ae05-002590c72640','administration',NULL),('2392d8cd-3217-11ee-ae05-002590c72640','administration',NULL),('f30bc380-3216-11ee-ae05-002590c72640','administration',NULL);
+INSERT IGNORE INTO `rolle_menu` VALUES ('087743ec-3217-11ee-b860-002590c4e7c6','administration',NULL),('1ace16ec-3217-11ee-ae05-002590c72640','administration',NULL),('2392d8cd-3217-11ee-ae05-002590c72640','administration',NULL),('f30bc380-3216-11ee-ae05-002590c72640','administration',NULL);
 UNLOCK TABLES;
 
 
@@ -228,7 +228,7 @@ UNLOCK TABLES;
 -- Routines 
 --
 DELIMITER ;;
-CREATE  FUNCTION `canAccessComponent`(in_component varchar(255)) RETURNS tinyint(1)
+CREATE OR REPLACE FUNCTION `canAccessComponent`(in_component varchar(255)) RETURNS tinyint(1)
     DETERMINISTIC
 BEGIN
 IF in_component='cmp_template_default' THEN
@@ -248,7 +248,7 @@ RETURN FALSE;
 END ;;
 DELIMITER ;
 DELIMITER ;;
-CREATE  FUNCTION `set_login_salt`(length integer) RETURNS varchar(255) CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE OR REPLACE FUNCTION `set_login_salt`(length integer) RETURNS varchar(255) CHARSET utf8mb4 COLLATE utf8mb4_general_ci
     DETERMINISTIC
 BEGIN
   DECLARE count INT DEFAULT 0;
@@ -270,7 +270,7 @@ BEGIN
 END ;;
 DELIMITER ;
 DELIMITER ;;
-CREATE  FUNCTION `set_login_sha2`(username varchar(255),password varchar(255)) RETURNS bit(1)
+CREATE OR REPLACE FUNCTION `set_login_sha2`(username varchar(255),password varchar(255)) RETURNS bit(1)
     DETERMINISTIC
 BEGIN
   DECLARE salt VARCHAR(255);
@@ -288,7 +288,7 @@ BEGIN
 END ;;
 DELIMITER ;
 DELIMITER ;;
-CREATE  FUNCTION `test_login`(username varchar(255),password varchar(255)) RETURNS int(4)
+CREATE OR REPLACE FUNCTION `test_login`(username varchar(255),password varchar(255)) RETURNS int(4)
     READS SQL DATA
 BEGIN
   SET @u = username;
@@ -324,7 +324,7 @@ BEGIN
 END ;;
 DELIMITER ;
 DELIMITER ;;
-CREATE  PROCEDURE `ADD_TUALO_USER`(
+CREATE OR REPLACE PROCEDURE `ADD_TUALO_USER`(
   IN username varchar(50),
   IN password varchar(50),
   IN client varchar(50),
@@ -333,7 +333,7 @@ CREATE  PROCEDURE `ADD_TUALO_USER`(
     MODIFIES SQL DATA
 BEGIN
 
-  insert into macc_clients (
+  INSERT IGNORE INTO macc_clients (
     `id`,
     `username`,
     `password`,
@@ -349,7 +349,7 @@ BEGIN
   on duplicate key update id=values(id);
 
   IF ( select count(*) c from macc_users where `login` = username) = 0 THEN
-    insert into macc_users (
+    INSERT IGNORE INTO macc_users (
       `login`,
       `passwd`,
       `groupname`,
@@ -371,13 +371,13 @@ BEGIN
     select set_login_sha2(username,password);
   END IF;
 
-  insert into macc_users_clients (
+  INSERT IGNORE INTO macc_users_clients (
     `login`,
     `client`
   ) values (username,client)
   on duplicate key update `login`=values(`login`);
 
-  insert into loginnamen
+  INSERT IGNORE INTO loginnamen
   (
     `login`,
     `vorname`,
@@ -401,7 +401,7 @@ BEGIN
   on duplicate key update `login`=values(`login`);
 
 
-  insert into macc_groups (
+  INSERT IGNORE INTO macc_groups (
     `name`,
     `aktiv`,
     `beschreibung`,
@@ -416,7 +416,7 @@ BEGIN
   )
   on duplicate key update `name`=values(`name`);
 
-  insert into macc_users_groups (
+  INSERT IGNORE INTO macc_users_groups (
     `id`,
     `group`
   ) values (
@@ -432,7 +432,7 @@ DELIMITER ;
 -- Final view structure for view `view_macc_clients`
 --
 
-CREATE VIEW `view_macc_clients` AS 
+CREATE VIEW IF NOT EXISTS `view_macc_clients` AS 
 select 
   './' `url`,
   `macc_clients`.`id` AS `id`,`macc_clients`.`username` AS `username`,
