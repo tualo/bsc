@@ -28,10 +28,11 @@ class CreateSystemUser implements ICommandline{
     public static function run(Args $args){
 
         $clientOptions = "";
+        /*
         if (($client_host = $args->getOpt('host'))!='') $clientOptions .= " --host=".$client_host." ";
         if (($client_username = $args->getOpt('username'))!='') $clientOptions .= " --user=".$client_username." ";
         if (($client_password = $args->getOpt('password'))!='') $clientOptions .= ' --password="'.$client_password.'" ';
-        
+        */
 
         $clientUsername = $args->getOpt('username');
         $clientpassword = $args->getOpt('password');
