@@ -150,6 +150,7 @@ CREATE TABLE IF NOT EXISTS `oauth` (
   `create_time` datetime DEFAULT NULL,
   `lastcontact` datetime DEFAULT NULL,
   `validuntil` datetime DEFAULT NULL,
+  `singleuse` tinyint default 0,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_oauth_username` FOREIGN KEY (`username`) REFERENCES `macc_users` (`login`) ON DELETE CASCADE ON UPDATE CASCADE
 );
