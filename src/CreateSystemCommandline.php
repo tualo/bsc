@@ -21,9 +21,8 @@ class CreateSystemCommandline implements ICommandline{
             ->opt('username', 'username', false, 'string')
             ->opt('password', 'password', false, 'string')
             ->opt('host', 'host', false, 'string')
-
             ->opt('createusers', 'createusers', false, 'boolean')
-
+            ->opt('silent', 'silent', false, 'boolean')
             ->opt('db', 'db name', false, 'string')
             ->opt('session', 'session db name', false, 'string');
     }
@@ -34,7 +33,9 @@ class CreateSystemCommandline implements ICommandline{
         $prompt = [
             "\t".'do you want to create a new system? [y|n|c] '
         ];
-        while(in_array($line = readline(implode("\n",$prompt)),['yes','y','n','no','c'])){
+        $line =( $args->getOpt('silent',false))?'y':'';
+        
+        while( ($line == 'y') || in_array($line = readline(implode("\n",$prompt)),['yes','y','n','no','c']) ){
             if ($line=='c') exit();
             if ($line=='y'){
                 if (($clientDBName = $args->getOpt('db'))==''){
