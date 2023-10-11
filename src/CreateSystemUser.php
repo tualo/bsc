@@ -51,9 +51,10 @@ class CreateSystemUser implements ICommandline{
             $sql = "call ADD_TUALO_USER_GROUP('".$clientUsername."','".$group.")";
             exec('echo "'.$sql.'" | mysql '.$clientOptions.' --force=true -D '.$sessionDBName.' ',$res,$err);
         }
-        if  ($args->getOpt('master',false))
-        $sql = "update macc_users set typ='master' where  login = '".$clientUsername."' ";
-        exec('echo "'.$sql.'" | mysql '.$clientOptions.' --force=true -D '.$sessionDBName.' ',$res,$err);
+        if  ($args->getOpt('master',false)){
+            $sql = "update macc_users set typ='master' where  login = '".$clientUsername."' ";
+            exec('echo "'.$sql.'" | mysql '.$clientOptions.' --force=true -D '.$sessionDBName.' ',$res,$err);
+        }
         PostCheck::formatPrint(['green'],"\tdone:   \n");
 
     }
