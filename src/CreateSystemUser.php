@@ -48,7 +48,7 @@ class CreateSystemUser implements ICommandline{
                 exec('echo "'.$sql.'" | mysql '.$clientOptions.' --force=true -D '.$sessionDBName.' ',$res,$err);
 
         foreach ($clientGroups as $group){
-            $sql = "call ADD_TUALO_USER_GROUP('".$clientUsername."','".$group.")";
+            $sql = "call ADD_TUALO_USER_GROUP('".$clientUsername."','".$group."')";
             exec('echo "'.$sql.'" | mysql '.$clientOptions.' --force=true -D '.$sessionDBName.' ',$res,$err);
         }
         if  ($args->getOpt('master',false)){
