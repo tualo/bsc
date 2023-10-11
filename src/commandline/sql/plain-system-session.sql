@@ -402,7 +402,7 @@ BEGIN
   on duplicate key update `login`=values(`login`);
 
 
-  INSERT IGNORE INTO macc_groups (
+  INSERT INTO macc_groups (
     `name`,
     `aktiv`,
     `beschreibung`,
@@ -417,7 +417,40 @@ BEGIN
   )
   on duplicate key update `name`=values(`name`);
 
-  INSERT IGNORE INTO macc_users_groups (
+  INSERT INTO macc_users_groups (
+    `id`,
+    `group`
+  ) values (
+    username,
+    groupname
+  )
+  on duplicate key update `id`=values(`id`);
+
+END ;;
+
+CREATE OR REPLACE PROCEDURE `ADD_TUALO_USER_GROUP`(
+  IN username varchar(50),
+  IN groupname varchar(50)
+)
+    MODIFIES SQL DATA
+BEGIN
+
+  INSERT INTO macc_groups (
+    `name`,
+    `aktiv`,
+    `beschreibung`,
+    `kategorie`
+  )
+  values
+  (
+    groupname,
+    1,
+    '',
+    'unkategorisiert'
+  )
+  on duplicate key update `name`=values(`name`);
+  
+  INSERT INTO macc_users_groups (
     `id`,
     `group`
   ) values (
@@ -428,6 +461,7 @@ BEGIN
 
 END ;;
 DELIMITER ;
+
 
 --
 -- Final view structure for view `view_macc_clients`
