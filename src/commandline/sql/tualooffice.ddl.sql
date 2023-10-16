@@ -10392,7 +10392,7 @@ BEGIN
         `ds_renderer_stylesheet`.`group`,
         `ds_renderer_stylesheet`.`classname`,
 
-        concat( '.',`ds_renderer_stylesheet`.`classname`,'{ ',
+        concat( if(`ds_renderer_stylesheet`.`classname` = ':root', '', '.'),`ds_renderer_stylesheet`.`classname`,'{ ',
             group_concat(
                 concat( `ds_renderer_stylesheet_attributes`.`attribute`,': ',`ds_renderer_stylesheet_attributes`.`values`)
                 separator '; '

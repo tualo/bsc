@@ -155,6 +155,8 @@ CREATE TABLE IF NOT EXISTS `oauth` (
   CONSTRAINT `fk_oauth_username` FOREIGN KEY (`username`) REFERENCES `macc_users` (`login`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+-- alter table oauth drop CONSTRAINT `fk_oauth_username`
+-- alter table oauth add CONSTRAINT `fk_oauth_username` FOREIGN KEY (`username`) REFERENCES `macc_users` (`login`) ON DELETE CASCADE ON UPDATE CASCADE
 
 
 --
