@@ -290,7 +290,7 @@ $element = array(
 
     public function explode_by_delimiter($sql){
       $all_queries = [];
-      preg_match_all("/delimiter\s+(?P<delimiter>(\/\/|;))/i", $sql, $matches);
+      preg_match_all("/delimiter\s*(?P<delimiter>(\/\/|;))/i", $sql, $matches);
       if (count($matches)>0){
           
           foreach($matches[0] as $index=>$delimiters){
