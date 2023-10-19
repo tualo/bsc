@@ -83,7 +83,7 @@ class CommandLineInstallSessionSQL{
                     PostCheck::formatPrintLn(['red'],implode("\n",$res));
                     exit();
                 }else{
-                    PostCheck::formatPrintLn(['green'],'done');
+                    // PostCheck::formatPrintLn(['green'],'done');
                 }
 
             };
