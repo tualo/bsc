@@ -35,15 +35,20 @@ class PostCheck implements IPostCheck
                 } else {
 
 
-
-                    App::set('clientDB', $session->newDBByRow($db));
-                    self::formatPrintLn(['blue'], 'checks on ' . $db['dbname'] . ':  ');
-                    $classes = get_declared_classes();
-                    foreach ($classes as $cls) {
-                        $class = new \ReflectionClass($cls);
-                        if ($class->implementsInterface('Tualo\Office\Basic\IPostCheck')) {
-                            $cls::test($config);
+                    try{
+                        App::set('clientDB', $session->newDBByRow($db));
+                        self::formatPrintLn(['blue'], 'checks on ' . $db['dbname'] . ':  ');
+                        $classes = get_declared_classes();
+                        foreach ($classes as $cls) {
+                            $class = new \ReflectionClass($cls);
+                            if ($class->implementsInterface('Tualo\Office\Basic\IPostCheck')) {
+                                $cls::test($config);
+                            }
                         }
+                    }catch(\Exception $e){
+                        self::formatPrintLn(['red'], 'error on ' . $db['dbname'] . ':  ');
+                        self::formatPrintLn(['red'], $e->getMessage());
+                        self::formatPrintLn(['blue'],'try `./tm createsystem --db "'.$db['dbname'].'"`');
                     }
                 }
             }
