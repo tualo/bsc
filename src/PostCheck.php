@@ -112,7 +112,7 @@ class PostCheck implements IPostCheck
         echo self::formatPrint($format, $text) . PHP_EOL;
     }
 
-    public static function tableCheck(string $displayName, array $tables)
+    public static function tableCheck(string $displayName, array $tables, string $missingHint = '', string $differentHint = '')
     {
         $clientdb = App::get('clientDB');
         if (is_null($clientdb)) return;
@@ -128,6 +128,8 @@ class PostCheck implements IPostCheck
                             if ($column['field'] == $colDef) {
                                 if ($column['type'] != $coltype) {
                                     self::formatPrintLn(['red'], "\tmodule " . $displayName . " test table " . $clientdb->dbname . '.' . $tablename . ' column ' . $colDef . ' has different type ' . $column['type'] . ' != ' . $coltype);
+                                    if ($differentHint!='')
+                                    self::formatPrintLn(['blue'], "\t" . $differentHint);
                                 }
                             }
                         }
@@ -135,6 +137,8 @@ class PostCheck implements IPostCheck
                 }
             } catch (\Exception $e) {
                 self::formatPrintLn(['red'], "\tmodule " . $displayName . " test table " . $clientdb->dbname . '.' . $tablename . ' failed  ');
+                if ($missingHint!='')
+                self::formatPrintLn(['blue'], "\t" . $missingHint);
                 continue;
             }
         }
