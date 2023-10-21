@@ -67,8 +67,17 @@ class PostCheck implements IPostCheck
                 }
             }
         } catch (\Exception $e) {
+
+            if (!file_exists(App::get('basePath') . '/tm')) {
+                copy(App::get('basePath') . '/vendor/tualo/bsc/src/commandline/client-script', App::get('basePath') . '/tm');
+                chmod(App::get('basePath') . '/tm', 0755);
+            }
+            if (!file_exists(App::get('basePath') . '/index.php')) {
+                copy(App::get('basePath') . '/vendor/tualo/bsc/src/commandline/index.php', App::get('basePath') . '/index.php');
+            }
+            
             self::formatPrintLn(['red'], 'error on ' . $db['dbname'] . ':  ');
-            self::formatPrintLn(['red'], $e->getMessage());
+            // self::formatPrintLn(['red'], $e->getMessage());
             self::formatPrintLn(['blue'], 'try `./tm createsystem --db "' . $db['dbname'] . '"`');
         }
     }
