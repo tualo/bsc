@@ -7,60 +7,69 @@ use Tualo\Office\Basic\TualoApplication as App;
 class PostCheck implements IPostCheck
 {
 
-    public static function testSessionDB(array $config){ }
+    public static function testSessionDB(array $config)
+    {
+    }
 
     public static function loopClients(array $config, string $clientName = null)
     {
 
-        $_SERVER['REQUEST_URI'] = '';
-        $_SERVER['REQUEST_METHOD'] = 'none';
-        App::run();
-        $session = App::get('session');
-        if (is_null($session->db)) {
-            self::formatPrintLn(['red'], 'there is not database configuration');
-            self::formatPrintLn(['yellow'], 'performing basic check');
+        try {
+            $_SERVER['REQUEST_URI'] = '';
+            $_SERVER['REQUEST_METHOD'] = 'none';
+            App::run();
+            $session = App::get('session');
+            if (is_null($session->db)) {
+                self::formatPrintLn(['red'], 'there is not database configuration');
+                self::formatPrintLn(['yellow'], 'performing basic check');
+                $classes = get_declared_classes();
+                foreach ($classes as $cls) {
+                    $class = new \ReflectionClass($cls);
+                    if ($class->implementsInterface('Tualo\Office\Basic\IPostCheck')) {
+                        $cls::test($config);
+                    }
+                }
+            } else {
+                $sessiondb = $session->db;
+
+                $dbs = $sessiondb->direct('select username dbuser, password dbpass, id dbname, host dbhost, port dbport from macc_clients ');
+                foreach ($dbs as $db) {
+                    if (!is_null($clientName) && $clientName != $db['dbname']) {
+                        continue;
+                    } else {
+
+
+                        try {
+                            App::set('clientDB', $session->newDBByRow($db));
+                            self::formatPrintLn(['blue'], 'checks on ' . $db['dbname'] . ':  ');
+                            $classes = get_declared_classes();
+                            foreach ($classes as $cls) {
+                                $class = new \ReflectionClass($cls);
+                                if ($class->implementsInterface('Tualo\Office\Basic\IPostCheck')) {
+                                    $cls::test($config);
+                                }
+                            }
+                        } catch (\Exception $e) {
+                            self::formatPrintLn(['red'], 'error on ' . $db['dbname'] . ':  ');
+                            self::formatPrintLn(['red'], $e->getMessage());
+                            self::formatPrintLn(['blue'], 'try `./tm createsystem --db "' . $db['dbname'] . '"`');
+                        }
+                    }
+                }
+            }
+
+            App::set('clientDB', $session->db);
             $classes = get_declared_classes();
             foreach ($classes as $cls) {
                 $class = new \ReflectionClass($cls);
                 if ($class->implementsInterface('Tualo\Office\Basic\IPostCheck')) {
-                    $cls::test($config);
+                    $cls::testSessionDB($config);
                 }
             }
-        } else {
-            $sessiondb = $session->db;
-            $dbs = $sessiondb->direct('select username dbuser, password dbpass, id dbname, host dbhost, port dbport from macc_clients ');
-            foreach ($dbs as $db) {
-                if (!is_null($clientName) && $clientName != $db['dbname']) {
-                    continue;
-                } else {
-
-
-                    try{
-                        App::set('clientDB', $session->newDBByRow($db));
-                        self::formatPrintLn(['blue'], 'checks on ' . $db['dbname'] . ':  ');
-                        $classes = get_declared_classes();
-                        foreach ($classes as $cls) {
-                            $class = new \ReflectionClass($cls);
-                            if ($class->implementsInterface('Tualo\Office\Basic\IPostCheck')) {
-                                $cls::test($config);
-                            }
-                        }
-                    }catch(\Exception $e){
-                        self::formatPrintLn(['red'], 'error on ' . $db['dbname'] . ':  ');
-                        self::formatPrintLn(['red'], $e->getMessage());
-                        self::formatPrintLn(['blue'],'try `./tm createsystem --db "'.$db['dbname'].'"`');
-                    }
-                }
-            }
-        }
-
-        App::set('clientDB', $session->db);
-        $classes = get_declared_classes();
-        foreach ($classes as $cls) {
-            $class = new \ReflectionClass($cls);
-            if ($class->implementsInterface('Tualo\Office\Basic\IPostCheck')) {
-                $cls::testSessionDB($config);
-            }
+        } catch (\Exception $e) {
+            self::formatPrintLn(['red'], 'error on ' . $db['dbname'] . ':  ');
+            self::formatPrintLn(['red'], $e->getMessage());
+            self::formatPrintLn(['blue'], 'try `./tm createsystem --db "' . $db['dbname'] . '"`');
         }
     }
 
@@ -128,8 +137,8 @@ class PostCheck implements IPostCheck
                             if ($column['field'] == $colDef) {
                                 if ($column['type'] != $coltype) {
                                     self::formatPrintLn(['red'], "\tmodule " . $displayName . " test table " . $clientdb->dbname . '.' . $tablename . ' column ' . $colDef . ' has different type ' . $column['type'] . ' != ' . $coltype);
-                                    if ($differentHint!='')
-                                    self::formatPrintLn(['blue'], "\t" . $differentHint);
+                                    if ($differentHint != '')
+                                        self::formatPrintLn(['blue'], "\t" . $differentHint);
                                 }
                             }
                         }
@@ -137,8 +146,8 @@ class PostCheck implements IPostCheck
                 }
             } catch (\Exception $e) {
                 self::formatPrintLn(['red'], "\tmodule " . $displayName . " test table " . $clientdb->dbname . '.' . $tablename . ' failed  ');
-                if ($missingHint!='')
-                self::formatPrintLn(['blue'], "\t" . $missingHint);
+                if ($missingHint != '')
+                    self::formatPrintLn(['blue'], "\t" . $missingHint);
                 continue;
             }
         }
@@ -158,7 +167,7 @@ class PostCheck implements IPostCheck
                 } else if ($columns == $procedure_md5) {
                     self::formatPrintLn(['green'], "\tmodule " . $displayName . " test stored procedure " . $clientdb->dbname . '.' . $procedurename . ' done  ');
                 } else {
-                    self::formatPrintLn(['yellow'], "\tmodule " . $displayName . " test stored procedure " . $clientdb->dbname . '.' . $procedurename . ' other version (got: '.$columns.', expected: '.$procedure_md5.')');
+                    self::formatPrintLn(['yellow'], "\tmodule " . $displayName . " test stored procedure " . $clientdb->dbname . '.' . $procedurename . ' other version (got: ' . $columns . ', expected: ' . $procedure_md5 . ')');
                     self::formatPrintLn(['blue'], "\t" . $differentHint);
                 }
             } catch (\Exception $e) {
