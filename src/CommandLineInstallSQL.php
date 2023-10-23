@@ -82,6 +82,7 @@ class CommandLineInstallSQL{
                 $sql = preg_replace('#^\s*\-\-.+$#m', '', $sql);
 
                 $sinlgeStatements = App::get('clientDB')->explode_by_delimiter($sql);
+                $sleep_count = 0;
                 foreach($sinlgeStatements as $commandIndex => $statement){
                     try{
                         App::get('session')->db->direct('select database()'); // keep connection alive
@@ -91,7 +92,10 @@ class CommandLineInstallSQL{
                         App::get('clientDB')->direct('select database()'); // keep connection alive
                         App::get('clientDB')->execute($statement);
                         App::get('clientDB')->moreResults();
-                        if ( ($sleep = $args->getOpt('sleep',0))!=0 ) sleep($sleep);
+                        if ($sleep_count++>30){
+                            $sleep_count = 0;
+                            if ( ($sleep = $args->getOpt('sleep',0))!=0 ) sleep($sleep);
+                        }
 
                     }catch(\Exception $e){
                         echo PHP_EOL;
