@@ -40,6 +40,7 @@ class CommandLineInstallSQL{
         $cli->command(static::getCommandName())
             ->description('installs needed sql for '.self::$shortName)
             ->opt('client', 'only use this client', true, 'string')
+            ->opt('sleep', 'seconds to sleep between each command', false, 'integer')
             ->opt('debug', 'show command index', false, 'boolean');
     }
 
@@ -87,8 +88,11 @@ class CommandLineInstallSQL{
                         if ( $args->getOpt('debug') ){
                             PostCheck::formatPrintLn(['blue'],"\t\t". $commandIndex.': '.substr(preg_replace("/\\n/m","",$statement),0,60));
                         }
+                        App::get('clientDB')->direct('select database()'); // keep connection alive
                         App::get('clientDB')->execute($statement);
                         App::get('clientDB')->moreResults();
+                        if ( ($sleep = $args->getOpt('sleep',0))!=0 ) sleep($sleep);
+
                     }catch(\Exception $e){
                         echo PHP_EOL;
                         PostCheck::formatPrintLn(['red'], $e->getMessage().': commandIndex => '.$commandIndex);
