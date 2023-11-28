@@ -89,6 +89,8 @@ class Route{
 
                     $session_condition_allowed = true;
                     if (isset($_SESSION['session_condition'])&&isset($_SESSION['session_condition']['path'])){
+
+                        if( TualoApplication::configuration('logger-options','ROUTERUN','0')=='1')
                         TualoApplication::logger('ROUTERUN')->debug("use path ".$_SESSION['session_condition']['path']." for ".$path);
 
                         $session_condition_allowed = false;
@@ -97,10 +99,12 @@ class Route{
                             $test_path = str_replace('*','(\.)*',$test_path);
                         }
                         if(preg_match('#'.$test_path.'#',$path,$session_condition_matches)){
+                            if( TualoApplication::configuration('logger-options','ROUTERUN','0')=='1')
                             TualoApplication::logger('ROUTERUN')->debug("path matches");
                             $session_condition_allowed = true;
                         }else{
                             header($_SERVER['SERVER_PROTOCOL'] . " 404 not found");
+                            if( TualoApplication::configuration('logger-options','ROUTERUN','0')=='1')
                             TualoApplication::logger('ROUTERUN')->error("try to reach a path that is not allowed");
                             exit();
                         }
