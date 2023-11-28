@@ -201,7 +201,7 @@ class TualoApplication{
         if (self::$total_time_start==0) self::$total_time_start=microtime(true); 
         $time_end = microtime(true);
         self::$timing_result[] = array('key'=>$key,'total'=>$time_end-self::$total_time_start,'last'=>$time_end-self::$time_start,'data'=>$data);
-        if( self::configuration('logger-timing','enabled','0')=='1'){
+        if( self::configuration('logger-options','TualoApplicationTiming','0')=='1'){
             self::logger('TualoApplicationTiming')->info(number_format($time_end-self::$total_time_start,5)."s ".number_format($time_end-self::$time_start,5)."s (".$key.")");
         }
         self::$time_start=$time_end;
