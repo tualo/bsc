@@ -84,7 +84,7 @@ TualoApplication::use('TualoApplicationSession_Auth', function () {
 
 
 
-                TualoApplication::set('basePath', dirname($_SERVER['SCRIPT_FILENAME']) . '/~/' . $matches['oauth']);
+                //TualoApplication::set('basePath', dirname($_SERVER['SCRIPT_FILENAME']) . '/~/' . $matches['oauth']);
 
                 session_commit();
             }
