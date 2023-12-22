@@ -733,4 +733,15 @@ class TualoApplication{
         }
     }
 
+
+    public static function deferredTrigger(){
+        if(!self::configuration('deferred','enabled',false)) return;
+        try{
+            $db = self::get('session')->getDB();
+            $db->execute('call proc_deferred_sql_tasks()');
+            $db->moreResults();
+        }catch(\Exception $e){
+            // self::debug($e->getMessage());
+        }
+    }
 }
