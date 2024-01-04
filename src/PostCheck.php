@@ -142,14 +142,21 @@ class PostCheck implements IPostCheck
                 // $columnnames = array_map(function($v){ return $v['field']; },$columns);
                 if (isset($tabledef['columns'])) {
                     foreach ($tabledef['columns'] as $colDef => $coltype) {
+                        $found = false;
                         foreach ($columns as $column) {
                             if ($column['field'] == $colDef) {
+                                $found = true;
                                 if ($column['type'] != $coltype) {
                                     self::formatPrintLn(['red'], "\tmodule " . $displayName . " test table " . $clientdb->dbname . '.' . $tablename . ' column ' . $colDef . ' has different type ' . $column['type'] . ' != ' . $coltype);
                                     if ($differentHint != '')
                                         self::formatPrintLn(['blue'], "\t" . $differentHint);
                                 }
                             }
+                        }
+                        if (!$found) {
+                            self::formatPrintLn(['red'], "\tmodule " . $displayName . " test table " . $clientdb->dbname . '.' . $tablename . ' column ' . $colDef . ' does not exist');
+                            if ($missingHint != '')
+                                self::formatPrintLn(['blue'], "\t" . $missingHint);
                         }
                     }
                 }
