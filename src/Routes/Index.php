@@ -1,13 +1,29 @@
 <?php
 namespace Tualo\Office\Basic\Routes;
+
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RegexIterator;
 use Tualo\Office\Basic\TualoApplication;
 use Tualo\Office\Basic\Route;
 use Tualo\Office\Basic\IRoute;
+use Tualo\Office\Basic\Version;
 
 
 class Index implements IRoute{
+    
+
     public static function register(){
 
+        
+        
+        // usage: to find the test.zip file recursively
+        // $result = rsearch($_SERVER['DOCUMENT_ROOT'], '/.*\/test\.zip/'));
+        
+        Route::add('/versionsum',function(){
+            TualoApplication::contenttype('application/json');
+            TualoApplication::result('f',Version::versionMD5());
+        },['get','post'],false);
 
         Route::add('/',function(){
 
@@ -52,6 +68,9 @@ class Index implements IRoute{
                     'shortcut_iconurl',
                     'favicon-32x32.png'
                 );
+
+                $params[ 'checksum'] = Version::versionMD5();
+      
 
                 TualoApplication::body( $pug->renderFile($pugfile,$params));
                 

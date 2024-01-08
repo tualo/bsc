@@ -6,7 +6,7 @@ use Tualo\Office\Basic\ICommandline;
 use Tualo\Office\ExtJSCompiler\Helper;
 use Tualo\Office\Basic\TualoApplication as App;
 use Tualo\Office\Basic\PostCheck;
-
+use Tualo\Office\Basic\Version;
 class PostCheckCommandline implements ICommandline{
 
     public static function getCommandName():string { return 'postcheck';}
@@ -19,6 +19,7 @@ class PostCheckCommandline implements ICommandline{
     }
     public static function run(Args $args){
         PostCheck::loopClients(App::get('configuration'),$args->getOpt('client'));
+        Version::versionMD5(true);
         if (!file_exists(App::get('basePath').'/cache')){
             mkdir( App::get('basePath').'/cache');
         }
