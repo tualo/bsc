@@ -61,7 +61,7 @@ class PreCheck implements IPreCheck
             }
         } catch (\Exception $e) {
 
-            self::formatPrintLn(['red'], 'error on ' . $db['dbname'] . ':  ');
+            self::formatPrintLn(['red'], 'error on ' . $db['dbname'] . ':  '.$e->getMessage());
             exit(65);
 
         }
