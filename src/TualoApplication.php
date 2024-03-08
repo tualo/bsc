@@ -31,6 +31,8 @@ class TualoApplication{
     private static $modules = array();
     private static $modulesTree;
 
+    private static $headers = [];
+
     /**
      * @var bool $runmiddlewares flag indicating that the next middleware(s) can be executed
      */
@@ -548,7 +550,34 @@ class TualoApplication{
     }
     
 
+    /**
+     * Run all Headers
+     * 
+     * @return $this
+     */
+    public static function runHeaders(){
+        $classes = get_declared_classes();
+        
+        foreach($classes as $cls){
+            $class = new \ReflectionClass($cls);
+            if ( $class->implementsInterface('Tualo\Office\Basic\IHeader') ) {
+                $cls::register();
+            }
+        }
+        foreach(self::$headers as $key=>$header){
+            header($key.': '.implode(' ',$header));
+        }
+    }
     
+    public static function addHeader(string $key ,string $value){
+        if (isset(self::$headers[$key])){
+            self::$headers[$key][] = $value;
+        }else{
+            self::$headers[$key] = [$value];
+        }
+        return self::$headers;
+
+    }
 
     /**
      * Run all Middlewares
