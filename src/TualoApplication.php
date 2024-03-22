@@ -586,20 +586,15 @@ class TualoApplication{
      */
     public static function run(){
         self::timing('run start middlewares');
-        
         $classes = get_declared_classes();
-        
         foreach($classes as $cls){
             $class = new \ReflectionClass($cls);
             if ( $class->implementsInterface('Tualo\Office\Basic\IMiddleware') ) {
                 $cls::register();
             }
         }
-
         $cb=self::class."::compare_position";
         usort(self::$middlewares,     $cb);
-
-
         $parsed_url = parse_url($_SERVER['REQUEST_URI']);//Parse Uri
         if(isset($_SERVER['REDIRECT_URL'])) $parsed_url = parse_url($_SERVER['REDIRECT_URL']);
         if(isset($parsed_url['path'])){
@@ -607,7 +602,6 @@ class TualoApplication{
         }else{
             $path = '/';
         }
-
         foreach(self::$middlewares as $middleware){
             if (self::$runmiddlewares===true) self::callMiddlewareIntern($middleware,$path);
             self::timing($middleware['key']);
@@ -615,15 +609,12 @@ class TualoApplication{
         if (self::$runmiddlewares===true){
             self::end();
         }
-        
         self::timing('run end middlewares');
     }
 
     
 
     private static function callMiddlewareIntern($middleware,$path){
-        
-        
         $run=self::canRunMiddleWare($middleware);
         if(isset(self::$called_middlewares[$middleware['key']])) $run =false;
         
@@ -644,7 +635,6 @@ class TualoApplication{
         $is_web=http_response_code()!==FALSE;
         $headers=[];
         if ($is_web) $headers = getallheaders();
-        
         $result = true;
         if(isset(self::$called_middlewares[$middleware['key']])) return false;
         if (isset($middleware['options'])){
@@ -657,7 +647,6 @@ class TualoApplication{
                 }
             }
         }
-
         return $result;
     }
 
