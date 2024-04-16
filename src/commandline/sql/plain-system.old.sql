@@ -2001,7 +2001,7 @@ DROP TABLE IF EXISTS `ds_renderer_stylesheet`;
 
 
 CREATE TABLE `ds_renderer_stylesheet` (
-  `classname` varchar(50) NOT NULL,
+  `classname` varchar(150) NOT NULL,
   `group` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`classname`),
   KEY `idx_ds_renderer_stylesheet_group` (`group`),
