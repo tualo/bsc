@@ -193,9 +193,10 @@ class Session{
                   on macc_users.login = loginnamen.login
       where
           oauth.id = {id}
+          and oauth.client <> \'*\'
           and (validuntil>=now() or validuntil is null)
   
-      union 
+      union all
   
           select
               oauth.id,
