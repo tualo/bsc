@@ -56,7 +56,7 @@ class Route{
 
     public static function runpath($path,$method){
         $path_match_found = false;
-        $route_match_found = false;
+
         $route_method_found = false;
 
         TualoApplication::timing("start routes loop",'');
@@ -133,14 +133,15 @@ class Route{
             }
         }
 
+        $is_web=http_response_code()!==FALSE;
         // No matching route was found
         if (!self::$finished)
-        if(!$route_match_found){
+        if(!$path_match_found){
 
             // But a matching path exists
             if(!$route_method_found){
 
-                $is_web=http_response_code()!==FALSE;
+                
                 if ($is_web){
                     header("HTTP/1.0 405 Method Not Allowed");
                 }
@@ -152,7 +153,9 @@ class Route{
                     call_user_func_array(self::$methodNotAllowed, Array($path,$method));
                 }
             }else{
-                header("HTTP/1.0 404 Not Found");
+                if ($is_web){
+                   header("HTTP/1.0 404 Not Found");
+                }
                 if(self::$pathNotFound){
                     call_user_func_array(self::$pathNotFound, Array($path));
                 }
