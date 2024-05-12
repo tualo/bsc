@@ -155,6 +155,7 @@ class Route{
             }else{
                 if ($is_web){
                    header("HTTP/1.0 404 Not Found");
+                   
                 }
                 if(self::$pathNotFound){
                     call_user_func_array(self::$pathNotFound, Array($path));
