@@ -38,7 +38,7 @@ class CommandLineInstallSQL{
 
     public static function setup(Cli $cli){
         $cli->command(static::getCommandName())
-            ->description('installs needed sql for '.self::$shortName)
+            ->description('installs needed sql for '.self::getShortName())
             ->opt('client', 'only use this client', true, 'string')
             ->opt('sleep', 'seconds to sleep between each command', false, 'integer')
             ->opt('debug', 'show command index', false, 'boolean');
