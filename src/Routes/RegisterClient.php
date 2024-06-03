@@ -24,6 +24,8 @@ class RegisterClient implements IRoute{
                 $session->oauthValidDays($token,7);
 
                 if ($key!==false){
+
+                    App::result('token_clean', $token);
                     $token = base64_encode(\Tualo\Office\TualoPGP\TualoApplicationPGP::encrypt(file_get_contents($key),$token));
                 }
 
