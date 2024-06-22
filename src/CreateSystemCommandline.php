@@ -139,6 +139,7 @@ class CreateSystemCommandline implements ICommandline{
                 }
                 */
                 PostCheck::formatPrint(['blue'],"\tsetup sessions db... ");
+
                 exec('mysql '.$clientOptions.' --force=true -D '.$sessionDBName.' < '.__DIR__.'/commandline/sql/plain-system-session.sql',$res,$err);
                 if ($err!=0){
                     PostCheck::formatPrintLn(['red'],'failed');
@@ -147,7 +148,7 @@ class CreateSystemCommandline implements ICommandline{
                 }else{
                     PostCheck::formatPrintLn(['green'],'done');
                 }
-
+                
                 /*
                 if (( $args->getOpt('createusers'))===true){
 
@@ -159,6 +160,7 @@ class CreateSystemCommandline implements ICommandline{
                 }
                 */
 
+                /*
                 PostCheck::formatPrint(['blue'],"\tsetup client db... ");
                 exec('cat '.__DIR__.'/commandline/sql/plain-system.sql | sed -E \'s#SESSIONDB#'.$sessionDBName.'#g\' | mysql '.$clientOptions.' --force=true -D '.$clientDBName.' ',$res,$err);
                 if ($err!=0){
@@ -168,6 +170,7 @@ class CreateSystemCommandline implements ICommandline{
                 }else{
                     PostCheck::formatPrintLn(['green'],'done');
                 }
+                */
 
                 $clientUsername = 'admin';
                 $clientpassword = (Uuid::uuid4())->toString();

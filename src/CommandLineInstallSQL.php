@@ -14,6 +14,10 @@ class CommandLineInstallSQL{
     public static $dir = '';
     public static $files = [];
 
+    public static function exitOnError():bool {  
+        return false;
+    }
+
     public static function getDir():string {  
         return __DIR__;
     }
@@ -68,7 +72,7 @@ class CommandLineInstallSQL{
 
 
     public static function run(Args $args){
-        $files = self::getFiles();
+        $files = static::getFiles();
 
         foreach($files as $file=>$msg){
             $installSQL = function(string $file){
@@ -89,6 +93,7 @@ class CommandLineInstallSQL{
                         if ( $args->getOpt('debug') ){
                             PostCheck::formatPrintLn(['blue'],"\t\t". $commandIndex.': '.substr(preg_replace("/\\n/m","",$statement),0,60));
                         }
+                        $statement = str_replace('SESSIONDB.',App::get('session')->db->dbname.'.',$statement);
                         App::get('clientDB')->direct('select database()'); // keep connection alive
                         App::get('clientDB')->execute($statement);
                         App::get('clientDB')->moreResults();
@@ -100,6 +105,9 @@ class CommandLineInstallSQL{
                     }catch(\Exception $e){
                         echo PHP_EOL;
                         PostCheck::formatPrintLn(['red'], $e->getMessage().': commandIndex => '.$commandIndex);
+                        if (static::exitOnError()){
+                            exit(1);
+                        }
                     }
                 }
             };

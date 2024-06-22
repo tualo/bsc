@@ -1,0 +1,496 @@
+[
+    
+    {
+        "file": "cron_log_dateien.sql",
+        "text": "setup cron_log_dateien"
+    },
+    {
+        "file": "cron_log_dateien_daten.sql",
+        "text": "setup cron_log_dateien_daten"
+    },
+    {
+        "file": "cron_queries.sql",
+        "text": "setup cron_queries"
+    },
+    {
+        "file": "cron_queries_toexecute.sql",
+        "text": "setup cron_queries_toexecute"
+    },
+    {
+        "file": "crontab_weekdays.sql",
+        "text": "setup crontab_weekdays"
+    },
+    {
+        "file": "crontab_applications.sql",
+        "text": "setup crontab_applications"
+    },
+    {
+        "file": "crontab.sql",
+        "text": "setup crontab"
+    },
+    {
+        "file": "custom_types.sql",
+        "text": "setup custom_types"
+    },
+    {
+        "file": "custom_types_attributes_boolean.sql",
+        "text": "setup custom_types_attributes_boolean"
+    },
+    {
+        "file": "custom_types_attributes_integer.sql",
+        "text": "setup custom_types_attributes_integer"
+    },
+    {
+        "file": "custom_types_attributes_string.sql",
+        "text": "setup custom_types_attributes_string"
+    },
+    {
+        "file": "ds/ds_class.sql",
+        "text": "setup ds_class.sql"
+    },
+    {
+        "file": "ds/ds_form_properties.sql",
+        "text": "setup ds_form_properties.sql"
+    },
+    {
+        "file": "ds/ds.sql",
+        "text": "setup ds.sql"
+    },
+    {
+        "file": "ds/ds_column.sql",
+        "text": "setup ds_column.sql"
+    },
+    {
+        "file": "ds/ds_access.sql",
+        "text": "setup ds_access.sql"
+    },
+    {
+        "file": "ds/ds_addcommands_xtypes.sql",
+        "text": "setup ds_addcommands_xtypes.sql"
+    },
+    {
+        "file": "ds/ds_addcommand_locations.sql",
+        "text": "setup ds_addcommand_locations.sql"
+    },
+    {
+        "file": "ds/ds_addcommands.sql",
+        "text": "setup ds_addcommands.sql"
+    },
+    {
+        "file": "ds/ds_additional_columns.sql",
+        "text": "setup ds_additional_columns.sql"
+    },
+    {
+        "file": "ds/ds_backup_importance.sql",
+        "text": "setup ds_backup_importance.sql"
+    },
+    {
+        "file": "ds/ds_blg_column.sql",
+        "text": "setup ds_blg_column.sql"
+    },
+    {
+        "file": "ds/ds_calendar.sql",
+        "text": "setup ds_calendar.sql"
+    },
+    {
+        "file": "ds/ds_column_dialog_label.sql",
+        "text": "setup ds_column_dialog_label.sql"
+    },
+    {
+        "file": "ds/ds_column_export_template.sql",
+        "text": "setup ds_column_export_template.sql"
+    },
+    {
+        "file": "ds/ds_column_forcetype.sql",
+        "text": "setup ds_column_forcetype.sql"
+    },
+    {
+        "file": "ds/ds_column_form_label.sql",
+        "text": "setup ds_column_form_label.sql"
+    },
+    {
+        "file": "ds/ds_column_form_properties.sql",
+        "text": "setup ds_column_form_properties.sql"
+    },
+    {
+        "file": "ds/ds_column_list_export.sql",
+        "text": "setup ds_column_list_export.sql"
+    },
+    {
+        "file": "ds/ds_column_list_label.sql",
+        "text": "setup ds_column_list_label.sql"
+    },
+    {
+        "file": "ds/ds_column_tagfields.sql",
+        "text": "setup ds_column_tagfields.sql"
+    },
+    {
+        "file": "ds/ds_column_types.sql",
+        "text": "setup ds_column_types.sql"
+    },
+    {
+        "file": "ds/ds_combined_tables.sql",
+        "text": "setup ds_combined_tables.sql"
+    },
+    {
+        "file": "ds/ds_contextmenu.sql",
+        "text": "setup ds_contextmenu.sql"
+    },
+    {
+        "file": "ds/ds_contextmenu_groups.sql",
+        "text": "setup ds_contextmenu_groups.sql"
+    },
+    {
+        "file": "ds/ds_contextmenu_params.sql",
+        "text": "setup ds_contextmenu_params.sql"
+    },
+    {
+        "file": "ds/ds_contextmenu_session_groups.sql",
+        "text": "setup ds_contextmenu_session_groups.sql"
+    },
+    {
+        "file": "ds/ds_custom_listview_config.sql",
+        "text": "setup ds_custom_listview_config.sql"
+    },
+    {
+        "file": "ds/ds_db_types_fieldtype.sql",
+        "text": "setup ds_db_types_fieldtype.sql"
+    },
+    {
+        "file": "ds/ds_dialog.sql",
+        "text": "setup ds_dialog.sql"
+    },
+    {
+        "file": "ds/ds_dialog_cards.sql",
+        "text": "setup ds_dialog_cards.sql"
+    },
+    {
+        "file": "ds/ds_dialog_card_fields.sql",
+        "text": "setup ds_dialog_card_fields.sql"
+    },
+    {
+        "file": "ds/ds_dialog_condition.sql",
+        "text": "setup ds_dialog_condition.sql"
+    },
+    {
+        "file": "ds/ds_dialog_condition_values.sql",
+        "text": "setup ds_dialog_condition_values.sql"
+    },
+    {
+        "file": "ds/ds_dictionary.sql",
+        "text": "setup ds_dictionary.sql"
+    },
+    {
+        "file": "ds/ds_dropdownfields.sql",
+        "text": "setup ds_dropdownfields.sql"
+    },
+    {
+        "file": "ds/ds_export_file_transfer.sql",
+        "text": "setup ds_export_file_transfer.sql"
+    },
+    {
+        "file": "ds/ds_extended_panels.sql",
+        "text": "setup ds_extended_panels.sql"
+    },
+    {
+        "file": "ds/ds_genericbarcode.sql",
+        "text": "setup ds_genericbarcode.sql"
+    },
+    {
+        "file": "ds/ds_import_file_transfer.sql",
+        "text": "setup ds_import_file_transfer.sql"
+    },
+    {
+        "file": "ds/ds_listplugins.sql",
+        "text": "setup ds_listplugins.sql"
+    },
+    {
+        "file": "ds/ds_nm_tables.sql",
+        "text": "setup ds_nm_tables.sql"
+    },
+    {
+        "file": "ds/ds_preview_form_label.sql",
+        "text": "setup ds_preview_form_label.sql"
+    },
+    {
+        "file": "ds/ds_privacy_rating.sql",
+        "text": "setup ds_privacy_rating.sql"
+    },
+    {
+        "file": "ds/ds_privacy_rating_types.sql",
+        "text": "setup ds_privacy_rating_types.sql"
+    },
+    {
+        "file": "ds/ds_procedureform.sql",
+        "text": "setup ds_procedureform.sql"
+    },
+    {
+        "file": "ds/ds_pug_templates.sql",
+        "text": "setup ds_pug_templates.sql"
+    },
+    {
+        "file": "ds/ds_reference_tables.sql",
+        "text": "setup ds_reference_tables.sql"
+    },
+    {
+        "file": "ds/ds_referenced_manual.sql",
+        "text": "setup ds_referenced_manual.sql"
+    },
+    {
+        "file": "ds/ds_referenced_manual_columns.sql",
+        "text": "setup ds_referenced_manual_columns.sql"
+    },
+    {
+        "file": "ds/ds_renderer.sql",
+        "text": "setup ds_renderer.sql"
+    },
+    {
+        "file": "ds/ds_renderer_stylesheet_groups.sql",
+        "text": "setup ds_renderer_stylesheet_groups.sql"
+    },
+    {
+        "file": "ds/ds_renderer_stylesheet.sql",
+        "text": "setup ds_renderer_stylesheet.sql"
+    },
+    {
+        "file": "ds/ds_renderer_stylesheet_attributes.sql",
+        "text": "setup ds_renderer_stylesheet_attributes.sql"
+    },
+    {
+        "file": "ds/ds_renderer_stylesheet_groups_assign.sql",
+        "text": "setup ds_renderer_stylesheet_groups_assign.sql"
+    },
+    {
+        "file": "ds/ds_searchfields.sql",
+        "text": "setup ds_searchfields.sql"
+    },
+    {
+        "file": "ds/ds_send_mail.sql",
+        "text": "setup ds_send_mail.sql"
+    },
+    {
+        "file": "ds/ds_send_mail_to.sql",
+        "text": "setup ds_send_mail_to.sql"
+    },
+    {
+        "file": "ds/ds_statistics.sql",
+        "text": "setup ds_statistics.sql"
+    },
+    {
+        "file": "ds/ds_sync_data.sql",
+        "text": "setup ds_sync_data.sql"
+    },
+    {
+        "file": "ds/ds_sync_hstrtable_lock.sql",
+        "text": "setup ds_sync_hstrtable_lock.sql"
+    },
+    {
+        "file": "ds/ds_sync_lock.sql",
+        "text": "setup ds_sync_lock.sql"
+    },
+    {
+        "file": "ds/ds_sync_remove.sql",
+        "text": "setup ds_sync_remove.sql"
+    },
+    {
+        "file": "ds/ds_trigger.sql",
+        "text": "setup ds_trigger.sql"
+    },
+    {
+        "file": "ds/ds_used_tables.sql",
+        "text": "setup ds_used_tables.sql"
+    },
+    {
+        "file": "ds/extjs_base_columnfilter_types.sql",
+        "text": "setup extjs_base_columnfilter_types.sql"
+    },
+    {
+        "file": "ds/extjs_base_types.data.sql",
+        "text": "setup extjs_base_types.data.sql"
+    },
+    {
+        "file": "ds/extjs_base_types.sql",
+        "text": "setup extjs_base_types.sql"
+    },
+    {
+        "file": "ds/farben.sql",
+        "text": "setup farben.sql"
+    },
+    {
+        "file": "ds/func.fn_json_filter_values_extract.sql",
+        "text": "setup func.fn_json_filter_values_extract.sql"
+    },
+    {
+        "file": "ds/icons.sql",
+        "text": "setup icons.sql"
+    },
+    {
+        "file": "ds/lager.sql",
+        "text": "setup lager.sql"
+    },
+    {
+        "file": "ds/log_ds_sync.sql",
+        "text": "setup log_ds_sync.sql"
+    },
+    {
+        "file": "ds/preisorientierung.sql",
+        "text": "setup preisorientierung.sql"
+    },
+    {
+        "file": "ds/func.convertColumnType2DataType.sql",
+        "text": "setup func.convertColumnType2DataType.sql"
+    },
+    {
+        "file": "ds/func.dsx_filter_operator.sql",
+        "text": "setup func.dsx_filter_operator.sql"
+    },
+    {
+        "file": "ds/func.dsx_filter_term.sql",
+        "text": "setup func.dsx_filter_term.sql"
+    },
+    {
+        "file": "ds/func.dsx_filter_values.sql",
+        "text": "setup func.dsx_filter_values.sql"
+    },
+    {
+        "file": "ds/func.dsx_filter_values_extract.sql",
+        "text": "setup func.dsx_filter_values_extract.sql"
+    },
+    {
+        "file": "ds/func.dsx_filter_values_simple.sql",
+        "text": "setup func.dsx_filter_values_simple.sql"
+    },
+    {
+        "file": "ds/setup_parameters.sql",
+        "text": "setup setup_parameters.sql"
+    },
+    {
+        "file": "ds/setup.sql",
+        "text": "setup setup.sql"
+    },
+    {
+        "file": "ds/test_ds_cmd.sql",
+        "text": "setup test_ds_cmd.sql"
+    },
+
+    {
+        "file": "blg_config.sql",
+        "text": "setup blg_config"
+    },
+
+    {
+        "file": "ds/func.fn_json_operator.sql",
+        "text": "setup fn_json_operator"
+    },
+    {
+        "file": "ds/func.fn_serial_sql.sql",
+        "text": "setup fn_serial_sql"
+    },
+    {
+        "file": "ds/func.generateGUID.sql",
+        "text": "setup generateGUID"
+    },
+    {
+        "file": "ds/func.german_to_decimal.sql",
+        "text": "setup german_to_decimal"
+    },
+    {
+        "file": "ds/func.getBulkInsertSQL.sql",
+        "text": "setup getBulkInsertSQL"
+    },
+    {
+        "file": "ds/func.getColumnSearchJoin.sql",
+        "text": "setup getColumnSearchJoin"
+    },
+    {
+        "file": "ds/func.getNextPossibleBookingDate.sql",
+        "text": "setup getNextPossibleBookingDate"
+    },
+    {
+        "file": "ds/func.getTableForeignKeys.sql",
+        "text": "setup getTableForeignKeys"
+    },
+    {
+        "file": "ds/func.getTableKeys.sql",
+        "text": "setup getTableKeys"
+    },
+    {
+        "file": "ds/func.isFieldExisting.sql",
+        "text": "setup isFieldExisting"
+    },
+    {
+        "file": "ds/func.standardize_version.sql",
+        "text": "setup standardize_version"
+    },
+    {
+        "file": "ds/proc.ADD_OR_UPDATE_CLIENTDB.sql",
+        "text": "setup ADD_OR_UPDATE_CLIENTDB"
+    },
+    {
+        "file": "ds/func.check_database_defaults.sql",
+        "text": "setup check_database_defaults"
+    },
+    {
+        "file": "ds/proc.correctViewDefiner.sql",
+        "text": "setup correctViewDefiner"
+    },
+    {
+        "file": "ds/proc.createNewClient.sql",
+        "text": "setup createNewClient"
+    },
+    {
+        "file": "ds/proc.create_or_upgrade_hstr_table.sql",
+        "text": "setup create_or_upgrade_hstr_table"
+    },
+    {
+        "file": "ds/proc.create__fulltext_index.sql",
+        "text": "setup create__fulltext_index"
+    },
+    {
+        "file": "ds/proc.debug_message.sql",
+        "text": "setup debug_message"
+    },
+    {
+        "file": "ds/proc.ds_fill_column.sql",
+        "text": "setup ds_fill_column"
+    },
+    {
+        "file": "ds/proc.fill_ds.sql",
+        "text": "setup fill_ds"
+    },
+    {
+        "file": "ds/proc.fill_ds_reference_table.sql",
+        "text": "setup fill_ds_reference_table"
+    },
+    {
+        "file": "ds/proc.ds_cloneformlabel.sql",
+        "text": "setup ds_cloneformlabel"
+    },
+    {
+        "file": "ds/proc.ds_cloneformlabelexport.sql",
+        "text": "setup ds_cloneformlabelexport"
+    },
+    {
+        "file": "ds/proc.isDSOperationAllowed.sql",
+        "text": "setup isDSOperationAllowed"
+    },
+    {
+        "file": "ds/proc.fixPrimaryKey.sql",
+        "text": "setup fixPrimaryKey"
+    },
+    {
+        "file": "ds/view_config_ds_column.sql",
+        "text": "setup view_config_ds_column"
+    },
+    {
+        "file": "ds/view_config_ds.sql",
+        "text": "setup view_config_ds"
+    },
+    {
+        "file": "ds/proc.addFieldIfNotExists.sql",
+        "text": "setup addFieldIfNotExists"
+    }
+    
+    
+]
+

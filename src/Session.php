@@ -500,7 +500,7 @@ class Session{
       if ($is_web) $headers = getallheaders();
 
       foreach($headers as $key=>$val){
-        if ($hkey==$key){
+        if (strtolower( $hkey ) == strtolower($key)){
           return $val;
         }
       }

@@ -34,3 +34,5 @@ require_once "Routes/Logout.php";
 require_once "Routes/PublicRoute.php";
 
 require_once "Checks/Tables.php";
+require_once "commandline/InstallMain.php";
+

@@ -310,6 +310,8 @@ $element = array(
               }
               
           } 
+      }else{
+          $all_queries = explode(';', $sql);
       }
 
       return $all_queries;
