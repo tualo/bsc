@@ -301,12 +301,14 @@ class Session{
     }
 
 
-    public function removeToken() {
+    public function removeToken($token) {
       try{
-          $session->db->direct('delete from oauth where id = {token}',['token'=>$token ]);
+        $session = $this;
+        $session->db->direct('delete from oauth where id = {token}',['token'=>$token ]);
       }catch(\Exception $e){
       }
     }
+    
 
     public function getDB() {
       if ($_SESSION['tualoapplication']['loggedIn']===false) return null;
