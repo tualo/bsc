@@ -300,6 +300,14 @@ class Session{
       
     }
 
+
+    public function removeToken() {
+      try{
+          $session->db->direct('delete from oauth where id = {token}',['token'=>$token ]);
+      }catch(\Exception $e){
+      }
+    }
+
     public function getDB() {
       if ($_SESSION['tualoapplication']['loggedIn']===false) return null;
       
