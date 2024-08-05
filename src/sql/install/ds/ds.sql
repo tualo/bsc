@@ -38,3 +38,8 @@ CREATE TABLE IF NOT EXISTS `ds` (
   KEY `fk_ds_class_name` (`class_name`),
   CONSTRAINT `fk_ds_class_name` FOREIGN KEY (`class_name`) REFERENCES `ds_class` (`class_name`) ON DELETE SET NULL ON UPDATE CASCADE
 );
+
+alter table ds add column if not exists autosave tinyint(1) default 0;
+alter table ds add column if not exists base_store_class varchar(50) default 'Tualo.DataSets.data.Store';
+alter table ds add column if not exists use_insert_for_update tinyint(1) default 0;
+
