@@ -43,3 +43,23 @@ alter table ds add column if not exists autosave tinyint(1) default 0;
 alter table ds add column if not exists base_store_class varchar(50) default 'Tualo.DataSets.data.Store';
 alter table ds add column if not exists use_insert_for_update tinyint(1) default 0;
 
+
+
+CREATE TABLE IF NOT EXISTS `ds_reference_tables` (
+  `table_name` varchar(128) NOT NULL,
+  `reference_table_name` varchar(100) NOT NULL DEFAULT '',
+  `columnsdef` longtext DEFAULT NULL,
+  `constraint_name` varchar(128) NOT NULL primary key,
+  `active` tinyint(4) DEFAULT 1,
+  `searchable` tinyint(4) DEFAULT 0,
+  `autosync` tinyint(4) DEFAULT 1,
+  `position` int(11) DEFAULT 99999,
+  `path` varchar(100) DEFAULT '',
+  `existsreal` int(11) DEFAULT 1,
+  `tabtitle` varchar(50) DEFAULT '',
+  KEY `fk_ds_reference_tables_r_ds` (`reference_table_name`),
+  KEY `idx_ds_reference_tables_table_name_reference_table_name` (`table_name`,`reference_table_name`),
+  KEY `idx_ds_reference_tables_table_name` (`table_name`),
+  CONSTRAINT `fk_ds_reference_tables_ds` FOREIGN KEY (`table_name`) REFERENCES `ds` (`table_name`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_ds_reference_tables_r_ds` FOREIGN KEY (`reference_table_name`) REFERENCES `ds` (`table_name`) ON DELETE CASCADE ON UPDATE CASCADE
+);
