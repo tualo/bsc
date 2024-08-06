@@ -3,7 +3,7 @@ namespace Tualo\Office\BSC\Commandline;
 use Tualo\Office\Basic\ICommandline;
 use Tualo\Office\Basic\CommandLineInstallSQL;
 
-class InstallMain extends CommandLineInstallSQL  implements ICommandline{
+class InstallMain extends CommandLineInstallSessionSQL  implements ICommandline{
     public static function getDir():string {   return dirname(__DIR__,1); }
     public static $shortName  = 'bsc-main';
     public static $files = [
