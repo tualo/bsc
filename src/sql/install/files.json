@@ -213,12 +213,12 @@
         "text": "setup ds_preview_form_label.sql"
     },
     {
-        "file": "ds/ds_privacy_rating.sql",
-        "text": "setup ds_privacy_rating.sql"
-    },
-    {
         "file": "ds/ds_privacy_rating_types.sql",
         "text": "setup ds_privacy_rating_types.sql"
+    },
+    {
+        "file": "ds/ds_privacy_rating.sql",
+        "text": "setup ds_privacy_rating.sql"
     },
     {
         "file": "ds/ds_procedureform.sql",
