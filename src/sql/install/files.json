@@ -305,12 +305,12 @@
         "text": "setup extjs_base_columnfilter_types.sql"
     },
     {
-        "file": "ds/extjs_base_types.data.sql",
-        "text": "setup extjs_base_types.data.sql"
-    },
-    {
         "file": "ds/extjs_base_types.sql",
         "text": "setup extjs_base_types.sql"
+    },
+    {
+        "file": "ds/extjs_base_types.data.sql",
+        "text": "setup extjs_base_types.data.sql"
     },
     {
         "file": "ds/farben.sql",
