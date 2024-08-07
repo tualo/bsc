@@ -44,6 +44,7 @@ class InstallViewSQLCommandline implements ICommandline{
     public static function run(Args $args){
         $files = [
             'install/session_funcs' => 'setup session_funcs ',
+            'install/doublequote' => 'setup doublequote ',
             'sessionviews' => 'setup sessionviews '
         ];
 
