@@ -490,6 +490,11 @@
         "file": "ds/proc.addFieldIfNotExists.sql",
         "text": "setup addFieldIfNotExists"
     }
+    ,
+    {
+        "file": "ds/view_session_groups.ds",
+        "text": "setup view_session_groups.ds"
+    }
     
     
 ]
