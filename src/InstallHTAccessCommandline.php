@@ -21,7 +21,7 @@ class InstallHTAccessCommandline implements ICommandline{
     public static function run(Args $args){
         if (!file_exists(App::get('basePath') . '/.htaccess')) {
             copy(App::get('basePath') . '/vendor/tualo/bsc/src/commandline/tpl/tpl.htaccess', App::get('basePath') . '/.htaccess');
-            self::formatPrintLn(['green'], "\t done");
+            PostCheck::formatPrintLn(['green'], "\t done");
         }
     }
 }
