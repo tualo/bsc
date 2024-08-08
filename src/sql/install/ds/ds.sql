@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS `ds` (
 alter table ds add column if not exists autosave tinyint(1) default 0;
 alter table ds add column if not exists base_store_class varchar(50) default 'Tualo.DataSets.data.Store';
 alter table ds add column if not exists use_insert_for_update tinyint(1) default 0;
+update ds set use_insert_for_update = 1 where table_name like 'ds%';
 
 
 
