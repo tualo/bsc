@@ -27,6 +27,7 @@ require_once "CreateTMShell.php";
 
 require_once "InstallViewSQLCommandline.php";
 require_once "InstallMenuSQLCommandline.php";
+require_once "InstallHTAccessCommandline.php";
 require_once "SetConfigurationVariable.php";
 
 require_once "Routes/RegisterClient.php";
