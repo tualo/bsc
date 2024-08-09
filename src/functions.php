@@ -36,4 +36,4 @@ require_once "Routes/PublicRoute.php";
 
 require_once "Checks/Tables.php";
 require_once "commandline/InstallMain.php";
-
+require_once "SetupCommandline.php";
