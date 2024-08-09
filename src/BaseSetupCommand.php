@@ -6,7 +6,7 @@ class BaseSetupCommand {
 
     public static function performInstall(string $cmdString,string $clientName) {
         $cmd = explode(' ',$cmdString);
-        $cmd[] = '--client='.$clientName;
+        if ($clientName!='') $cmd[] = '--client='.$clientName;
         $classes = get_declared_classes();
         foreach($classes as $cls){
             $class = new \ReflectionClass($cls);
