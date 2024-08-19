@@ -18,6 +18,9 @@ if (class_exists("Tualo\Office\Basic\Routes\Logout")){ }
 
 require_once "Middleware/ClientIP.php";
 require_once "Middleware/Timezone.php";
+require_once "Middleware/UserDevice.php";
+require_once "Middleware/PHPSettings.php";
+
 require_once "PostCheckCommandline.php";
 require_once "PreCheckCommandline.php";
 require_once "MaintainceCommandline.php";
