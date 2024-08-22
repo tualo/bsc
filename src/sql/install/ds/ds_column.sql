@@ -31,3 +31,8 @@ CREATE TABLE IF NOT EXISTS `ds_column` (
   UNIQUE KEY `udix_ds_column_table_name_column_name` (`table_name`,`column_name`),
   CONSTRAINT `fk_ds_column_ds` FOREIGN KEY (`table_name`) REFERENCES `ds` (`table_name`) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+
+alter table ds_column add column if not exists  is_generated varchar(30) default '';
+
+

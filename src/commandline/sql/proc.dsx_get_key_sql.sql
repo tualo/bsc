@@ -10,6 +10,7 @@ BEGIN
         where 
             ds_column.table_name = in_table_name
             and ds_column.existsreal = 1
+            and ds_column.is_generated <> 'ALWAYS'
             and ds_column.is_primary = 1
             
     );

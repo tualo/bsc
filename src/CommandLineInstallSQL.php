@@ -51,6 +51,7 @@ class CommandLineInstallSQL{
     public static function setupClients(string $msg,string $clientName,string $file,callable $callback){
         $_SERVER['REQUEST_URI']='';
         $_SERVER['REQUEST_METHOD']='none';
+        ini_set('memory_limit', '48024M');
         App::run();
 
         $session = App::get('session');

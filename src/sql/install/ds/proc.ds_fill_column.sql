@@ -1,4 +1,5 @@
 DELIMITER //
+
 CREATE OR REPLACE PROCEDURE `fill_ds_column`( in use_table_name varchar(128) )
     MODIFIES SQL DATA
 BEGIN
@@ -35,6 +36,7 @@ select
         ds_column.privileges,
         1 existsreal,
         ds_column.deferedload,
+        ds_column.is_generated,
         ds_column.hint
 from 
 cte_ds
@@ -70,6 +72,7 @@ insert into ds_column (
         privileges,
         existsreal,
         deferedload,
+        is_generated,
         hint
     )
     values
@@ -98,6 +101,7 @@ insert into ds_column (
         record.privileges,
         record.existsreal,
         record.deferedload,
+        record.is_generated,
         record.hint
     )
     on duplicate key 
@@ -124,6 +128,7 @@ insert into ds_column (
         `privileges`=values(`privileges`),
         `existsreal`=values(`existsreal`),
         `deferedload`=values(`deferedload`),
+        `is_generated`=values(`is_generated`),
         `hint`=values(`hint`)
 ;
 
@@ -131,7 +136,8 @@ insert into ds_column (
  END FOR;
  
 FOR record IN (
-    select * from view_config_ds_column where (use_table_name=''  or table_name = use_table_name) ) DO
+    select * from view_config_ds_column where (use_table_name=''  or table_name = use_table_name) 
+) DO
     if @debug=1 then select record.table_name,record.column_name; end if;
 
     insert into ds_column (
@@ -159,6 +165,7 @@ FOR record IN (
         privileges,
         existsreal,
         deferedload,
+        is_generated,
         hint
     )
     values
@@ -187,6 +194,7 @@ FOR record IN (
         record.privileges,
         record.existsreal,
         record.deferedload,
+        record.is_generated,
         record.hint
     )
     on duplicate key 
@@ -214,6 +222,7 @@ FOR record IN (
         `privileges`=values(`privileges`),
         `existsreal`=values(`existsreal`),
         `deferedload`=values(`deferedload`),
+        `is_generated`=values(`is_generated`),
         `hint`=values(`hint`);
 
 END FOR;

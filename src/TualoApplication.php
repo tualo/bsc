@@ -199,6 +199,7 @@ class TualoApplication{
 
 
     public static function timing($key='',$data=''){
+        /*
         if (self::$time_start==0) self::$time_start=microtime(true); 
         if (self::$total_time_start==0) self::$total_time_start=microtime(true); 
         $time_end = microtime(true);
@@ -207,7 +208,7 @@ class TualoApplication{
             self::logger('TualoApplicationTiming')->info(number_format($time_end-self::$total_time_start,5)."s ".number_format($time_end-self::$time_start,5)."s (".$key.")");
         }
         self::$time_start=$time_end;
-
+        */
     }
 
     public static function executeDefferedRoute($route,$time="now + 1min"){
