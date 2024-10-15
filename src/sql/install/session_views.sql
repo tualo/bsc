@@ -1,4 +1,5 @@
-DELIMITER;
+DELIMITER ;
+
 CREATE VIEW IF NOT EXISTS `view_session_groups` AS
     select '_default_' AS `group`
 union
