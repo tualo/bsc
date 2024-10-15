@@ -10,5 +10,15 @@ CREATE OR REPLACE VIEW DBNAME.`VIEW_SESSION_GROUPS` AS
     GROUP BY SESSIONDB.macc_groups.name
     
 ;
+
+CREATE OR REPLACE VIEW DBNAME.`VIEW_SESSION_ALLOWED_GROUPS` AS 
+    SELECT '_default_' `group` 
+    UNION  SELECT `group` FROM SESSIONDB.`macc_users_groups` WHERE  `group`<>'_default_' AND `id`=DBNAME.getSessionUser() GROUP BY `group`
+    UNION  SELECT SESSIONDB.macc_groups.name `group` FROM SESSIONDB.`macc_groups` join SESSIONDB.macc_users 
+    WHERE  SESSIONDB.macc_users.`login`=DBNAME.getSessionUser()
+    GROUP BY SESSIONDB.macc_groups.name
+    
+;
+
 CREATE OR REPLACE VIEW DBNAME.VIEW_SESSION_ROLE_MENU AS SELECT SESSIONDB.rolle_menu.* from  SESSIONDB.rolle_menu join SESSIONDB.macc_users_groups on SESSIONDB.rolle_menu.rolle = SESSIONDB.macc_users_groups.group join DBNAME.`VIEW_SESSION_GROUPS` on DBNAME.`VIEW_SESSION_GROUPS`.group = SESSIONDB.macc_users_groups.group;
 CREATE OR REPLACE VIEW DBNAME.VIEW_SESSION_MENU AS SELECT SESSIONDB.macc_menu.* from SESSIONDB.macc_menu where id in (select id from DBNAME.VIEW_SESSION_ROLE_MENU);
