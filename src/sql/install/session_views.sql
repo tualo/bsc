@@ -7,13 +7,14 @@ union
     from SESSIONDB.`macc_users_groups`
     where SESSIONDB.`macc_users_groups`.`group` <> '_default_'
         and SESSIONDB.`macc_users_groups`.`id` = `getSessionUser`()
+group by SESSIONDB.`macc_users_groups`.`group`
 union  
     SELECT 
         SESSIONDB.macc_groups.name `group` 
     FROM SESSIONDB.`macc_groups` join SESSIONDB.macc_users 
     WHERE SESSIONDB.macc_users.`login`=DBNAME.getSessionUser() 
         and SESSIONDB.macc_users.typ = 'master'
-    group by SESSIONDB.`macc_users_groups`.`group`
+    group by SESSIONDB.macc_groups.name 
 ;
 
 CREATE VIEW IF NOT EXISTS `view_session_allowed_groups` AS
