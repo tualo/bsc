@@ -97,6 +97,8 @@ class CommandLineInstallSQL{
                         $statement = str_replace('SESSIONDB.',App::get('session')->db->dbname.'.',$statement);
                         App::get('clientDB')->direct('select database()'); // keep connection alive
                         App::get('clientDB')->execute($statement);
+
+                        
                         App::get('clientDB')->moreResults();
                         if ($sleep_count++>30){
                             $sleep_count = 0;
