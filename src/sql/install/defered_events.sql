@@ -1,3 +1,5 @@
+DELIMITER //
+
 CREATE OR REPLACE PROCEDURE `proc_deferred_sql_tasks`()
     MODIFIES SQL DATA
 BEGIN
@@ -44,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `deferred_sql_tasks` (
   PRIMARY KEY (`taskid`)
 ) //
 
-CREATE TABLE `deferred_sql_tasks_log` (
+CREATE TABLE IF NOT EXISTS `deferred_sql_tasks_log` (
   `taskid` varchar(36) NOT NULL,
   `startime` datetime DEFAULT NULL,
   `endtime` datetime DEFAULT NULL,
