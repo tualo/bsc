@@ -34,7 +34,7 @@ BEGIN
     DEALLOCATE PREPARE stmt;
 END //
 
-CREATE TABLE `deferred_sql_tasks` (
+CREATE TABLE IF NOT EXISTS `deferred_sql_tasks` (
   `taskid` varchar(36) NOT NULL,
   `sessionuser` varchar(255) NOT NULL,
   `state` tinyint(4) DEFAULT 0,
