@@ -73,6 +73,8 @@ class Database_mysql extends Database_basic
             // $this->autocommit($this->commit_state);
             $this->state = true;
         }
+
+        
         TualoApplication::timing("db __construct connect ready");
 
     }
