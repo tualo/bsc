@@ -9,3 +9,5 @@ CREATE TABLE IF NOT EXISTS `ds_searchfields` (
   CONSTRAINT `fk_ds_column_ds_searchfields` FOREIGN KEY (`table_name`, `column_name`) REFERENCES `ds_column` (`table_name`, `column_name`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_ds_ds_searchfields` FOREIGN KEY (`table_name`) REFERENCES `ds` (`table_name`) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+
