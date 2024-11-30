@@ -1,6 +1,5 @@
 DELIMITER ;
 
-
 CREATE TABLE IF NOT EXISTS `ds_privacy_rating` (
   `table_name` varchar(128) NOT NULL,
   `type_id` varchar(36) NOT NULL,

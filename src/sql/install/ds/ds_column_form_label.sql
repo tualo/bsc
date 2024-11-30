@@ -17,3 +17,6 @@ CREATE TABLE IF NOT EXISTS `ds_column_form_label` (
   PRIMARY KEY (`table_name`,`column_name`,`language`),
   CONSTRAINT `fk_ds_column_form_label_ds` FOREIGN KEY (`table_name`) REFERENCES `ds` (`table_name`) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+alter table ds_column_form_label add column if not exists `flex` decimal(5,2) DEFAULT 1.00;
+alter table ds_column_form_label add column if not exists `hint` varchar(255) DEFAULT '';

@@ -33,6 +33,8 @@ CREATE TABLE IF NOT EXISTS `ds_column` (
 );
 
 
+
+alter table ds_column add column if not exists fieldtype varchar(50) default '';
 alter table ds_column add column if not exists  is_generated varchar(30) default '';
 
 

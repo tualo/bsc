@@ -16,6 +16,8 @@ CREATE TABLE IF NOT EXISTS `ds_addcommands` (
   CONSTRAINT `fk_ds_ds_addcommands_xtypes` FOREIGN KEY (`xtype`) REFERENCES `ds_addcommands_xtypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+alter table ds_addcommands add column if not exists iconCls varchar(255) DEFAULT 'x-fa fa-plus';
+
 INSERT  IGNORE INTO `ds_addcommands` VALUES
 ('ds','cmp_setup_export_config_command','toolbar',1,'','x-fa fa-plus'),
 ('ds','cmp_setup_update_history_tables_command','toolbar',1,'','x-fa fa-plus'),

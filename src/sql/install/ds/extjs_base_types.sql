@@ -13,3 +13,8 @@ CREATE TABLE IF NOT EXISTS `extjs_base_types` (
   `isformfield` tinyint(4) DEFAULT 0,
   PRIMARY KEY (`id`)
 );
+
+
+alter table `extjs_base_types` add column if not exists `iscolumn` tinyint(4) DEFAULT 0;
+alter table `extjs_base_types` add column if not exists `isformfield` tinyint(4) DEFAULT 0;
+

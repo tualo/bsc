@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS `ds_reference_tables` (
   CONSTRAINT `fk_ds_reference_tables_r_ds` FOREIGN KEY (`reference_table_name`) REFERENCES `ds` (`table_name`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+alter table `ds_reference_tables` add column if not exists `tabtitle` varchar(50) DEFAULT '';
 
 INSERT  IGNORE INTO `ds_reference_tables` VALUES
 ('ds_access','ds','{\"ds_access__table_name\":\"ds__table_name\"}','fk_ds_access_ds',1,0,1,99999,'',0,''),
