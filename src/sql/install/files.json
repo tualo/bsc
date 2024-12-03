@@ -459,6 +459,10 @@
         "text": "setup fill_ds"
     },
     {
+        "file": "ds/view_config_ds_reference_tables.sql",
+        "text": "setup view_config_ds_reference_tables"
+    },
+    {
         "file": "ds/proc.fill_ds_reference_table.sql",
         "text": "setup fill_ds_reference_table"
     },
