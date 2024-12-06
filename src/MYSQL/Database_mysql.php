@@ -85,7 +85,7 @@ class Database_mysql extends Database_basic
     private function log($txt)
     {
         if (defined("__LOG_DB_COMMANDS__")){
-            $fh = fopen(__LOG_DB_COMMANDS__, 'a+');
+            $fh = fopen(constant('__LOG_DB_COMMANDS__'), 'a+');
             fwrite($fh, implode("\t",array(date("Y-m-d H:i:s",time()), $this->get_callee(),str_replace("\t"," ",str_replace("\r"," ",str_replace("\n"," ",$txt)))."\n" ) ) );
             fclose($fh);
         }
@@ -142,14 +142,14 @@ class Database_mysql extends Database_basic
     {
         $check_stop = time();
         $diff = $check_stop - $this->check_start;
-        if (defined(__QUERY_CHECK__)) {
-            if (__QUERY_CHECK__ == '1') {
+        if (defined(constant('__QUERY_CHECK__'))) {
+            if (constant('__QUERY_CHECK__') == '1') {
                 $sql = str_replace("'", '*', $sql);
                 if (strlen($sql) > 3900) {
                     $sql = substr($sql, 0, 3900);
                 }
                 $s = "insert into query_check (diff,anfrage) values ($diff,'$sql')";
-                $this->db_ref->query($s);
+                $this->execute($s);
             }
         }
     }
@@ -516,7 +516,7 @@ class Database_mysql extends Database_basic
         while ($rs->moveNext()) {
             $columns[] = array(
                 'name' => $rs->fieldValue('columnname'),
-                'type' => find_in($types, $rs->fieldValue('ctype'), 'string'),
+                'type' => $this->find_in($types, $rs->fieldValue('ctype'), 'string'),
                 'length' => $rs->fieldValue('clength'),
                 'precision' => $rs->fieldValue('numeric_precision'),
                 'scale' => $rs->fieldValue('numeric_scale'),
