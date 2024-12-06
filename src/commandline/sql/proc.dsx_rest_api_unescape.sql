@@ -1,5 +1,5 @@
 DELIMITER ;;
-CREATE FUNCTION IF NOT EXISTS `dsx_rest_api_unescape`(data longtext) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE OR REPLACE FUNCTION   `dsx_rest_api_unescape`(data longtext) RETURNS longtext  
     DETERMINISTIC
 BEGIN 
     set data = REPLACE(data,concat(char(92),'"'),'"');

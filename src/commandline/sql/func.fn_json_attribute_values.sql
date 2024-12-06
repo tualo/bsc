@@ -1,5 +1,5 @@
 DELIMITER ;;
-CREATE FUNCTION IF NOT EXISTS `fn_json_attribute_values`(request JSON , attribute varchar(128)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_bin
+CREATE FUNCTION IF NOT EXISTS `fn_json_attribute_values`(request JSON , attribute varchar(128)) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE i int;

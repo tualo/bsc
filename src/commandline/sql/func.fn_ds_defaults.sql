@@ -1,5 +1,5 @@
 DELIMITER ;;
-CREATE FUNCTION IF NOT EXISTS `fn_ds_defaults`(str_fieldvalue varchar(255) , record JSON) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION IF NOT EXISTS `fn_ds_defaults`(str_fieldvalue varchar(255) , record JSON) RETURNS longtext  
     DETERMINISTIC
 BEGIN 
     IF str_fieldvalue = '{#serial}' THEN RETURN '@serial';

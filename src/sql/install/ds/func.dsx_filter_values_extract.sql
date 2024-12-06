@@ -1,5 +1,5 @@
 DELIMITER //
-CREATE FUNCTION IF NOT EXISTS `dsx_filter_values_extract`(request JSON,  dtype varchar(36) ) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE or replace function `dsx_filter_values_extract`(request JSON,  dtype varchar(36) ) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE _type varchar(36);

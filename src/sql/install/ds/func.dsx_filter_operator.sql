@@ -1,5 +1,5 @@
 DELIMITER //
-CREATE FUNCTION IF NOT EXISTS `dsx_filter_operator`(operator varchar(128)) RETURNS varchar(128) CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION IF NOT EXISTS `dsx_filter_operator`(operator varchar(128)) RETURNS varchar(128) 
     DETERMINISTIC
 BEGIN 
     DECLARE result varchar(128) default '=';

@@ -3958,7 +3958,7 @@ DROP TABLE IF EXISTS `view_tualo_form_fields`;
 
 
 DELIMITER ;;
-CREATE FUNCTION `convertColumnType2DataType`(in_type varchar(128)) RETURNS varchar(64) CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `convertColumnType2DataType`(in_type varchar(128)) RETURNS varchar(64) 
     DETERMINISTIC
     COMMENT 'fix view column type'
 BEGIN 
@@ -4045,7 +4045,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `DOUBLEQUOTE`(txt longtext) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `DOUBLEQUOTE`(txt longtext) RETURNS longtext 
     NO SQL
 BEGIN 
     RETURN CONCAT('"',REPLACE(txt,'"','\"'),'"');
@@ -4065,7 +4065,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `dsx_filter_operator`(operator varchar(128)) RETURNS varchar(128) CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `dsx_filter_operator`(operator varchar(128)) RETURNS varchar(128) 
     DETERMINISTIC
 BEGIN 
     DECLARE result varchar(128) default '=';
@@ -4095,7 +4095,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `dsx_filter_term`(tablename varchar(128), filter_object JSON ) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `dsx_filter_term`(tablename varchar(128), filter_object JSON ) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     RETURN (
@@ -4159,7 +4159,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `dsx_filter_values`(request JSON , ftype varchar(20)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `dsx_filter_values`(request JSON , ftype varchar(20)) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE concat_by varchar(20);
@@ -4340,7 +4340,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `dsx_filter_values_extract`(request JSON,  dtype varchar(36) ) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `dsx_filter_values_extract`(request JSON,  dtype varchar(36) ) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE _type varchar(36);
@@ -4408,7 +4408,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `dsx_filter_values_simple`(request JSON ) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `dsx_filter_values_simple`(request JSON ) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE concat_by varchar(20);
@@ -4515,7 +4515,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `dsx_get_key_sql`(in_table_name varchar(64)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     RETURN ( 
@@ -4546,7 +4546,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `dsx_get_key_sql_plain`(in_prefix varchar(255),in_table_name varchar(64)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     RETURN ( 
@@ -4576,7 +4576,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `dsx_read_order`(request JSON ) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `dsx_read_order`(request JSON ) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     
@@ -4628,7 +4628,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `dsx_rest_api_unescape`(data longtext) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `dsx_rest_api_unescape`(data longtext) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     set data = REPLACE(data,concat(char(92),'"'),'"');
@@ -4653,7 +4653,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `ds_insert`(request JSON ) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `ds_insert`(request JSON ) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE res LONGTEXT;
@@ -4744,7 +4744,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `ds_serial`(request JSON ) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `ds_serial`(request JSON ) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE serialsql LONGTEXT;
@@ -4788,7 +4788,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `ds_update`(request JSON ) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `ds_update`(request JSON ) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE res LONGTEXT;
@@ -4861,7 +4861,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `FIELDQUOTE`(in_str varchar(255)) RETURNS varchar(100) CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `FIELDQUOTE`(in_str varchar(255)) RETURNS varchar(100) 
     NO SQL
     DETERMINISTIC
 BEGIN
@@ -4882,7 +4882,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `fn_ds_defaults`(str_fieldvalue varchar(255) , record JSON) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `fn_ds_defaults`(str_fieldvalue varchar(255) , record JSON) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     IF str_fieldvalue = '{#serial}' THEN RETURN '@serial';
@@ -4914,7 +4914,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `fn_ds_read`(request JSON ) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `fn_ds_read`(request JSON ) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE result longtext default '';
@@ -5050,7 +5050,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `fn_ds_read_order_ex`(request JSON ) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `fn_ds_read_order_ex`(request JSON ) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE result longtext default '';
@@ -5148,7 +5148,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `fn_json_filter_values`(request JSON, ftype varchar(20) ) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `fn_json_filter_values`(request JSON, ftype varchar(20) ) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE i int;
@@ -5276,7 +5276,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `fn_json_filter_values_extract`(request JSON, operator varchar(20), dtype varchar(36) ) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `fn_json_filter_values_extract`(request JSON, operator varchar(20), dtype varchar(36) ) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE _type varchar(36);
@@ -5381,7 +5381,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `fn_serial_sql`(in_table_name varchar(128),in_column_name varchar(128)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `fn_serial_sql`(in_table_name varchar(128),in_column_name varchar(128)) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE res LONGTEXT;
@@ -5406,7 +5406,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `generateGUID`(length integer) RETURNS varchar(255) CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `generateGUID`(length integer) RETURNS varchar(255) 
     DETERMINISTIC
 BEGIN
     DECLARE result varchar(255);
@@ -5456,7 +5456,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `getBulkInsertSQL`(in_table_name varchar(128)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN
     DECLARE write_table_name varchar(128);
@@ -5533,7 +5533,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getCheckListViewController`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getCheckListViewController`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getCheckListViewController\n\n`getCheckListViewController` return the JS Model Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -5668,7 +5668,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getCheckListViewModel`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getCheckListViewModel`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getCheckListViewModel\n\n`getCheckListViewModel` return the JS Model Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -5723,7 +5723,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getCheckListViewport`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getCheckListViewport`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getCheckListViewport\n\n`getCheckListViewport` return the JS Model Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -5803,7 +5803,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getCheckModelDefinition`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getCheckModelDefinition`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getCheckModelDefinition\n\n`getCheckModelDefinition`return the JS Model Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -5839,7 +5839,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `getColumnSearch`(in_queryid varchar(36)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN
     DECLARE result longtext;
@@ -5915,7 +5915,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `getColumnSearchJoin`(in_queryid varchar(36)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN
     DECLARE result longtext;
@@ -6018,7 +6018,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getColumnsStore`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getColumnsStore`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getColumnsStore\n\n`getColumnsStore`return the JS Store Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -6125,7 +6125,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getColumnsType`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getColumnsType`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getColumnsStore\n\n`getColumnsStore`return the JS Store Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -6294,7 +6294,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getComboBox`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getComboBox`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getComboBox\n\n`getComboBox`return the JS Store Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -6383,7 +6383,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getContextMenu`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getContextMenu`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getContextMenu\n\n`getContextMenu` return the JS Model Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -6474,7 +6474,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getControlls`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getControlls`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
 BEGIN 
 
@@ -6513,7 +6513,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getCreateTableDDL`(in_database varchar(64), in_table_name varchar(64),in_resultdatabase varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getCreateTableDDL`(in_database varchar(64), in_table_name varchar(64),in_resultdatabase varchar(64)) RETURNS longtext 
     READS SQL DATA
 BEGIN
     DECLARE strFIELDS longtext;
@@ -6615,7 +6615,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getDialogItems`(in_dialog_id varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getDialogItems`(in_dialog_id varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getViewportCgetDialogItemsontroller\n\n`getDialogItems` return the JS Array of dialog ITEMS\n\n# Parameter\n    * `in_dialog_id` the dialog_id\n\n'
 BEGIN 
@@ -6645,7 +6645,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getDisplayComboBox`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getDisplayComboBox`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getDisplayComboBox\n\n`getDisplayComboBox`return the JS Store Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -6685,7 +6685,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `getDSDelete`(in_queryid varchar(36)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN
     DECLARE result longtext;
@@ -6712,7 +6712,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `getDSDisplayField`(in_table_name varchar(64)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE result_sql longtext;
@@ -6744,7 +6744,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE FUNCTION `getDSFilter`(in_queryid varchar(36),
     in_position varchar(8)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN
 
@@ -7251,7 +7251,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `getDSHavingFilter`(in_queryid varchar(36)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN
 	RETURN getDSFilter(in_queryid,'having');
@@ -7273,7 +7273,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE FUNCTION `getDSInsert`(in_queryid varchar(36),
     in_onduplicatekeyupdate boolean
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN
     DECLARE result longtext;
@@ -7303,7 +7303,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `getDSInsertFieldList`(in_queryid varchar(36)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN
     DECLARE result longtext;
@@ -7348,7 +7348,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `getDSInsertFieldUpdateList`(in_queryid varchar(36)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN
     DECLARE result longtext;
@@ -7392,7 +7392,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `getDSInsertValueList`(in_queryid varchar(36)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN
     DECLARE result longtext;
@@ -7532,7 +7532,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `getDSKeyJSFormula`(in_table_name varchar(64)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE result_sql longtext;
@@ -7578,7 +7578,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `getDSKeySQL`(in_table_name varchar(64)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE result_sql longtext;
@@ -7613,7 +7613,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `getDSKeySQLExt`(in_table_name varchar(64)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE result_sql longtext;
@@ -7647,7 +7647,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getDSOrderBy`(in_queryid char(36) ) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getDSOrderBy`(in_queryid char(36) ) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE result_sql longtext;
@@ -7702,7 +7702,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getDSOrderByExt`(in_queryid char(36), prefixfld varchar(255) ) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getDSOrderByExt`(in_queryid char(36), prefixfld varchar(255) ) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE result_sql longtext;
@@ -7759,7 +7759,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE FUNCTION `getDSPrimaryKeyValueFilter`(in_queryid varchar(36),
     in_separator varchar(5)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN
     DECLARE wherelist longtext;
@@ -7912,7 +7912,7 @@ DELIMITER ;;
 CREATE FUNCTION `getDSRead`(in_queryid varchar(36),
     in_add_calc_found_rows boolean,
     in_limits boolean
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN
 
@@ -7974,7 +7974,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `getDSSelectFieldList`(in_queryid varchar(36)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN
 	DECLARE result longtext;
@@ -8078,7 +8078,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `getDSUpdate`(in_queryid varchar(36)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN
     DECLARE result longtext;
@@ -8128,7 +8128,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `getDSUpdateValueList`(in_queryid varchar(36)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     READS SQL DATA
 BEGIN
     DECLARE result longtext;
@@ -8274,7 +8274,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `getDSWhereFilter`(in_queryid varchar(36)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN
 	RETURN getDSFilter(in_queryid,'where');
@@ -8295,7 +8295,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `getDSWriteTable`(in_table_name varchar(64)
-) RETURNS varchar(64) CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS varchar(64) 
     DETERMINISTIC
 BEGIN
     DECLARE write_table_name varchar(64);
@@ -8317,7 +8317,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getFormFields`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getFormFields`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT ' # getFormFields'
 BEGIN 
@@ -8753,7 +8753,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getFormFieldsByPath`(in_table_name varchar(64),in_path varchar(255)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getFormFieldsByPath`(in_table_name varchar(64),in_path varchar(255)) RETURNS longtext 
     READS SQL DATA
     COMMENT ' # getFormFieldsByPath '
 BEGIN 
@@ -8915,7 +8915,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getFormFieldsSets`(in_table_name varchar(64),in_path varchar(255)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getFormFieldsSets`(in_table_name varchar(64),in_path varchar(255)) RETURNS longtext 
     READS SQL DATA
     COMMENT ' # getFormFieldsSets'
 BEGIN 
@@ -9016,7 +9016,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getFormViewController`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getFormViewController`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getFormViewController\n\n`getFormViewController` return the JS Controller Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -9064,7 +9064,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getFormViewModel`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getFormViewModel`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getFormViewModel\n\n`getFormViewModel` return the JS Model Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -9103,7 +9103,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getFormViewport`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getFormViewport`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getFormViewport\n\n`getFormViewport` return the JS Viewport Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -9184,7 +9184,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getGlobalSearch`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getGlobalSearch`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getGlobalSearch\n\n`getGlobalSearch` return the JS Model Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -9258,7 +9258,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getJSClass`(in_name varchar(255)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getJSClass`(in_name varchar(255)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getJSClass\n\n`getJSClass`return the JS Controll Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -9296,7 +9296,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getListColumnFilter`(in_table_name varchar(64),in_column_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getListColumnFilter`(in_table_name varchar(64),in_column_name varchar(64)) RETURNS longtext 
     READS SQL DATA
 BEGIN 
     DECLARE listfiltertype varchar(255);
@@ -9338,7 +9338,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE FUNCTION `getListColumns`(in_table_name varchar(64),
   in_append_column longtext
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
     COMMENT 'Return a JSON-STRING of List Columns'
 BEGIN 
@@ -9398,7 +9398,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `getListFeatures`(in_table_name varchar(64)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE result longtext;
@@ -9458,7 +9458,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `getListPlugins`(in_table_name varchar(64)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE result longtext;
@@ -9506,7 +9506,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getListViewController`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getListViewController`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getListViewController\n\n`getListViewController` return the JS Model Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -9537,7 +9537,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getListViewModel`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getListViewModel`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getListViewModel\n\n`getListViewModel` return the JS Model Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -9578,7 +9578,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getListViewport`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getListViewport`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getListViewport\n\n`getListViewport` return the JS Model Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -9649,7 +9649,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getMainComboBox`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getMainComboBox`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getMainComboBox\n\n`getMainComboBox`return the JS Store Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -9722,7 +9722,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getModelDefinition`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getModelDefinition`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getModelDefinition\n\n`getModelDefinition`return the JS Model Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -9771,7 +9771,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE FUNCTION `getModelFields`(in_table_name varchar(64)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE result longtext;
@@ -9815,7 +9815,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE FUNCTION `getModelSingleField`(in_table_name varchar(64),
     in_column_name varchar(64)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
   DECLARE result longtext default '';
@@ -9866,7 +9866,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getModelSingleFieldDateFormat`(in_data_type varchar(64) ) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getModelSingleFieldDateFormat`(in_data_type varchar(64) ) RETURNS longtext 
     DETERMINISTIC
     COMMENT 'Return a Fragment for dateFormat property'
 BEGIN 
@@ -9898,7 +9898,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE FUNCTION `getModelSingleFieldDefault`(in_fieldtype varchar(64), 
   in_default_value varchar(255)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
     COMMENT 'Return a Fragment for defaultValue property'
 BEGIN 
@@ -9939,7 +9939,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getNextPossibleBookingDate`(in_date date) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getNextPossibleBookingDate`(in_date date) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE buchhaltungsabschluss_start date;
@@ -9984,7 +9984,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getOrderBy`(in_table_name char(128) ) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getOrderBy`(in_table_name char(128) ) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE result_sql longtext;
@@ -10026,7 +10026,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getPartnerID`() RETURNS varchar(255) CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getPartnerID`() RETURNS varchar(255) 
     DETERMINISTIC
 BEGIN
   DECLARE resid varchar(255);
@@ -10069,7 +10069,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getPreviewFields`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getPreviewFields`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getPreviewFields\n\n`getPreviewFields` return the JS Model Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -10132,7 +10132,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getSessionID`() RETURNS varchar(100) CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getSessionID`() RETURNS varchar(100) 
     DETERMINISTIC
 RETURN (
     SELECT @sessionid
@@ -10152,7 +10152,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getSessionUser`() RETURNS varchar(100) CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getSessionUser`() RETURNS varchar(100) 
     DETERMINISTIC
 RETURN (
     SELECT @sessionuser
@@ -10172,7 +10172,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getSessionUserFullName`() RETURNS varchar(255) CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getSessionUserFullName`() RETURNS varchar(255) 
     DETERMINISTIC
 RETURN (
     SELECT @sessionuserfullname
@@ -10194,7 +10194,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE FUNCTION `getSetup`(in_cmp varchar(64),
     in_key varchar(36)
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+) RETURNS longtext 
     DETERMINISTIC
 BEGIN
     DECLARE result longtext;
@@ -10226,7 +10226,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getStoreDefinition`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getStoreDefinition`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getStoreDefinition\n\n`getStoreDefinition`return the JS Store Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -10286,7 +10286,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getTableForeignKeys`(in_database varchar(64), in_table_name varchar(64) ) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getTableForeignKeys`(in_database varchar(64), in_table_name varchar(64) ) RETURNS longtext 
     READS SQL DATA
 BEGIN
     DECLARE strDEF longtext;
@@ -10363,7 +10363,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getTableKeys`(in_database varchar(64), in_table_name varchar(64) ) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getTableKeys`(in_database varchar(64), in_table_name varchar(64) ) RETURNS longtext 
     READS SQL DATA
 BEGIN
     DECLARE strDEF longtext;
@@ -10421,7 +10421,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getTagField`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getTagField`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getTagField\n\n`getTagField`return the JS Store Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -10475,7 +10475,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getUIListFilter`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getUIListFilter`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
 BEGIN 
 
@@ -10571,7 +10571,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getViewport`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getViewport`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getViewport\n\n`getViewport` return the JS Model Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -11094,7 +11094,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getViewport2023`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getViewport2023`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getViewport2023\n\n`getViewport2023` return the JS Model Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -11680,7 +11680,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getViewportController`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getViewportController`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getViewportController\n\n`getViewportController` return the JS Model Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -11708,7 +11708,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getViewportModel`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getViewportModel`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getViewportModel\n\n`getViewportModel` return the JS Model Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -12170,7 +12170,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `getViewportModelStores`(in_table_name varchar(64)) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `getViewportModelStores`(in_table_name varchar(64)) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# getViewportModelStores\n\n`getViewportModelStores` return the stores definition for the viewport model\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -12312,7 +12312,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `replaceDefaultDefinitionVars`(in_table_name varchar(64),source_text longtext) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `replaceDefaultDefinitionVars`(in_table_name varchar(64),source_text longtext) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# replaceDefaultDefinitionVars\n\n`replaceDefaultDefinitionVars` \n\n# Parameter\n    * `in_table_name` the table name for the store\n    * `source_text`\n\n'
 BEGIN 
@@ -12414,7 +12414,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `replaceDSDropDownField`(in_table_name varchar(64), source longtext) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `replaceDSDropDownField`(in_table_name varchar(64), source longtext) RETURNS longtext 
     READS SQL DATA
     COMMENT '\n# replaceDSDropDownField\n\n`replaceDSDropDownField`return the JS Store Definition\n\n# Parameter\n    * `in_table_name` the table name for the store\n\n'
 BEGIN 
@@ -12561,7 +12561,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `umlaute_ersetzen`(str varchar(255)) RETURNS varchar(255) CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `umlaute_ersetzen`(str varchar(255)) RETURNS varchar(255) 
     DETERMINISTIC
 BEGIN
    
@@ -12595,7 +12595,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `uuid_v4`() RETURNS char(36) CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `uuid_v4`() RETURNS char(36) 
     NO SQL
 BEGIN
     
@@ -12633,7 +12633,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE FUNCTION `value_uuid`(column_name varchar(64)) RETURNS char(36) CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION `value_uuid`(column_name varchar(64)) RETURNS char(36) 
     NO SQL
 BEGIN
     DECLARE h8 char(4);

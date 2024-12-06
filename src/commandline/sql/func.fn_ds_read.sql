@@ -1,5 +1,5 @@
 DELIMITER ;;
-CREATE FUNCTION IF NOT EXISTS `fn_ds_read`(request JSON ) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE FUNCTION IF NOT EXISTS `fn_ds_read`(request JSON ) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE result longtext default '';

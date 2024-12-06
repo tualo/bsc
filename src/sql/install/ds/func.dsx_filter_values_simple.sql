@@ -1,5 +1,5 @@
 DELIMITER //
-CREATE FUNCTION IF NOT EXISTS `dsx_filter_values_simple`(request JSON ) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE OR REPLACE FUNCTION   `dsx_filter_values_simple`(request JSON ) RETURNS longtext 
     DETERMINISTIC
 BEGIN 
     DECLARE concat_by varchar(20);
