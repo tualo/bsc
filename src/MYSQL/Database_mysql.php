@@ -73,6 +73,8 @@ class Database_mysql extends Database_basic
 
             // $this->autocommit($this->commit_state);
             $this->state = true;
+            $this->execute('SET collation_connection = @@collation_database;');
+            $this->execute('SET character_set_client = @@character_set_database;');
         }
 
         
