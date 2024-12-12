@@ -230,9 +230,9 @@ class Session{
       ';
       $row = $session->db->singleRow($sql,['id'=>$token]);
       if ($row!==false){
+          $uri = $_SERVER['REQUEST_URI'];
           $path = $session->db->singleValue('select path from oauth_path where id = {id} ',array('id'=>$token),'path');
           if ($path!==false){
-              $uri = $_SERVER['REQUEST_URI'];
               //if (isset($_SERVER['REDIRECT_URL'])) $uri = $_SERVER['REDIRECT_URL'];
               if (strpos($uri,'?')!==false){
                   $p = explode('?',$uri);
