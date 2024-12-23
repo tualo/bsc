@@ -13,8 +13,8 @@ class Tables  extends PostCheck {
             'oauth'=>[
                 'columns'=>[
                     'id' => 'varchar(36)',
-                    'client' => 'varchar(100)',
-                    'username' => 'varchar(100)',
+                    'client' => 'varchar(255)',
+                    'username' => 'varchar(255)',
                     'create_time' => 'datetime',
                     'validuntil' => 'datetime',
                     'lastcontact' => 'datetime',
