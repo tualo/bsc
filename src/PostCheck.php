@@ -7,11 +7,9 @@ use Tualo\Office\Basic\TualoApplication as App;
 class PostCheck implements IPostCheck
 {
 
-    public static function testSessionDB(array $config)
-    {
-    }
+    public static function testSessionDB(array $config) {}
 
-    public static function loopClients(array $config, string $clientName = null)
+    public static function loopClients(array $config, ?string $clientName = null)
     {
 
         try {
@@ -75,7 +73,7 @@ class PostCheck implements IPostCheck
             if (!file_exists(App::get('basePath') . '/index.php')) {
                 copy(App::get('basePath') . '/vendor/tualo/bsc/src/commandline/index.php', App::get('basePath') . '/index.php');
             }
-            
+
             self::formatPrintLn(['red'], 'error on ' . $db['dbname'] . ':  ');
             // self::formatPrintLn(['red'], $e->getMessage());
             self::formatPrintLn(['blue'], 'try `./tm createsystem --db "' . $db['dbname'] . '"`');
@@ -116,9 +114,25 @@ class PostCheck implements IPostCheck
     {
         $codes = [
             'bold' => 1,
-            'italic' => 3, 'underline' => 4, 'strikethrough' => 9,
-            'black' => 30, 'red' => 31, 'green' => 32, 'yellow' => 33, 'blue' => 34, 'magenta' => 35, 'cyan' => 36, 'white' => 37,
-            'blackbg' => 40, 'redbg' => 41, 'greenbg' => 42, 'yellowbg' => 44, 'bluebg' => 44, 'magentabg' => 45, 'cyanbg' => 46, 'lightgreybg' => 47
+            'italic' => 3,
+            'underline' => 4,
+            'strikethrough' => 9,
+            'black' => 30,
+            'red' => 31,
+            'green' => 32,
+            'yellow' => 33,
+            'blue' => 34,
+            'magenta' => 35,
+            'cyan' => 36,
+            'white' => 37,
+            'blackbg' => 40,
+            'redbg' => 41,
+            'greenbg' => 42,
+            'yellowbg' => 44,
+            'bluebg' => 44,
+            'magentabg' => 45,
+            'cyanbg' => 46,
+            'lightgreybg' => 47
         ];
         $formatMap = array_map(function ($v) use ($codes) {
             return $codes[$v];
