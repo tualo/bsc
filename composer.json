@@ -6,9 +6,9 @@
         "phpseclib/phpseclib": "~3.0.41",
         "ramsey/uuid": "~4.7.6",
         "vanilla/garden-cli": "~v4.0",
-        "monolog/monolog": "~3.7.0"
+        "monolog/monolog": "~3.7.0",
+        "tualo/server": "*"
 
-        
     },
     "autoload": {
         "psr-4": {
