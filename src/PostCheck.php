@@ -74,9 +74,20 @@ class PostCheck implements IPostCheck
                 copy(App::get('basePath') . '/vendor/tualo/bsc/src/commandline/index.php', App::get('basePath') . '/index.php');
             }
 
+            if(isset($db)){
+                self::formatPrintLn(['red'], 'error on ' . $db['dbname'] . ':  ');
+                self::formatPrintLn(['red'], $e->getMessage());
+                self::formatPrintLn(['blue'], 'try `./tm createsystem --db "' . $db['dbname'] . '"`');
+            }else{
+                self::formatPrintLn(['red'], 'error on sessiondb:  ');
+                self::formatPrintLn(['red'], $e->getMessage());
+                self::formatPrintLn(['blue'], 'try `./tm createsystem`');
+            }
+            /*
             self::formatPrintLn(['red'], 'error on ' . $db['dbname'] . ':  ');
             // self::formatPrintLn(['red'], $e->getMessage());
             self::formatPrintLn(['blue'], 'try `./tm createsystem --db "' . $db['dbname'] . '"`');
+            */
         }
     }
 
