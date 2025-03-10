@@ -22,6 +22,7 @@ TualoApplication::use('TualoApplicationSession_Auth', function () {
         }
 
         if (!isset($_SESSION['tualoapplication']['loggedInType'])) $_SESSION['tualoapplication']['loggedInType'] = 'none';
+
         if (
             isset($_SESSION['tualoapplication']['loggedIn'])
             &&  ($_SESSION['tualoapplication']['loggedIn'] === true)
@@ -50,19 +51,21 @@ TualoApplication::use('TualoApplicationSession_Auth', function () {
             */
         }
 
+
         if (
+
             isset($_SESSION['tualoapplication']['loggedIn'])
             &&  ($_SESSION['tualoapplication']['loggedIn'] === false)
             &&  (!is_null($session))
             &&  (isset($_SERVER['REQUEST_METHOD']))
             &&  (
-                
-                   (TualoApplication::configuration('oauth', 'key') === false)
+
+                (TualoApplication::configuration('oauth', 'key') === false)
                 || isset($_SERVER['REDIRECT_STATUS'])
-            
+
             )
 
-            
+
         ) {
             //if (is_null($session->db)) throw new \Exception("Session DB not loaded");
             $path = '';
@@ -88,10 +91,6 @@ TualoApplication::use('TualoApplicationSession_Auth', function () {
                 $session->inputToRequest();
                 $token = $matches['oauth'];
                 $session->loginByToken($token);
-
-
-
-                //TualoApplication::set('basePath', dirname($_SERVER['SCRIPT_FILENAME']) . '/~/' . $matches['oauth']);
 
                 session_commit();
             }
@@ -125,7 +124,7 @@ TualoApplication::use('TualoApplicationSession_Auth', function () {
         if (
             isset($_SESSION['tualoapplication']['loggedIn'])
             &&  ($_SESSION['tualoapplication']['loggedIn'] === true)
-        ){
+        ) {
 
             if (preg_match('#/~/(?P<oauth>[\w\-]+)/*#', $path, $matches)) {
                 $_SESSION['tualoapplication']['oauth'] = $matches['oauth'];

@@ -135,7 +135,10 @@ class Route
                     }
 
                     if ($session_condition_allowed === true) {
-                        $route['function']($matches);
+                        $return = $route['function']($matches);
+                        if ($return === true) {
+                            break;
+                        }
                     }
 
                     TualoApplication::timing("after call_user_func_array");
@@ -156,7 +159,6 @@ class Route
                 // But a matching path exists
                 if (!$route_method_found) {
 
-
                     if ($is_web) {
                         header("HTTP/1.0 405 Method Not Allowed");
                     }
@@ -167,6 +169,9 @@ class Route
                     if (self::$methodNotAllowed) {
                         call_user_func_array(self::$methodNotAllowed, array($path, $method));
                     }
+                    if (self::$pathNotFound) {
+                        call_user_func_array(self::$pathNotFound, array($path));
+                    }
                 } else {
                     if ($is_web) {
                         header("HTTP/1.0 404 Not Found");
@@ -174,6 +179,10 @@ class Route
                     if (self::$pathNotFound) {
                         call_user_func_array(self::$pathNotFound, array($path));
                     }
+                }
+            } else {
+                if (self::$pathNotFound) {
+                    call_user_func_array(self::$pathNotFound, array($path));
                 }
             }
     }
