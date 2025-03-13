@@ -451,7 +451,7 @@ class Session
 
     if (is_array($args[0])) {
       TualoApplication::logger('BSC (' . __FILE__ . ',' . __LINE__ . ')')
-        ->warn('registerOAuth first parameter as array is deprecated, called from ' . debug_backtrace()[1]['function'] . ' ' . debug_backtrace()[1]['file']);
+        ->info('registerOAuth first parameter as array is deprecated, called from ' . debug_backtrace()[1]['function'] . ' ' . debug_backtrace()[1]['file']);
     }
 
     if (!is_bool($args[0])) throw new \Exception("registerOAuth paramter need to be boolean", 1);
