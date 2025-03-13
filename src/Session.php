@@ -450,6 +450,7 @@ class Session
     $device = '';
 
     if (is_array($args[0])) {
+      $params = array_shift($args);
       TualoApplication::logger('BSC (' . __FILE__ . ',' . __LINE__ . ')')
         ->info('registerOAuth first parameter as array is deprecated, called from ' . debug_backtrace()[1]['function'] . ' ' . debug_backtrace()[1]['file']);
     }
