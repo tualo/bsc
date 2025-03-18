@@ -503,8 +503,7 @@ class Session
       /**
        * 
        * 
-        alter table oauth add column if not exists name varchar(255) default uuid();
-        alter table oauth add column if not exists device varchar(255) default uuid();
+       
        * 
        */
       if ($path != '') {
