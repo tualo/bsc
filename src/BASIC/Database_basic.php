@@ -29,6 +29,7 @@ class  Database_basic
   }
 
   public $dbTypes = true;
+  private $_tinyIntAsBoolean = false;
 
   function useDBTypes($val)
   {
@@ -51,6 +52,10 @@ class  Database_basic
   {
     return 0;
   }
+  function tinyIntAsBoolean($val)
+  {
+    $this->_tinyIntAsBoolean = $val;
+  }
 
 
   public function direct($statement, $hash = array(), $key = '', $byName = false)
@@ -59,6 +64,7 @@ class  Database_basic
     $rs = $this->execute_with_hash($statement, $hash);
     if (is_object($rs) && (method_exists($rs, 'toArray'))) {
       $rs->useDBTypes($this->dbTypes);
+      $rs->tinyIntAsBoolean($this->_tinyIntAsBoolean);
       $utf8 = false;
       $start = 0;
       $limit = 999999999;

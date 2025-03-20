@@ -34,6 +34,7 @@ class Recordset_mysql
 	private $open;
 	private $isFreed = false;
 	private $dbTypes = true;
+	private $_tinyIntAsBoolean = true;
 
 
 
@@ -47,7 +48,9 @@ class Recordset_mysql
 				return 'd';
 
 			case MYSQLI_TYPE_BIT:
+				return 'x';
 			case MYSQLI_TYPE_TINY:
+				return (($this->_tinyIntAsBoolean) ? 'x' : 'i');
 			case MYSQLI_TYPE_SHORT:
 			case MYSQLI_TYPE_LONG:
 			case MYSQLI_TYPE_LONGLONG:
@@ -111,6 +114,12 @@ class Recordset_mysql
 			throw new \Exception('Fehler in der Abfrage');
 		}
 	}
+
+	function tinyIntAsBoolean($val)
+	{
+		$this->_tinyIntAsBoolean = $val;
+	}
+
 	function useDBTypes($val)
 	{
 		$this->dbTypes = $val;
@@ -170,7 +179,7 @@ class Recordset_mysql
 							case 'd':
 								$ds[$cname] = doubleval($this->rs_ref[$x['index']]);
 								break;
-							case 'b':
+							case 'x':
 								$ds[$cname] = boolval($this->rs_ref[$x['index']]);
 								break;
 							case 'i':
@@ -197,8 +206,8 @@ class Recordset_mysql
 							case 'd':
 								$ds[$cname] = doubleval($this->rs_ref[$x['index']]);
 								break;
-							case 'b':
-								$ds[$cname] = $this->rs_ref[$x['index']];
+							case 'x':
+								$ds[$cname] = boolval($this->rs_ref[$x['index']]);
 								break;
 							case 'i':
 								$ds[$cname] = intval($this->rs_ref[$x['index']]);

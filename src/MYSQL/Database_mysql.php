@@ -1,5 +1,7 @@
 <?php
+
 namespace Tualo\Office\Basic\MYSQL;
+
 use Tualo\Office\Basic\TualoApplication;
 
 use Tualo\Office\Basic\BASIC\Database_basic;
@@ -22,53 +24,61 @@ class Database_mysql extends Database_basic
     public $last_sql = '';
     private $charset = '';
 
-    private $user='';
-    private $pass='';
-    private $host='';
-    private $port=3306;
-    private $db='';
+    private $user = '';
+    private $pass = '';
+    private $host = '';
+    private $port = 3306;
+    private $db = '';
 
-    
-    public function __construct($user, $pass, $db, $host, $port = 3306,$ssl_key='',$ssl_cert='',$ssl_ca='')
+    private $_tinyIntAsBoolean = false;
+
+
+    function tinyIntAsBoolean($val)
+    {
+        $this->_tinyIntAsBoolean = $val;
+    }
+
+    public function __construct($user, $pass, $db, $host, $port = 3306, $ssl_key = '', $ssl_cert = '', $ssl_ca = '')
     {
         parent::__construct($user, $pass, $db, $host);
-        if (strpos($host, ':') !== false) { list($host, $port) = explode(':', $host); }
+        if (strpos($host, ':') !== false) {
+            list($host, $port) = explode(':', $host);
+        }
 
         TualoApplication::timing("db __construct");
 
         $this->dbname = $db;
         $this->mysqli = new mysqli;
-        $this->mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT,  TualoApplication::configuration('','client.mysql.connect_timeout',10) );
-        $this->mysqli->options(MYSQLI_OPT_SSL_VERIFY_SERVER_CERT,false);
+        $this->mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT,  TualoApplication::configuration('', 'client.mysql.connect_timeout', 10));
+        $this->mysqli->options(MYSQLI_OPT_SSL_VERIFY_SERVER_CERT, false);
         // $this->mysqli->options(MYSQLI_SET_CHARSET_NAME ,"utf8mb4");
         $c = false;
 
         TualoApplication::timing("db __construct options");
 
-        if ( ($ssl_key!='') && ($ssl_cert!='') && ($ssl_ca!='') ){
-            $this->mysqli->ssl_set($ssl_key,$ssl_cert,$ssl_ca ,NULL,NULL);
-            $c = @$this->mysqli->real_connect($host, ($user), ($pass), $db, $port,NULL, MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT );
+        if (($ssl_key != '') && ($ssl_cert != '') && ($ssl_ca != '')) {
+            $this->mysqli->ssl_set($ssl_key, $ssl_cert, $ssl_ca, NULL, NULL);
+            $c = @$this->mysqli->real_connect($host, ($user), ($pass), $db, $port, NULL, MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT);
             TualoApplication::timing("db __construct connect ssl");
-        }else{
-            $c = @$this->mysqli->real_connect($host, ($user), ($pass), $db, $port );
+        } else {
+            $c = @$this->mysqli->real_connect($host, ($user), ($pass), $db, $port);
             TualoApplication::timing("db __construct connect plain");
         }
         TualoApplication::timing("db __construct connect step a");
-        if (!$c){
-            TualoApplication::logger("Database")->critical("Database not reachable $host:$port, $user, $db ".gethostname());
-            throw new \Exception('Verbindungsfehler, die Datenbank kann nicht erreicht werden ('.$this->mysqli->connect_error.') '.$this->mysqli->connect_errno);
-        }else{
+        if (!$c) {
+            TualoApplication::logger("Database")->critical("Database not reachable $host:$port, $user, $db " . gethostname());
+            throw new \Exception('Verbindungsfehler, die Datenbank kann nicht erreicht werden (' . $this->mysqli->connect_error . ') ' . $this->mysqli->connect_errno);
+        } else {
             TualoApplication::timing("db __construct connect step x");
             // $this->mysqli->set_charset('utf8');
             $this->charset = 'utf8';
             if ($this->mysqli->connect_errno) {
-                
             } else {
-                $this->host=$host;
-                $this->user=$user;
-                $this->pass=$pass;
-                $this->db=$db;
-                $this->port=$port;
+                $this->host = $host;
+                $this->user = $user;
+                $this->pass = $pass;
+                $this->db = $db;
+                $this->port = $port;
             }
 
             // $this->autocommit($this->commit_state);
@@ -77,16 +87,15 @@ class Database_mysql extends Database_basic
             $this->execute('SET character_set_client = @@character_set_database;');
         }
 
-        
-        TualoApplication::timing("db __construct connect ready");
 
+        TualoApplication::timing("db __construct connect ready");
     }
 
     private function log($txt)
     {
-        if (defined("__LOG_DB_COMMANDS__")){
+        if (defined("__LOG_DB_COMMANDS__")) {
             $fh = fopen(constant('__LOG_DB_COMMANDS__'), 'a+');
-            fwrite($fh, implode("\t",array(date("Y-m-d H:i:s",time()), $this->get_callee(),str_replace("\t"," ",str_replace("\r"," ",str_replace("\n"," ",$txt)))."\n" ) ) );
+            fwrite($fh, implode("\t", array(date("Y-m-d H:i:s", time()), $this->get_callee(), str_replace("\t", " ", str_replace("\r", " ", str_replace("\n", " ", $txt))) . "\n")));
             fclose($fh);
         }
     }
@@ -95,15 +104,16 @@ class Database_mysql extends Database_basic
     {
         $backtrace = debug_backtrace();
         $txt = array();
-        foreach($backtrace as $trace){
-            $txt[]=$trace['function'].'-'.$trace['file'].'('.$trace['line'].')';
+        foreach ($backtrace as $trace) {
+            $txt[] = $trace['function'] . '-' . $trace['file'] . '(' . $trace['line'] . ')';
         }
-        return implode('>',$txt);
+        return implode('>', $txt);
     }
 
-    public function reconnect(){
-      $this->mysqli->close();
-      $this->mysqli = new \mysqli($this->host, ($this->user), ($this->pass), $this->db, $this->port);
+    public function reconnect()
+    {
+        $this->mysqli->close();
+        $this->mysqli = new \mysqli($this->host, ($this->user), ($this->pass), $this->db, $this->port);
     }
 
     public function __destruct()
@@ -113,10 +123,10 @@ class Database_mysql extends Database_basic
 
     public function close()
     {
-      if ($this->state){
-        $this->mysqli->close();
-        $this->state=false;
-      }
+        if ($this->state) {
+            $this->mysqli->close();
+            $this->state = false;
+        }
     }
     public function GetError()
     {
@@ -128,8 +138,8 @@ class Database_mysql extends Database_basic
         return $this->mysqli->errno;
     }
 
-    
-	
+
+
 
     private $check_start = 0;
 
@@ -165,24 +175,24 @@ class Database_mysql extends Database_basic
                     $ende = strrpos($sql_statement, '</bulk>');
                     if ($start !== false) {
                         if ($ende !== false) {
-                            $part = substr($sql_statement, $start+6, $ende -6- $start);
+                            $part = substr($sql_statement, $start + 6, $ende - 6 - $start);
                             $start_sql = substr($sql_statement, 0, $start - 1);
-                            $end_sql = substr($sql_statement, $ende+7);
+                            $end_sql = substr($sql_statement, $ende + 7);
                             $parts = array();
                             $i = preg_match_all('/\{(?P<name>(\w+)(.\w+)*)\}/', $part, $matches);
                             if ($i === false) {
                             } else {
                                 if (isset($matches['name'])) {
                                     foreach ($list as $item) {
-                                        $xs=$part;
+                                        $xs = $part;
                                         foreach ($matches['name'] as $p) {
-                                          $xs=str_replace('{'.$p.'}', isset($item[$p]) ? ' \''.$this->escape_string($item[$p]).'\' ' : 'null', $xs);
+                                            $xs = str_replace('{' . $p . '}', isset($item[$p]) ? ' \'' . $this->escape_string($item[$p]) . '\' ' : 'null', $xs);
                                         }
-                                        $parts[] =$xs;
+                                        $parts[] = $xs;
                                     }
                                 }
                             }
-                            $sql_statement = $start_sql.implode(',', $parts).$end_sql;
+                            $sql_statement = $start_sql . implode(',', $parts) . $end_sql;
                             return $this->execute($sql_statement);
                         }
                     }
@@ -191,57 +201,59 @@ class Database_mysql extends Database_basic
         }
     }
 
-    public function replace_hash($sql,$hash){
-      //if ($hash instanceof DSModel) $hash = $hash->toArray();
-      
-      //error_reporting(E_ALL);
-      ini_set("display_errors","on");
+    public function replace_hash($sql, $hash)
+    {
+        //if ($hash instanceof DSModel) $hash = $hash->toArray();
 
-      $matches = array();
-      $i = preg_match_all('/\{(?P<name>(\w+)(.\w+)*)\}/', $sql, $matches);
-      if ($i === false) {
-      } else {
-        if (isset($matches['name'])) {
-          foreach ($matches['name'] as $p) {
-            $func = '';
-            $field = '';
-            if (strpos($p,':')!==false){
-                $parts = explode(':',$p);
-                $func = $parts[1];
-                $field =$parts[0];
-            }
-            if ($func == 'array'){
-                if (isset($hash[$field])){
-                    $v=array();
-                    foreach($hash[$field] as $x){
-                        $v[] = $this->escape_string($x);
+        //error_reporting(E_ALL);
+        ini_set("display_errors", "on");
+
+        $matches = array();
+        $i = preg_match_all('/\{(?P<name>(\w+)(.\w+)*)\}/', $sql, $matches);
+        if ($i === false) {
+        } else {
+            if (isset($matches['name'])) {
+                foreach ($matches['name'] as $p) {
+                    $func = '';
+                    $field = '';
+                    if (strpos($p, ':') !== false) {
+                        $parts = explode(':', $p);
+                        $func = $parts[1];
+                        $field = $parts[0];
                     }
-                    $sql = str_replace('{'.$p.'}', '\''.implode('\',\'',$v).'\'', $sql);// ' \''.$this->escape_string($hash[$p]).'\' ' : '(null)', $sql);
-                }else{
-                    $sql = str_replace('{'.$p.'}', 'null', $sql);
+                    if ($func == 'array') {
+                        if (isset($hash[$field])) {
+                            $v = array();
+                            foreach ($hash[$field] as $x) {
+                                $v[] = $this->escape_string($x);
+                            }
+                            $sql = str_replace('{' . $p . '}', '\'' . implode('\',\'', $v) . '\'', $sql); // ' \''.$this->escape_string($hash[$p]).'\' ' : '(null)', $sql);
+                        } else {
+                            $sql = str_replace('{' . $p . '}', 'null', $sql);
+                        }
+                    } else if ($func == 'json') {
+                        $sql = str_replace('{' . $p . '}', isset($hash[$field]) ? ' \'' . ($hash[$field]) . '\' ' : 'null', $sql);
+                    } else {
+                        $sql = str_replace('{' . $p . '}', isset($hash[$p]) ? ' \'' . $this->escape_string($hash[$p]) . '\' ' : 'null', $sql);
+                    }
                 }
-            }else if ($func == 'json'){
-                $sql = str_replace('{'.$p.'}', isset($hash[$field]) ? ' \''.($hash[$field]).'\' ' : 'null', $sql);
-            }else{
-                $sql = str_replace('{'.$p.'}', isset($hash[$p]) ? ' \''.$this->escape_string($hash[$p]).'\' ' : 'null', $sql);
             }
-          }
         }
-      }
-      return $sql;
+        return $sql;
     }
 
-    public function moreResults(){
+    public function moreResults()
+    {
         $results = [];
-        
-        while($this->mysqli->more_results()){
-            
+
+        while ($this->mysqli->more_results()) {
+
             if ($result = $this->mysqli->use_result()) {
                 $res = [];
                 while ($row = $result->fetch_row()) {
-                    $res[]=$row;
+                    $res[] = $row;
                 }
-                $results[]=$res;
+                $results[] = $res;
                 $result->close();
             }
             $this->mysqli->next_result();
@@ -271,7 +283,7 @@ class Database_mysql extends Database_basic
         }
         return $this->execute( $sql_statement );
         */
-        return $this->execute( $this->replace_hash( $sql_statement, $hash ) );
+        return $this->execute($this->replace_hash($sql_statement, $hash));
     }
 
     public function enableLogging($command)
@@ -291,10 +303,10 @@ class Database_mysql extends Database_basic
         //TualoApplication::timing(self::class.' execute start '.__LINE__);
         $this->check_start();
         $sql_statement = trim($sql_statement);
-        $this->log($sql_statement );
+        $this->log($sql_statement);
 
-        
-        $this->warnings=array();
+
+        $this->warnings = array();
         if ($this->logfile != '') {
             if (count($this->logcommands) > 0) {
                 if (!file_exists($this->logfile)) {
@@ -305,7 +317,7 @@ class Database_mysql extends Database_basic
                     $keyword = strtoupper(substr($sql_statement, 0, $space_pos));
                     if (isset($this->logcommands[$keyword])) {
                         if ($this->logcommands[$keyword] === true) {
-                            file_put_contents($this->logfile, utf8_encode($sql_statement).";\n", FILE_APPEND);
+                            file_put_contents($this->logfile, utf8_encode($sql_statement) . ";\n", FILE_APPEND);
                         }
                     }
                 }
@@ -324,7 +336,7 @@ class Database_mysql extends Database_basic
             ) {
                 $rs = false;
                 $this->lastSQL = $sql_statement;
-                
+
 
                 //TualoApplication::timing(self::class.' mysqli->query start '.__LINE__);
                 $res = $this->mysqli->query($sql_statement);
@@ -333,21 +345,21 @@ class Database_mysql extends Database_basic
                 if ($res !== false) {
                     try {
                         $rs = new Recordset_mysql($res);
-                        if (property_exists($this,"dbTypes")){
+                        if (property_exists($this, "dbTypes")) {
                             $rs->useDBTypes($this->dbTypes);
                         }
-
+                        $rs->tinyIntAsBoolean($this->_tinyIntAsBoolean);
                     } catch (\Exception $error) {
-                        throw new \Exception($this->GetError() );
+                        throw new \Exception($this->GetError());
                     }
                 } else {
-                    throw new \Exception($this->GetError() );
+                    throw new \Exception($this->GetError());
                 }
-                if ($this->mysqli->warning_count!=0) { 
-                    $e = $this->mysqli->get_warnings(); 
-                    do { 
-                        $this->warnings[] = array('errno'=>$e->errno,'message'=>$e->message,'sqlstate'=>$e->sqlstate);
-                    } while ($e->next()); 
+                if ($this->mysqli->warning_count != 0) {
+                    $e = $this->mysqli->get_warnings();
+                    do {
+                        $this->warnings[] = array('errno' => $e->errno, 'message' => $e->message, 'sqlstate' => $e->sqlstate);
+                    } while ($e->next());
                 }
                 //TualoApplication::timing(self::class.' execute return '.__LINE__);
 
@@ -355,11 +367,11 @@ class Database_mysql extends Database_basic
             } else {
                 $this->lastSQL = $sql_statement;
                 $res = $this->mysqli->query($sql_statement);
-                if ($this->mysqli->warning_count!=0) { 
-                    $e = $this->mysqli->get_warnings(); 
-                    do { 
-                        $this->warnings[] = array('errno'=>$e->errno,'message'=>$e->message,'sqlstate'=>$e->sqlstate);
-                    } while ($e->next()); 
+                if ($this->mysqli->warning_count != 0) {
+                    $e = $this->mysqli->get_warnings();
+                    do {
+                        $this->warnings[] = array('errno' => $e->errno, 'message' => $e->message, 'sqlstate' => $e->sqlstate);
+                    } while ($e->next());
                 }
 
 
@@ -367,7 +379,7 @@ class Database_mysql extends Database_basic
                     //TualoApplication::timing(self::class.' execute return '.__LINE__);
                     return $res;
                 } else {
-                    throw new \Exception($this->GetError() );
+                    throw new \Exception($this->GetError());
                     //					throw new mException($this->GetError()." ".addslashes($sql_statement)." ",__FILE__,__LINE__);
                 }
             }
@@ -380,14 +392,15 @@ class Database_mysql extends Database_basic
 
     public function escape_string($str)
     {
-        if (is_string($str)){
+        if (is_string($str)) {
             return $this->mysqli->real_escape_string($str);
-        }else{
+        } else {
             return $str;
         }
     }
 
-    public function getWarnings(){
+    public function getWarnings()
+    {
         return $this->warnings;
     }
 
@@ -395,7 +408,7 @@ class Database_mysql extends Database_basic
     {
         $sql_statement = trim($sql_statement);
         if (strtoupper(substr($sql_statement, 0, 6)) == 'SELECT') {
-            throw new \Exception('Parameterbindung bei auswählenden Anweisungen nicht möglich. '.addslashes($sql_statement));
+            throw new \Exception('Parameterbindung bei auswählenden Anweisungen nicht möglich. ' . addslashes($sql_statement));
 
             return false;
         } else {
@@ -409,16 +422,16 @@ class Database_mysql extends Database_basic
                         if (isset($params[$i])) {
                             switch (gettype($params[$i])) {
                                 case 'string':
-                                $value = '\''.$this->escape_string($params[$i]).'\'';
-                                break;
+                                    $value = '\'' . $this->escape_string($params[$i]) . '\'';
+                                    break;
                                 default:
-                                $value = ''.$params[$i].'';
+                                    $value = '' . $params[$i] . '';
                             }
                         } else {
                             $value = 'null';
                         }
                     } else {
-                        throw new \Exception($sql_statement.' - '.print_r($params, true).' - Parameteranzahl stimmt nicht überein. '.$i.' < '.count($params));
+                        throw new \Exception($sql_statement . ' - ' . print_r($params, true) . ' - Parameteranzahl stimmt nicht überein. ' . $i . ' < ' . count($params));
 
                         return false;
                     }
@@ -441,7 +454,7 @@ class Database_mysql extends Database_basic
     {
         $this->commit_state = $bool_state;
         $this->mysqli->autocommit($bool_state);
-        if ($this->commit_state==false){
+        if ($this->commit_state == false) {
             $this->mysqli->begin_transaction();
         }
 
@@ -463,12 +476,13 @@ class Database_mysql extends Database_basic
         return $this->commit_state;
     }
 
-    public function isLocked($table_name){
-        $item=$this->singleRow('show open tables from '.$this->dbname.' like {table_name}',array('table_name'=>$table_name));
-        if ($item===false){
+    public function isLocked($table_name)
+    {
+        $item = $this->singleRow('show open tables from ' . $this->dbname . ' like {table_name}', array('table_name' => $table_name));
+        if ($item === false) {
             return false;
-        }else{
-            if (intval($item['in_use'])>0){
+        } else {
+            if (intval($item['in_use']) > 0) {
                 return true;
             }
         }
@@ -481,7 +495,7 @@ class Database_mysql extends Database_basic
     public function getTables()
     {
         $tables = array();
-        $sql = 'select table_name from information_schema.tables where table_schema=\''.$this->dbname.'\' ';
+        $sql = 'select table_name from information_schema.tables where table_schema=\'' . $this->dbname . '\' ';
         $rs = $this->execute($sql);
         while ($rs->moveNext()) {
             $tables[] = $rs->fieldValue('table_name');
@@ -511,7 +525,7 @@ class Database_mysql extends Database_basic
         $types['char'] = 'string';
 
         $columns = array();
-        $sql = 'select column_name columnname,data_type ctype,character_maximum_length clength,column_key ckey,is_nullable,NUMERIC_PRECISION,NUMERIC_SCALE from information_schema.columns where  table_schema=\''.$this->dbname.'\' and table_name=\''.$table_name.'\' order by ordinal_position ';
+        $sql = 'select column_name columnname,data_type ctype,character_maximum_length clength,column_key ckey,is_nullable,NUMERIC_PRECISION,NUMERIC_SCALE from information_schema.columns where  table_schema=\'' . $this->dbname . '\' and table_name=\'' . $table_name . '\' order by ordinal_position ';
         $rs = $this->execute($sql);
         while ($rs->moveNext()) {
             $columns[] = array(
