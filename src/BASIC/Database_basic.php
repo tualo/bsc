@@ -228,7 +228,7 @@ class  Database_basic
       $count++;
     }
     if (defined('__THROW_ERROR_ON_WAIT_TIMEOUT__')) {
-      if (__THROW_ERROR_ON_WAIT_TIMEOUT__ == 1) {
+      if (constant('__THROW_ERROR_ON_WAIT_TIMEOUT__') == 1) {
         if ($count >= $iterations) {
           throw new \Exception("Wait to long for unlocking table `" . $table_name . "`");
         }
