@@ -767,9 +767,6 @@ class TualoApplication
             if (self::$output === true) {
 
                 if (self::contenttype() == 'application/json') {
-
-
-
                     $data = '{}';
                     if (self::$returnField != '') {
                         $data =  json_encode(self::$result[self::$returnField], JSON_PRETTY_PRINT |  JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
