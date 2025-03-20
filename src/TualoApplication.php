@@ -777,7 +777,7 @@ class TualoApplication
                         if (self::$json_timing) self::$result['__timing'] = self::$timing_result;
                         if (self::$appendDebug) self::$result['__debug'] = self::$debug_result;
                         ini_set('memory_limit', '12G');
-                        $data =   json_encode(self::$result, JSON_PRETTY_PRINT |  JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                        $data =   json_encode(self::$result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
                     }
 
                     if ($is_web) header('Content-Type: ' . self::contenttype());
