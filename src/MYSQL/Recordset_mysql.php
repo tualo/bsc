@@ -2,6 +2,9 @@
 
 namespace Tualo\Office\Basic\MYSQL;
 
+
+use Tualo\Office\Basic\TualoApplication;
+
 /**
  * @version 1.2.001
  * @author Thomas Hoffmann <thomas.hoffmann@maccoffice.de>
@@ -30,7 +33,7 @@ class Recordset_mysql
 	private $ref;
 	private $open;
 	private $isFreed = false;
-	private $dbTypes = false;
+	private $dbTypes = true;
 
 
 
@@ -95,6 +98,7 @@ class Recordset_mysql
 					'index' => $i
 				);
 			}
+			// TualoApplication::result('type_string', $fres);
 			$this->a_fields = $fres;
 			$this->a_info = $finfo;
 			unset($fres);
@@ -218,6 +222,7 @@ class Recordset_mysql
 				$d[] = $ds;
 			}
 		}
+		// TualoApplication::result('ddd', $d);
 		return $d;
 	}
 
