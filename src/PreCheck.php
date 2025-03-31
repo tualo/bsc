@@ -32,11 +32,11 @@ class PreCheck implements IPreCheck
 
                 $dbs = $sessiondb->direct('select username db_user, password db_pass, id db_name, host db_host, port db_port from macc_clients ');
                 foreach ($dbs as $db) {
-                    if (!is_null($clientName) && $clientName != $db['dbname']) {
+                    if (!is_null($clientName) && $clientName != $db['db_name']) {
                         continue;
                     } else {
                         App::set('clientDB', $session->newDBByRow($db));
-                        self::formatPrintLn(['blue'], 'checks on ' . $db['dbname'] . ':  ');
+                        self::formatPrintLn(['blue'], 'checks on ' . $db['db_name'] . ':  ');
                         $classes = get_declared_classes();
                         foreach ($classes as $cls) {
                             $class = new \ReflectionClass($cls);
@@ -58,7 +58,7 @@ class PreCheck implements IPreCheck
             }
         } catch (\Exception $e) {
 
-            self::formatPrintLn(['red'], 'error on ' . $db['dbname'] . ':  ' . $e->getMessage());
+            self::formatPrintLn(['red'], 'error on ' . $db['db_name'] . ':  ' . $e->getMessage());
             exit(65);
         }
     }

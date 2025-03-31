@@ -32,14 +32,14 @@ class PostCheck implements IPostCheck
 
                 $dbs = $sessiondb->direct('select username db_user, password db_pass, id db_name, host db_host, port db_port from macc_clients ');
                 foreach ($dbs as $db) {
-                    if (!is_null($clientName) && $clientName != $db['dbname']) {
+                    if (!is_null($clientName) && $clientName != $db['db_name']) {
                         continue;
                     } else {
 
 
                         try {
                             App::set('clientDB', $session->newDBByRow($db));
-                            self::formatPrintLn(['blue'], 'checks on ' . $db['dbname'] . ':  ');
+                            self::formatPrintLn(['blue'], 'checks on ' . $db['db_name'] . ':  ');
                             $classes = get_declared_classes();
                             foreach ($classes as $cls) {
                                 $class = new \ReflectionClass($cls);
@@ -48,9 +48,9 @@ class PostCheck implements IPostCheck
                                 }
                             }
                         } catch (\Exception $e) {
-                            self::formatPrintLn(['red'], 'error on ' . $db['dbname'] . ':  ');
+                            self::formatPrintLn(['red'], 'error on ' . $db['db_name'] . ':  ');
                             self::formatPrintLn(['red'], $e->getMessage());
-                            self::formatPrintLn(['blue'], 'try `./tm createsystem --db "' . $db['dbname'] . '"`');
+                            self::formatPrintLn(['blue'], 'try `./tm createsystem --db "' . $db['db_name'] . '"`');
                         }
                     }
                 }
@@ -75,18 +75,18 @@ class PostCheck implements IPostCheck
             }
 
             if (isset($db)) {
-                self::formatPrintLn(['red'], 'error on ' . $db['dbname'] . ':  ');
+                self::formatPrintLn(['red'], 'error on ' . $db['db_name'] . ':  ');
                 self::formatPrintLn(['red'], $e->getMessage());
-                self::formatPrintLn(['blue'], 'try `./tm createsystem --db "' . $db['dbname'] . '"`');
+                self::formatPrintLn(['blue'], 'try `./tm createsystem --db "' . $db['db_name'] . '"`');
             } else {
                 self::formatPrintLn(['red'], 'error on sessiondb:  ');
                 self::formatPrintLn(['red'], $e->getMessage());
                 self::formatPrintLn(['blue'], 'try `./tm createsystem`');
             }
             /*
-            self::formatPrintLn(['red'], 'error on ' . $db['dbname'] . ':  ');
+            self::formatPrintLn(['red'], 'error on ' . $db['db_name'] . ':  ');
             // self::formatPrintLn(['red'], $e->getMessage());
-            self::formatPrintLn(['blue'], 'try `./tm createsystem --db "' . $db['dbname'] . '"`');
+            self::formatPrintLn(['blue'], 'try `./tm createsystem --db "' . $db['db_name'] . '"`');
             */
         }
     }

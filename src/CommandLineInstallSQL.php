@@ -68,12 +68,12 @@ class CommandLineInstallSQL
         $sessiondb = $session->db;
         $dbs = $sessiondb->direct('select username db_user, password db_pass, id db_name, host db_host, port db_port from macc_clients ');
         foreach ($dbs as $db) {
-            if (($clientName != '') && ($clientName != $db['dbname'])) {
+            if (($clientName != '') && ($clientName != $db['db_name'])) {
                 continue;
             } else {
 
                 App::set('clientDB', $session->newDBByRow($db));
-                PostCheck::formatPrint(['blue'], $msg . '(' . $db['dbname'] . '):  ');
+                PostCheck::formatPrint(['blue'], $msg . '(' . $db['db_name'] . '):  ');
                 $callback($file);
                 PostCheck::formatPrintLn(['green'], "\t" . ' done');
             }
