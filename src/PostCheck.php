@@ -30,7 +30,7 @@ class PostCheck implements IPostCheck
             } else {
                 $sessiondb = $session->db;
 
-                $dbs = $sessiondb->direct('select username dbuser, password dbpass, id dbname, host dbhost, port dbport from macc_clients ');
+                $dbs = $sessiondb->direct('select username db_user, password db_pass, id db_name, host db_host, port db_port from macc_clients ');
                 foreach ($dbs as $db) {
                     if (!is_null($clientName) && $clientName != $db['dbname']) {
                         continue;
@@ -74,11 +74,11 @@ class PostCheck implements IPostCheck
                 copy(App::get('basePath') . '/vendor/tualo/bsc/src/commandline/index.php', App::get('basePath') . '/index.php');
             }
 
-            if(isset($db)){
+            if (isset($db)) {
                 self::formatPrintLn(['red'], 'error on ' . $db['dbname'] . ':  ');
                 self::formatPrintLn(['red'], $e->getMessage());
                 self::formatPrintLn(['blue'], 'try `./tm createsystem --db "' . $db['dbname'] . '"`');
-            }else{
+            } else {
                 self::formatPrintLn(['red'], 'error on sessiondb:  ');
                 self::formatPrintLn(['red'], $e->getMessage());
                 self::formatPrintLn(['blue'], 'try `./tm createsystem`');

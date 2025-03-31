@@ -51,6 +51,15 @@ class Session
     if (isset($row["FORCE_DB_HOST"])) $row['db_host'] = $row["force_db_host"];
     if (isset($row["FORCE_DB_PORT"])) $row['db_port'] = $row["force_db_port"];
 
+    // for backward compatibility
+    if (!isset($row['db_host']) && isset($row['dbhost'])) $row['db_host'] = $row['dbhost'];
+    if (!isset($row['db_port']) && isset($row['dbport'])) $row['db_port'] = $row['dbport'];
+    if (!isset($row['db_user']) && isset($row['dbuser'])) $row['db_user'] = $row['dbuser'];
+    if (!isset($row['db_pw']) && isset($row['dbpass'])) $row['db_pw'] = $row['dbpass'];
+    if (!isset($row['db_name']) && isset($row['dbname'])) $row['db_name'] = $row['dbname'];
+
+
+
     $db = new MYSQL\Database($row['db_user'], $row['db_pw'], $row['db_name'], $row['db_host'], $row['db_port'], $row['key_file'] ?? null, $row['cert_file'] ?? null, $row['ca_file'] ?? null);
     return $db;
   }
