@@ -55,12 +55,12 @@ class Session
     if (!isset($row['db_host']) && isset($row['dbhost'])) $row['db_host'] = $row['dbhost'];
     if (!isset($row['db_port']) && isset($row['dbport'])) $row['db_port'] = $row['dbport'];
     if (!isset($row['db_user']) && isset($row['dbuser'])) $row['db_user'] = $row['dbuser'];
-    if (!isset($row['db_pw']) && isset($row['dbpass'])) $row['db_pw'] = $row['dbpass'];
+    if (!isset($row['db_pass']) && isset($row['dbpass'])) $row['db_pass'] = $row['dbpass'];
     if (!isset($row['db_name']) && isset($row['dbname'])) $row['db_name'] = $row['dbname'];
 
 
 
-    $db = new MYSQL\Database($row['db_user'], $row['db_pw'], $row['db_name'], $row['db_host'], $row['db_port'], $row['key_file'] ?? null, $row['cert_file'] ?? null, $row['ca_file'] ?? null);
+    $db = new MYSQL\Database($row['db_user'], $row['db_pass'], $row['db_name'], $row['db_host'], $row['db_port'], $row['key_file'] ?? null, $row['cert_file'] ?? null, $row['ca_file'] ?? null);
     return $db;
   }
 
@@ -86,7 +86,7 @@ class Session
       @session_start();
       $_SESSION['db']['db_host'] = $row['host'];
       $_SESSION['db']['db_user'] = $row['username'];
-      $_SESSION['db']['db_pw']   = $row['password'];
+      $_SESSION['db']['db_pass']   = $row['password'];
       $_SESSION['db']['db_port'] = $row['port'];
       $_SESSION['db']['db_name'] = $row['id'];
 
@@ -171,7 +171,7 @@ class Session
           oauth.username, 
           concat(loginnamen.vorname,\' \',loginnamen.nachname) fullname,
           view_macc_clients.username db_user,
-          view_macc_clients.password db_pw,
+          view_macc_clients.password db_pass,
           view_macc_clients.host db_host,
           view_macc_clients.port db_port,
           macc_users.typ,
@@ -204,7 +204,7 @@ class Session
               oauth.username,
               concat(loginnamen.vorname,\' \',loginnamen.nachname) fullname, 
               view_macc_clients.username db_user,
-              view_macc_clients.password db_pw,
+              view_macc_clients.password db_pass,
               view_macc_clients.host db_host,
               view_macc_clients.port db_port,
               macc_users.typ,
@@ -251,13 +251,6 @@ class Session
       }
 
 
-      /*
-      $_SESSION['db']['db_host'] = $row['dbhost'];
-      $_SESSION['db']['db_user'] = $row['dbuser'];
-      $_SESSION['db']['db_pw']   = $row['dbpass'];
-      $_SESSION['db']['db_port'] = $row['dbport'];
-      $_SESSION['db']['db_name'] = $row['dbname'];
-      */
 
       $_SESSION['tualoapplication']['loggedInType'] = 'oauth';
 

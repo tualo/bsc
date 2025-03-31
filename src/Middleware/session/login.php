@@ -40,7 +40,7 @@ TualoApplication::use('TualoApplicationSession_Login', function () {
 
                     macc_users_clients.client  db_name,
                     view_macc_clients.username db_user,
-                    view_macc_clients.password db_pw,
+                    view_macc_clients.password db_pass,
                     view_macc_clients.host db_host,
                     view_macc_clients.port db_port 
 
@@ -71,7 +71,7 @@ TualoApplication::use('TualoApplicationSession_Login', function () {
 
                 $_SESSION['db']['db_host'] = $row['db_host'];
                 $_SESSION['db']['db_user'] = $row['db_user'];
-                $_SESSION['db']['db_pw'] = $row['db_pw'];
+                $_SESSION['db']['db_pass'] = $row['db_pass'];
                 $_SESSION['db']['db_port'] = $row['db_port'];
                 $_SESSION['db']['db_name'] = $row['db_name'];
 
