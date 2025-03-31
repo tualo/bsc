@@ -8,13 +8,14 @@
         "vanilla/garden-cli": "~v4.0",
         "monolog/monolog": "~3.7.0",
         "tualo/server": "*"
-
     },
     "autoload": {
         "psr-4": {
             "Tualo\\Office\\Basic\\": "src/"
         },
-        "files": ["src/functions.php"]
+        "files": [
+            "src/functions.php"
+        ]
     },
     "license": "MIT",
     "authors": [

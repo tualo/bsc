@@ -4,6 +4,7 @@ use Garden\Cli\Cli;
 use Tualo\Office\Basic\TualoApplication;
 use Tualo\Office\Basic\IPreCheck;
 use Tualo\Office\Basic\ICommandline;
+use Tualo\Office\Server\Server;
 
 // Require composer's autoloader.
 require_once 'vendor/autoload.php';
@@ -54,10 +55,11 @@ if (!file_exists(TualoApplication::get('basePath') . '/configuration/.htconfig')
     );
 }
 TualoApplication::set('configurationFile', TualoApplication::get('basePath') . '/configuration/.htconfig');
-$settings = parse_ini_file((string)TualoApplication::get('configurationFile'), true);
 
+Server::loadIniFile();
+
+$settings = TualoApplication::get('configuration');
 $settings['client.mysql.connect_timeout'] = '0';
-TualoApplication::set('configuration', $settings);
 if (isset($settings['php-client'])) {
     foreach ($settings['php-client'] as $key => $value) {
         ini_set($key, $value);
