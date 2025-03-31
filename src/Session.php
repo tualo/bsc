@@ -135,7 +135,7 @@ class Session
         }
       }
     } else {
-      echo "*Bitte richten Sie die Sitzungsdatenbank ein.";
+      echo "*Bitte richten Sie die Sitzungsdatenbank ein." . PHP_EOL;
       exit();
     }
     if (is_object($this->db)) $this->db->mysqli->set_charset('utf8');
