@@ -38,11 +38,11 @@ TualoApplication::use('TualoApplicationSession_Login', function () {
                     concat(ifnull(loginnamen.vorname,"")," ",ifnull(loginnamen.nachname,"")) fullname,
                     test_login({username},{password}) pwresult,
 
-                    macc_users_clients.client  dbname,
-                    view_macc_clients.username dbuser,
-                    view_macc_clients.password dbpass,
-                    view_macc_clients.host dbhost,
-                    view_macc_clients.port dbport 
+                    macc_users_clients.client  db_name,
+                    view_macc_clients.username db_user,
+                    view_macc_clients.password db_pw,
+                    view_macc_clients.host db_host,
+                    view_macc_clients.port db_port 
 
                 FROM
                     macc_users
@@ -69,11 +69,11 @@ TualoApplication::use('TualoApplicationSession_Login', function () {
                 TualoApplication::result('msg', 'Login OK');
 
 
-                $_SESSION['db']['dbhost'] = $row['dbhost'];
-                $_SESSION['db']['dbuser'] = $row['dbuser'];
-                $_SESSION['db']['dbpass'] = $row['dbpass'];
-                $_SESSION['db']['dbport'] = $row['dbport'];
-                $_SESSION['db']['dbname'] = $row['dbname'];
+                $_SESSION['db']['db_host'] = $row['db_host'];
+                $_SESSION['db']['db_user'] = $row['db_user'];
+                $_SESSION['db']['db_pw'] = $row['db_pw'];
+                $_SESSION['db']['db_port'] = $row['db_port'];
+                $_SESSION['db']['db_name'] = $row['db_name'];
 
                 // $_SESSION['redirect_url'] = isset($row['url'])?$row['url']:'./';
 
@@ -87,7 +87,7 @@ TualoApplication::use('TualoApplicationSession_Login', function () {
                 } else {
                     $_SESSION['tualoapplication']['fullname'] = $row['fullname'];
                 }
-                $_SESSION['tualoapplication']['client'] = $row['dbname'];
+                $_SESSION['tualoapplication']['client'] = $row['db_name'];
                 $_SESSION['tualoapplication']['clients'] = $session->db->direct('SELECT macc_users_clients.client FROM macc_users_clients join view_macc_clients on macc_users_clients.client = view_macc_clients.id WHERE macc_users_clients.login = {username}', $_SESSION['tualoapplication']);
 
 

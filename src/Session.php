@@ -48,16 +48,10 @@ class Session
   {
 
     $config = TualoApplication::get('configuration');
-    if (isset($config["FORCE_DB_HOST"])) $row['dbhost'] = $config["FORCE_DB_HOST"];
-    if (isset($config["FORCE_DB_PORT"])) $row['dbport'] = $config["FORCE_DB_PORT"];
+    if (isset($row["FORCE_DB_HOST"])) $row['db_host'] = $row["force_db_host"];
+    if (isset($row["FORCE_DB_PORT"])) $row['db_port'] = $row["force_db_port"];
 
-    $row += [
-      'sslkey' => isset($config["__DB_SSL_KEY__"]) ? $config["__DB_SSL_KEY__"] : '',
-      'sslcert' => isset($config["__DB_SSL_CERT__"]) ? $config["__DB_SSL_CERT__"] : '',
-      'sslca' => isset($config["__DB_SSL_CA__"]) ? $config["__DB_SSL_CA__"] : ''
-    ];
-
-    $db = new MYSQL\Database($row['dbuser'], $row['dbpass'], $row['dbname'], $row['dbhost'], $row['dbport'], $row['sslkey'], $row['sslcert'], $row['sslca']);
+    $db = new MYSQL\Database($row['db_user'], $row['db_pw'], $row['db_name'], $row['db_host'], $row['db_port'], $row['key_file'] ?? null, $row['cert_file'] ?? null, $row['ca_file'] ?? null);
     return $db;
   }
 
@@ -81,11 +75,11 @@ class Session
     if ($row !== false) {
 
       @session_start();
-      $_SESSION['db']['dbhost'] = $row['host'];
-      $_SESSION['db']['dbuser'] = $row['username'];
-      $_SESSION['db']['dbpass'] = $row['password'];
-      $_SESSION['db']['dbport'] = $row['port'];
-      $_SESSION['db']['dbname'] = $row['id'];
+      $_SESSION['db']['db_host'] = $row['host'];
+      $_SESSION['db']['db_user'] = $row['username'];
+      $_SESSION['db']['db_pw']   = $row['password'];
+      $_SESSION['db']['db_port'] = $row['port'];
+      $_SESSION['db']['db_name'] = $row['id'];
 
 
       $_SESSION['redirect_url'] = isset($row['url']) ? $row['url'] : './';
@@ -111,7 +105,7 @@ class Session
     }
 
 
-    $config = TualoApplication::get('configuration');
+    $settings = TualoApplication::get('configuration');
 
     if (!isset($_SESSION['db'])) $_SESSION['db'] = [];
     if (!isset($_SESSION['tualoapplication'])) $_SESSION['tualoapplication'] = [];
@@ -126,24 +120,12 @@ class Session
     }
 
     if (
-      isset($config["__SESSION_DSN__"]) &&
-      isset($config["__SESSION_USER__"]) &&
-      isset($config["__SESSION_PASSWORD__"]) &&
-      isset($config["__SESSION_HOST__"]) &&
-      isset($config["__SESSION_PORT__"])
-
+      isset($settings['database']['db_name'])
     ) {
-      $db = null;
-      $db_config = [
-        'dbhost' => $config["__SESSION_HOST__"],
-        'dbpass' => $config["__SESSION_PASSWORD__"],
-        'dbuser' => $config["__SESSION_USER__"],
-        'dbname' => $config["__SESSION_DSN__"],
-        'dbport' => $config["__SESSION_PORT__"]
-      ];
+
 
       try {
-        $this->db = self::newDBByRow($db_config);
+        $this->db = self::newDBByRow($settings['database']);
       } catch (\Exception $e) {
         TualoApplication::logger('BSC(' . __FILE__ . ')')->error($e->getMessage());
         $is_web = http_response_code() !== FALSE;
@@ -176,13 +158,13 @@ class Session
       select
 
           oauth.id,
-          oauth.client dbname,
+          oauth.client db_name,
           oauth.username, 
           concat(loginnamen.vorname,\' \',loginnamen.nachname) fullname,
-          view_macc_clients.username dbuser,
-          view_macc_clients.password dbpass,
-          view_macc_clients.host dbhost,
-          view_macc_clients.port dbport,
+          view_macc_clients.username db_user,
+          view_macc_clients.password db_pw,
+          view_macc_clients.host db_host,
+          view_macc_clients.port db_port,
           macc_users.typ,
           macc_users.login login
   
@@ -209,13 +191,13 @@ class Session
   
           select
               oauth.id,
-              macc_users_clients.client dbname,
+              macc_users_clients.client db_name,
               oauth.username,
               concat(loginnamen.vorname,\' \',loginnamen.nachname) fullname, 
-              view_macc_clients.username dbuser,
-              view_macc_clients.password dbpass,
-              view_macc_clients.host dbhost,
-              view_macc_clients.port dbport,
+              view_macc_clients.username db_user,
+              view_macc_clients.password db_pw,
+              view_macc_clients.host db_host,
+              view_macc_clients.port db_port,
               macc_users.typ,
               macc_users.login login
   
@@ -260,11 +242,13 @@ class Session
       }
 
 
-      $_SESSION['db']['dbhost'] = $row['dbhost'];
-      $_SESSION['db']['dbuser'] = $row['dbuser'];
-      $_SESSION['db']['dbpass'] = $row['dbpass'];
-      $_SESSION['db']['dbport'] = $row['dbport'];
-      $_SESSION['db']['dbname'] = $row['dbname'];
+      /*
+      $_SESSION['db']['db_host'] = $row['dbhost'];
+      $_SESSION['db']['db_user'] = $row['dbuser'];
+      $_SESSION['db']['db_pw']   = $row['dbpass'];
+      $_SESSION['db']['db_port'] = $row['dbport'];
+      $_SESSION['db']['db_name'] = $row['dbname'];
+      */
 
       $_SESSION['tualoapplication']['loggedInType'] = 'oauth';
 
@@ -272,7 +256,7 @@ class Session
       $_SESSION['tualoapplication']['typ'] = $row['typ'];
       $_SESSION['tualoapplication']['username'] = $row['login'];
       $_SESSION['tualoapplication']['fullname'] = $row['fullname'];
-      $_SESSION['tualoapplication']['client'] = $row['dbname'];
+      $_SESSION['tualoapplication']['client'] = $row['db_name'];
       $_SESSION['tualoapplication']['clients'] = $session->db->direct('SELECT macc_users_clients.client FROM macc_users_clients join view_macc_clients on macc_users_clients.client = view_macc_clients.id WHERE macc_users_clients.login = {username}', $_SESSION['tualoapplication']);
 
 
@@ -337,7 +321,7 @@ class Session
     $clientdb = null;
     try {
       if (
-        isset($_SESSION['db']['dbuser'])
+        isset($_SESSION['db']['db_user'])
         &&  (is_null(self::$client_db_instance))
       ) {
         TualoApplication::timing("session new by row");
