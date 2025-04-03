@@ -48,8 +48,8 @@ class Session
   {
 
     $config = TualoApplication::get('configuration');
-    if (isset($row["FORCE_DB_HOST"])) $row['db_host'] = $row["force_db_host"];
-    if (isset($row["FORCE_DB_PORT"])) $row['db_port'] = $row["force_db_port"];
+    if (isset($row["force_db_host"])) $row['db_host'] = $row["force_db_host"];
+    if (isset($row["force_db_port"])) $row['db_port'] = $row["force_db_port"];
 
     // for backward compatibility
     if (!isset($row['db_host']) && isset($row['dbhost'])) $row['db_host'] = $row['dbhost'];
@@ -367,8 +367,8 @@ class Session
         $clientdb->execute_with_hash('SET lc_time_names = {lc_time_name};', array('lc_time_name' => 'de_DE'));
         $clientdb->execute_with_hash('set @sessiondb = {sessiondb}', array('sessiondb' => $this->db->dbname));
 
-        $this->db->execute_with_hash('set @sessionuser = {username}', $_SESSION);
-        $this->db->execute_with_hash('set @sessionuserfullname = {fullname}', $_SESSION);
+        $this->db->execute_with_hash('set @sessionuser = {username}', $_SESSION['tualoapplication']);
+        $this->db->execute_with_hash('set @sessionuserfullname = {fullname}', $_SESSION['tualoapplication']);
       }
     } catch (\Exception $e) {
       TualoApplication::logger('TualoApplication')->error($e->getMessage(), $_SESSION['db']);

@@ -131,6 +131,58 @@ class  Database_basic
     return $res;
   }
 
+  public function replace_hash($sql, $hash)
+  {
+    //if ($hash instanceof DSModel) $hash = $hash->toArray();
+
+    //error_reporting(E_ALL);
+    ini_set("display_errors", "on");
+
+    $matches = array();
+    $i = preg_match_all('/\{(?P<name>(\w+)(.\w+)*)\}/', $sql, $matches);
+    if ($i === false) {
+    } else {
+      if (isset($matches['name'])) {
+        foreach ($matches['name'] as $p) {
+          $func = '';
+          $field = '';
+          if (strpos($p, ':') !== false) {
+            $parts = explode(':', $p);
+            $func = $parts[1];
+            $field = $parts[0];
+          }
+          if ($func == 'array') {
+            if (isset($hash[$field])) {
+              $v = array();
+              foreach ($hash[$field] as $x) {
+                $v[] = $this->escape_string($x);
+              }
+              $sql = str_replace('{' . $p . '}', '\'' . implode('\',\'', $v) . '\'', $sql); // ' \''.$this->escape_string($hash[$p]).'\' ' : '(null)', $sql);
+            } else {
+              $sql = str_replace('{' . $p . '}', 'null', $sql);
+            }
+          } else if ($func == 'json') {
+            $sql = str_replace('{' . $p . '}', isset($hash[$field]) ? ' \'' . ($hash[$field]) . '\' ' : 'null', $sql);
+          } else {
+            $sql = str_replace('{' . $p . '}', isset($hash[$p]) ? ' \'' . $this->escape_string($hash[$p]) . '\' ' : 'null', $sql);
+          }
+        }
+      }
+    }
+    return $sql;
+  }
+
+  public function execute_with_hash($sql_statement, $hash, $decode = false)
+  {
+
+    return $this->execute($this->replace_hash($sql_statement, $hash));
+  }
+
+  public function escape_string($str)
+  {
+    return $str;
+  }
+
   public function singleRow($statement, $hash = array(), $key = '')
   {
     $rs = $this->execute_with_hash($statement, $hash);

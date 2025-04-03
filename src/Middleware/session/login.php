@@ -62,7 +62,6 @@ TualoApplication::use('TualoApplicationSession_Login', function () {
                 LIMIT 1
             ';
             $row = $session->db->singleRow($sql, $hash);
-
             if (false !== $row) {
 
                 TualoApplication::result('success', true);
