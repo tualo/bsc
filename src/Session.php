@@ -48,8 +48,9 @@ class Session
   {
 
     $config = TualoApplication::get('configuration');
-    if (isset($row["force_db_host"])) $row['db_host'] = $row["force_db_host"];
-    if (isset($row["force_db_port"])) $row['db_port'] = $row["force_db_port"];
+    if (isset($config['database']) && isset($config['database']['force_db_host'])) $row['db_host'] = $config['database']['force_db_host'];
+    if (isset($config['database']) && isset($config['database']['force_db_host'])) $row['db_port'] = $config['database']['force_db_host'];
+
 
     // for backward compatibility
     if (!isset($row['db_host']) && isset($row['dbhost'])) $row['db_host'] = $row['dbhost'];
@@ -60,7 +61,7 @@ class Session
 
 
 
-    $db = new MYSQL\Database($row['db_user'], $row['db_pass'], $row['db_name'], $row['db_host'], $row['db_port'], $row['key_file'] ?? null, $row['cert_file'] ?? null, $row['ca_file'] ?? null);
+    $db = new MYSQL\Database($row['db_user'], $row['db_pass'], $row['db_name'], $row['db_host'], intval($row['db_port']), $row['key_file'] ?? null, $row['cert_file'] ?? null, $row['ca_file'] ?? null);
     return $db;
   }
 
