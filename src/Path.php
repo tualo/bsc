@@ -4,6 +4,7 @@ namespace Tualo\Office\Basic;
 
 use InvalidArgumentException;
 
+
 class Path
 {
 
