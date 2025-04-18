@@ -102,6 +102,8 @@ class TualoApplication
         return $defaultReturn;
     }
 
+
+
     public static function logger($channel, $occurence = 'daily')
     {
         if (!isset(self::$logger[$channel])) {

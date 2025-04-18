@@ -4,6 +4,7 @@ namespace Tualo\Office\Basic;
 
 use Tualo\Office\Basic\TualoApplication;
 use Ramsey\Uuid\Uuid;
+use Tualo\Office\Basic\Path;
 
 class Session
 {
@@ -241,15 +242,27 @@ class Session
           $p = explode('?', $uri);
           $uri = $p[0];
         };
+
         if (substr($path, strlen($path) - 1, 1) == '*') {
-          if (strpos($uri, TualoApplication::get('requestPath') . '' . substr($path, 0, strlen($path) - 1)) === 0) {
+          if (
+            strpos(
+              $uri,
+              Path::join(
+                TualoApplication::get('requestPath'),
+                substr($path, 0, strlen($path) - 1)
+              )
+            ) === 0
+          ) {
             $byPath = 2;
-            $_SESSION['session_condition']['path'] = TualoApplication::get('requestPath') . $path;
+            $_SESSION['session_condition']['path'] = Path::join(
+              TualoApplication::get('requestPath'),
+              substr($path, 0, strlen($path) - 1)
+            );
           }
         }
-        if (($uri == TualoApplication::get('requestPath') . '' . $path)) {
+        if (($uri ==  Path::join(TualoApplication::get('requestPath'), $path))) {
           $byPath = 3;
-          $_SESSION['session_condition']['path'] = TualoApplication::get('requestPath') . $path;
+          $_SESSION['session_condition']['path'] = Path::join(TualoApplication::get('requestPath'), $path);
         }
       }
 
