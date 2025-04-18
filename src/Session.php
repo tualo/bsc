@@ -254,7 +254,7 @@ class Session
       }
 
 
-      if ($byPath == 0) {
+      if ($byPath == 1) {
         TualoApplication::result('success', false);
         TualoApplication::result('msg', 'Anmeldung fehlerhaft');
         TualoApplication::logger('BSC')->error('Anmeldung fehlerhaft, Token: ' . $token . ' Path: ' . $path . ' URI: ' . $uri);
