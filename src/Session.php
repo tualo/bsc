@@ -257,7 +257,7 @@ class Session
       if ($byPath == 1) {
         TualoApplication::result('success', false);
         TualoApplication::result('msg', 'Anmeldung fehlerhaft');
-        TualoApplication::logger('BSC')->error('Anmeldung fehlerhaft, Token: ' . $token . ' Path: ' . $path . ' URI: ' . $uri);
+        TualoApplication::logger('BSC')->error('Anmeldung fehlerhaft, Token: ' . $token . ' Path: ' . TualoApplication::get('requestPath') . $path . ' URI: ' . $uri);
         return;
       }
 
