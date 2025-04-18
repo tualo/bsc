@@ -34,6 +34,9 @@ class Database_Y extends Database_basic
 
     public function __construct($user, $pass, $db, $host, $port = 3306, $ssl_key = '', $ssl_cert = '', $ssl_ca = '')
     {
+        if ($port == 0) {
+            $port = 3306;
+        }
         $config = new MysqlConfig(
             $host,
             $port,
@@ -48,9 +51,22 @@ class Database_Y extends Database_basic
         );
 
         // $config->withCharset("ascii", "ascii_general_ci");
-        $this->dbpool = new MysqlConnectionPool($config);
+        print_r([
+            $host,
+            $port,
+            $user,
+            $pass,
+            $db
+        ]);
+        try {
 
-        $this->mysqli = new Fake();
+            $this->dbpool = new MysqlConnectionPool($config);
+
+            $this->mysqli = new Fake();
+        } catch (\Exception $e) {
+            // Handle exception
+            echo "Error: " . $e->getMessage();
+        }
 
         $this->execute('SET collation_connection = @@collation_database;');
         $this->execute('SET character_set_client = @@character_set_database;');

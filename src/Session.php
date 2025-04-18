@@ -232,26 +232,34 @@ class Session
     $row = $session->db->singleRow($sql, ['id' => $token]);
     if ($row !== false) {
       $uri = $_SERVER['REQUEST_URI'];
+      $byPath = 0;
       $path = $session->db->singleValue('select path from oauth_path where id = {id} ', array('id' => $token), 'path');
       if ($path !== false) {
         //if (isset($_SERVER['REDIRECT_URL'])) $uri = $_SERVER['REDIRECT_URL'];
+        $byPath = 1;
         if (strpos($uri, '?') !== false) {
           $p = explode('?', $uri);
           $uri = $p[0];
         };
-      }
-      if (substr($path, strlen($path) - 1, 1) == '*') {
-        if (strpos($uri, TualoApplication::get('requestPath') . substr($path, 0, strlen($path) - 1)) === 0) {
-          $byPath = true;
+        if (substr($path, strlen($path) - 1, 1) == '*') {
+          if (strpos($uri, TualoApplication::get('requestPath') . '/' . substr($path, 0, strlen($path) - 1)) === 0) {
+            $byPath = 2;
+            $_SESSION['session_condition']['path'] = TualoApplication::get('requestPath') . $path;
+          }
+        }
+        if (($uri == TualoApplication::get('requestPath') . '/' . $path)) {
+          $byPath = 3;
           $_SESSION['session_condition']['path'] = TualoApplication::get('requestPath') . $path;
         }
       }
-      if (($uri == TualoApplication::get('requestPath') . $path)) {
-        $byPath = true;
-        $_SESSION['session_condition']['path'] = TualoApplication::get('requestPath') . $path;
+
+
+      if ($byPath == 0) {
+        TualoApplication::result('success', false);
+        TualoApplication::result('msg', 'Anmeldung fehlerhaft');
+        TualoApplication::logger('BSC')->error('Anmeldung fehlerhaft, Token: ' . $token . ' Path: ' . $path . ' URI: ' . $uri);
+        return;
       }
-
-
 
       $_SESSION['tualoapplication']['loggedInType'] = 'oauth';
 
@@ -262,6 +270,11 @@ class Session
       $_SESSION['tualoapplication']['client'] = $row['db_name'];
       $_SESSION['tualoapplication']['clients'] = $session->db->direct('SELECT macc_users_clients.client FROM macc_users_clients join view_macc_clients on macc_users_clients.client = view_macc_clients.id WHERE macc_users_clients.login = {username}', $_SESSION['tualoapplication']);
 
+      $_SESSION['db']['db_host'] = $row['db_host'];
+      $_SESSION['db']['db_user'] = $row['db_user'];
+      $_SESSION['db']['db_pass']   = $row['db_pass'];
+      $_SESSION['db']['db_port'] = $row['db_port'];
+      $_SESSION['db']['db_name'] = $row['db_name'];
 
       // Test DB Access
       if (is_null($session->getDB())) {

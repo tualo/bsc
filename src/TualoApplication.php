@@ -110,7 +110,7 @@ class TualoApplication
 
             /**** ALT */
             if (isset($cnf['__LOGGER_FILE__'])) {
-                $level = Logger::WARNING;
+                $level = Logger::toMonologLevel('WARNING');
                 if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__'] == 'WARNING') $level = \Monolog\Level::Warning;
                 if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__'] == 'ERROR') $level = \Monolog\Level::Error;
                 if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__'] == 'NOTICE') $level = \Monolog\Level::Notice;
