@@ -116,7 +116,6 @@ class Route
                         if (TualoApplication::configuration('logger-options', 'ROUTERUN', '0') == '1')
                             TualoApplication::logger('ROUTERUN')->debug("use path " . $_SESSION['session_condition']['path'] . " for " . $path);
 
-
                         $session_condition_allowed = false;
                         $test_path = $_SESSION['session_condition']['path'];
                         if (substr($test_path, strlen($test_path) - 1, 1) == '*') {
