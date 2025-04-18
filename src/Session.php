@@ -242,12 +242,12 @@ class Session
           $uri = $p[0];
         };
         if (substr($path, strlen($path) - 1, 1) == '*') {
-          if (strpos($uri, TualoApplication::get('requestPath') . '/' . substr($path, 0, strlen($path) - 1)) === 0) {
+          if (strpos($uri, TualoApplication::get('requestPath') . '' . substr($path, 0, strlen($path) - 1)) === 0) {
             $byPath = 2;
             $_SESSION['session_condition']['path'] = TualoApplication::get('requestPath') . $path;
           }
         }
-        if (($uri == TualoApplication::get('requestPath') . '/' . $path)) {
+        if (($uri == TualoApplication::get('requestPath') . '' . $path)) {
           $byPath = 3;
           $_SESSION['session_condition']['path'] = TualoApplication::get('requestPath') . $path;
         }
