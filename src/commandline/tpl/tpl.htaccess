@@ -31,4 +31,4 @@ RewriteRule . index.php [L]
 
 </IfModule>
 
-php_value zlib.output_compression on
+# php_value zlib.output_compression on
