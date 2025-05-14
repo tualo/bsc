@@ -52,12 +52,44 @@ class Route
         if ($method == 'OPTIONS') {
             header("HTTP/1.0 200 OK");
             header('Access-Control-Allow-Origin: *');
-            header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+            header('Access-Control-Allow-Methods: ' . strtoupper(implode(', ', self::getAllowedMethods($path))));
             header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
             header('Access-Control-Max-Age: 86400');
             exit();
         }
         self::runpath($path, $method);
+    }
+
+    public static function getAllowedMethods($path)
+    {
+        $allowed = [];
+        foreach (self::$routes as $route) {
+            // If the method matches check the path
+            // Add basepath to matching string
+            if (self::$basepath != '' && self::$basepath != '/') {
+                $route['expression'] = '(' . self::$basepath . ')' . $route['expression'];
+            }
+            // Add 'find string start' automatically
+            $route['expression'] = '^' . $route['expression'];
+            // Add 'find string end' automatically
+            $route['expression'] = $route['expression'] . '$';
+            // Check path match	
+
+            if (preg_match('#' . $route['expression'] . '#', $path, $matches) && (!self::$finished)) {
+                if (is_array($route['method'])) {
+                    foreach ($route['method'] as $m) {
+                        if (!in_array($m, $allowed)) {
+                            array_push($allowed, $m);
+                        }
+                    }
+                } else {
+                    if (!in_array($route['method'], $allowed)) {
+                        array_push($allowed, $route['method']);
+                    }
+                }
+            }
+        }
+        return $allowed;
     }
 
     public static function runpath($path, $method)
