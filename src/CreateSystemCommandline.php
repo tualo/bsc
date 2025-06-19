@@ -50,7 +50,7 @@ class CreateSystemCommandline implements ICommandline
                     $clientDBName = readline("Enter the client db name: ");
                 }
                 if (($sessionDBName = $args->getOpt('session')) == '') {
-                    if (($sessionDBName = App::configuration('', '__SESSION_DSN__', '')) == '') {
+                    if (($sessionDBName = App::configuration('database', 'db_name', '')) == '') {
                         $sessionDBName = readline("Enter the session db name: ");
                     }
                 }
