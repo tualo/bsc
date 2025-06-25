@@ -14,8 +14,12 @@ class HTAccess  extends PostCheck
 
     public static function test(array $config)
     {
-        if (!file_exists(App::get('basePath') . '/vendor/.htaccess')) {
-            self::formatPrintLn(['red'], "\t vendor/.htaccess not found, please run `./tm install-htaccess` to create it");
+
+        $paths = ['configuration', 'vendor', 'ext-build', 'ext-cache', 'cache', 'temp'];
+        foreach ($paths as $path) {
+            if (!file_exists(App::get('basePath') . '/' . $path . '/.htaccess')) {
+                self::formatPrintLn(['red'], "\t " . $path . "/.htaccess not found, please run `./tm install-htaccess` to create it");
+            }
         }
     }
 }

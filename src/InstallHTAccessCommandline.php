@@ -31,11 +31,18 @@ class InstallHTAccessCommandline implements ICommandline
             copy(App::get('basePath') . '/vendor/tualo/bsc/src/commandline/tpl/tpl.htaccess', App::get('basePath') . '/.htaccess');
             PostCheck::formatPrintLn(['green'], "\t done");
         }
-        if (!file_exists(App::get('basePath') . '/vendor/.htaccess')) {
-            file_put_contents(App::get('basePath') . '/vendor/.htaccess', implode("\n", [
-                'Order Allow,Deny' .
+
+        $paths = ['configuration', 'vendor', 'ext-build', 'ext-cache', 'cache', 'temp'];
+        foreach ($paths as $path) {
+            if (!file_exists(App::get('basePath') . '/' . $path . '/.htaccess')) {
+                file_put_contents(App::get('basePath') . '/' . $path . '/.htaccess', implode("\n", [
+                    'Order Allow,Deny',
                     'Deny from all'
-            ]));
+                ]));
+                PostCheck::formatPrintLn(['green'], "\t " . $path . "/.htaccess created");
+            } else {
+                PostCheck::formatPrintLn(['green'], "\t " . $path . "/.htaccess already exists");
+            }
         }
     }
 }
