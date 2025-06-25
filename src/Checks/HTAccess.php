@@ -25,7 +25,7 @@ class HTAccess  extends PostCheck
             self::formatPrintLn(['red'], "\t .htaccess not found, please run `./tm install-htaccess` to create it");
         } else {
             self::formatPrintLn(['green'], "\t .htaccess found");
-            $data = file_exists(App::get('basePath') . '/.htaccess');
+            $data = file_get_contents(App::get('basePath') . '/.htaccess');
             if (strpos($data, 'composer.json') === false) {
                 self::formatPrintLn(['red'], "\t .htaccess does not contain 'composer.json', please run `rm .htaccess && ./tm install-htaccess` to recreate it");
             } else {
