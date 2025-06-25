@@ -3,6 +3,12 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule . index.php [L]
 
+<Files "tm">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+
 
 <ifModule mod_gzip.c>
     mod_gzip_on Yes

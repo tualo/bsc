@@ -108,6 +108,16 @@ class TualoApplication
     {
         if (!isset(self::$logger[$channel])) {
             $logger = new Logger($channel);
+
+            /*
+            $deduplicationHandler = new \Monolog\Handler\DeduplicationHandler(
+                new \Monolog\Handler\NullHandler(),
+                $deduplicationPeriod = 60, // seconds
+                $deduplicationKey = function ($record) {
+                    return $record['message'];
+                }
+            );
+            */
             $cnf = self::get('configuration');
 
             /**** ALT */
@@ -127,6 +137,7 @@ class TualoApplication
                 (isset($cnf['logger-file']['filename'])) &&
                 (isset($cnf['logger-file']['level']))
             ) {
+
                 $logger->pushHandler(new StreamHandler(
                     $cnf['logger-file']['filename'],
                     \Monolog\Level::fromName($cnf['logger-file']['level']) ??  \Monolog\Level::Debug
@@ -167,6 +178,10 @@ class TualoApplication
                 );
                 $logger->pushHandler($slackHandler);
             }
+
+
+
+
             self::$logger[$channel] = $logger;
         }
         return self::$logger[$channel];

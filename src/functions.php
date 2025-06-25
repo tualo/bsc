@@ -7,13 +7,19 @@ use Tualo\Office\Basic\Middleware\Router;
 use Tualo\Office\Basic\Routes\Index;
 */
 
-if (class_exists("Tualo\Office\Basic\Middleware\Maintaince")){ }
-if (class_exists("Tualo\Office\Basic\Middleware\SettingsCheck")){ }
-if (class_exists("Tualo\Office\Basic\Middleware\Session")){ }
-if (class_exists("Tualo\Office\Basic\Middleware\Router")){ }
+if (class_exists("Tualo\Office\Basic\Middleware\Maintaince")) {
+}
+if (class_exists("Tualo\Office\Basic\Middleware\SettingsCheck")) {
+}
+if (class_exists("Tualo\Office\Basic\Middleware\Session")) {
+}
+if (class_exists("Tualo\Office\Basic\Middleware\Router")) {
+}
 
-if (class_exists("Tualo\Office\Basic\Routes\Index")){ }
-if (class_exists("Tualo\Office\Basic\Routes\Logout")){ }
+if (class_exists("Tualo\Office\Basic\Routes\Index")) {
+}
+if (class_exists("Tualo\Office\Basic\Routes\Logout")) {
+}
 //require_once __DIR__.'/Routes/Download.php';
 
 require_once "Middleware/ClientIP.php";
@@ -38,5 +44,6 @@ require_once "Routes/Logout.php";
 require_once "Routes/PublicRoute.php";
 
 require_once "Checks/Tables.php";
+require_once "Checks/HTAccess.php";
 require_once "commandline/InstallMain.php";
 require_once "SetupCommandline.php";
