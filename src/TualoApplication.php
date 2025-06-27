@@ -439,8 +439,10 @@ class TualoApplication
             if ($default != '') {
                 return $default;
             } else {
-                //self::stopbuffering();
-                self::$result['errors'][] = 'Variable *' . $key . '* wurde nicht gefunden';
+                if ($key != 'configuration') {
+                    self::addError('Variable *' . $key . '* wurde nicht gefunden');
+                }
+                // self::$result['errors'][] = 'Variable *' . $key . '* wurde nicht gefunden';
             }
         }
     }
