@@ -534,6 +534,10 @@ class TualoApplication
     public static function etagFile($file, $sendContentType = false)
     {
 
+        if (!file_exists($file)) {
+            header("HTTP/1.1 404 Not Found");
+            return TualoApplication::body('File not found: ' . $file);
+        }
         $last_modified_time = filemtime($file);
         $etag = md5_file($file);
         if ($sendContentType == true) {
