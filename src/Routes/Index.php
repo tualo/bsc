@@ -9,6 +9,7 @@ use Tualo\Office\Basic\TualoApplication;
 use Tualo\Office\Basic\Route;
 use Tualo\Office\Basic\IRoute;
 use Tualo\Office\Basic\Version;
+use Tualo\Office\PUG\Pug;
 
 
 class Index implements IRoute
@@ -35,7 +36,7 @@ class Index implements IRoute
                 mkdir(TualoApplication::get('cachePath') . '/pugcache', 0777, true);
             }
 
-            $pug = new \Pug([
+            $pug = Pug::getPug([
                 'pretty' => true,
                 'cache' => TualoApplication::get('cachePath') . '/pugcache'
             ]);
