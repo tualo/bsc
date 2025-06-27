@@ -11,10 +11,12 @@ class Router implements IMiddleware
 
     public static function load()
     {
+
         $classes = get_declared_classes();
         foreach ($classes as $cls) {
             $class = new \ReflectionClass($cls);
             if ($class->implementsInterface('Tualo\Office\Basic\IRoute')) {
+                $GLOBALS['current_cls'] = $cls;
                 $cls::register();
             }
         }

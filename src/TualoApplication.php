@@ -2,6 +2,7 @@
 
 namespace Tualo\Office\Basic;
 
+use Tualo\Office\PUG\CIDR;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 // composer require symfony/monolog-bundle
@@ -185,6 +186,34 @@ class TualoApplication
             self::$logger[$channel] = $logger;
         }
         return self::$logger[$channel];
+    }
+
+    /**
+     * Check if the current request needs an active login
+     * 
+     * @param string $section The section to check, default is 'compiler'
+     * @return bool true if an active login is needed, false otherwise
+     */
+    public static function needsActiveLogin(string $section = 'compiler'): bool
+    {
+        $needsLogin = boolval(!self::configuration($section, 'allowedExtern', false));
+
+        if ($needsLogin == true) {
+
+            $keys =  json_decode(self::configuration($section, 'allowed_clientip_headers', "['HTTP_X_DDOSPROXY', 'HTTP_X_FORWARDED_FOR', 'HTTP_CLIENT_IP', 'REMOTE_ADDR']"), true);
+            if (is_null($keys)) {
+                $keys = ['HTTP_X_DDOSPROXY', 'HTTP_X_FORWARDED_FOR', 'HTTP_CLIENT_IP', 'REMOTE_ADDR'];
+            }
+            if (CIDR::IPisWithinCIDR(
+                CIDR::getIP($keys),
+                explode(' ', self::configuration($section, 'allowed_cidrs', '127.0.0.1'))
+            )) {
+                $needsLogin = false;
+            } else {
+                $needsLogin = true;
+            }
+        }
+        return $needsLogin;
     }
 
 

@@ -21,7 +21,8 @@ class Route
                 'expression'        => $expression,
                 'function'          => $function,
                 'method'            => $fn,
-                'needActiveSession' => $needActiveSession
+                'needActiveSession' => $needActiveSession,
+                'cls' => $GLOBALS['current_cls']
             ));
         }
     }
@@ -90,6 +91,11 @@ class Route
             }
         }
         return $allowed;
+    }
+
+    public static function getRoutes()
+    {
+        return self::$routes;
     }
 
     public static function runpath($path, $method)

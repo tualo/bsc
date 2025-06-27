@@ -1,4 +1,5 @@
 <?php
+
 namespace Tualo\Office\Basic\Routes;
 
 use RecursiveDirectoryIterator;
@@ -10,45 +11,47 @@ use Tualo\Office\Basic\IRoute;
 use Tualo\Office\Basic\Version;
 
 
-class Index implements IRoute{
-    
+class Index implements IRoute
+{
 
-    public static function register(){
 
-        
-        
+    public static function register()
+    {
+
+
+
         // usage: to find the test.zip file recursively
         // $result = rsearch($_SERVER['DOCUMENT_ROOT'], '/.*\/test\.zip/'));
-        
-        Route::add('/versionsum',function(){
-            TualoApplication::contenttype('application/json');
-            TualoApplication::result('f',Version::versionMD5());
-        },['get','post'],false);
 
-        Route::add('/',function(){
+        Route::add('/versionsum', function () {
+            TualoApplication::contenttype('application/json');
+            TualoApplication::result('f', Version::versionMD5());
+        }, ['get'], false);
+
+        Route::add('/', function () {
 
             TualoApplication::contenttype('text/html');
-            if (!file_exists(TualoApplication::get('cachePath').'/pugcache')){
-                mkdir(TualoApplication::get('cachePath').'/pugcache',0777,true);
+            if (!file_exists(TualoApplication::get('cachePath') . '/pugcache')) {
+                mkdir(TualoApplication::get('cachePath') . '/pugcache', 0777, true);
             }
-            
+
             $pug = new \Pug([
                 'pretty' => true,
-                'cache' => TualoApplication::get('cachePath').'/pugcache'
+                'cache' => TualoApplication::get('cachePath') . '/pugcache'
             ]);
 
             //'unsafe-eval'
             header("Content-Security-Policy: base-uri 'none', base-uri 'self'; default-src 'self' data:; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; form-action 'self'; img-src 'self' data:; worker-src 'self' 'unsafe-inline' * blob:;");
 
-            
 
-            try{
+
+            try {
                 // $pugfile = TualoApplication::get('basePath').'/pages/custom/index.pug';
 
                 $pugfile =  TualoApplication::configuration(
                     'tualo-backend',
                     'pugfile',
-                    dirname(__DIR__).'/tpl/pages/basic/index.pug'
+                    dirname(__DIR__) . '/tpl/pages/basic/index.pug'
                 );
 
                 // if (!file_exists( $pugfile )) $pugfile = dirname(__DIR__).'/tpl/pages/basic/index.pug';
@@ -56,28 +59,26 @@ class Index implements IRoute{
 
 
                 $params = array(
-                    'title'             =>  TualoApplication::get('htmltitle','tualo office'),
+                    'title'             =>  TualoApplication::get('htmltitle', 'tualo office'),
                     'stylesheets'       =>  TualoApplication::stylesheet(),
                     'javascripts'       =>  TualoApplication::javascript(),
                     'modules'       =>  TualoApplication::module()
 
                 );
 
-                $params[ 'shortcut_iconurl' ] =  TualoApplication::configuration(
+                $params['shortcut_iconurl'] =  TualoApplication::configuration(
                     'tualo-backend',
                     'shortcut_iconurl',
                     'favicon-32x32.png'
                 );
 
-                $params[ 'checksum'] = Version::versionMD5();
-      
+                $params['checksum'] = Version::versionMD5();
 
-                TualoApplication::body( $pug->renderFile($pugfile,$params));
-                
-            }catch(\Exception $e){
+
+                TualoApplication::body($pug->renderFile($pugfile, $params));
+            } catch (\Exception $e) {
                 echo $e->getMessage();
             }
-        },['get','post']);
-
+        }, ['get', 'post']);
     }
 }
