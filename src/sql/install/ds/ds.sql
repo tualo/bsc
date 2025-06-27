@@ -39,7 +39,8 @@ CREATE TABLE IF NOT EXISTS `ds` (
   CONSTRAINT `fk_ds_class_name` FOREIGN KEY (`class_name`) REFERENCES `ds_class` (`class_name`) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
-
+alter table ds change column phpexporterfilename
+    phpexporterfilename varchar(255) not null default '{GUID}';
 
 alter table ds add column if not exists autosave tinyint(1) default 0;
 alter table ds add column if not exists base_store_class varchar(50) default 'Tualo.DataSets.data.Store';

@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `ds_reference_tables` (
   `autosync` tinyint(4) DEFAULT 1,
   `position` int(11) DEFAULT 99999,
   `path` varchar(100) DEFAULT '',
-  `existsreal` int(11) DEFAULT 1,
+  `existsreal` tinyint(4) DEFAULT 1,
   `tabtitle` varchar(50) DEFAULT '',
   KEY `fk_ds_reference_tables_r_ds` (`reference_table_name`),
   KEY `idx_ds_reference_tables_table_name_reference_table_name` (`table_name`,`reference_table_name`),
@@ -20,8 +20,11 @@ CREATE TABLE IF NOT EXISTS `ds_reference_tables` (
 );
 
 alter table `ds_reference_tables` add column if not exists `tabtitle` varchar(50) DEFAULT '';
+alter table `ds_reference_tables` add column if not exists `existsreal` tinyint(4) DEFAULT 1;
 
-INSERT  IGNORE INTO `ds_reference_tables` VALUES
+INSERT  IGNORE INTO `ds_reference_tables` 
+(table_name, reference_table_name, columnsdef, constraint_name, active, searchable, autosync, position, path, existsreal, tabtitle)
+VALUES
 ('ds_access','ds','{\"ds_access__table_name\":\"ds__table_name\"}','fk_ds_access_ds',1,0,1,99999,'',0,''),
 ('ds_access','ds','{\"ds_access__table_name\":\"ds__table_name\"}','fk_ds_access_ds',0,0,0,999,'',0,''),
 ('ds_access','ds','{\"ds_access__table_name\":\"ds__table_name\"}','fk_ds_access_ds',0,0,0,999,'',0,''),
