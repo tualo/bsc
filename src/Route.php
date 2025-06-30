@@ -6,10 +6,17 @@ class Route
 {
 
     private static $routes = array();
+    private static $aliases = array();
     private static $basepath = '/';
     private static $pathNotFound = null;
     private static $methodNotAllowed = null;
     public static $finished = false;
+
+
+    public static function alias($alias, $origialRoute)
+    {
+        self::$aliases[$alias] = $origialRoute;
+    }
 
     public static function checkDoubleDots(array $arr, string $key, string $logMe): bool
     {
@@ -51,7 +58,22 @@ class Route
 
     public static function run($basepath = '/')
     {
-        // Parse current url
+        // apend aliases to routes
+        foreach (self::$aliases as $alias => $original) {
+            $route = null;
+            foreach (self::$routes as $r) {
+                if ($r['expression'] == $original) {
+                    $route = $r;
+                    break;
+                }
+            }
+            if ($route != null) {
+                $route['expression'] = $alias;
+                array_push(self::$routes, $route);
+            } else {
+                TualoApplication::logger('BSC')->error("target route $original not found for $alias");
+            }
+        }
 
         self::$basepath = $basepath;
         $parsed_url = parse_url($_SERVER['REQUEST_URI']); //Parse Uri
@@ -104,6 +126,8 @@ class Route
         }
         return $allowed;
     }
+
+
 
     public static function getRoutes()
     {
