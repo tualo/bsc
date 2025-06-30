@@ -95,6 +95,10 @@ class TualoApplication
     public static function configuration(string $section, string $key, mixed $defaultReturn = false): mixed
     {
         $cnf = self::get('configuration');
+        if (isset(self::$vars['inside_pug']) && self::$vars['inside_pug'] == true) {
+            // blocking variables in pug
+            return [];
+        }
         if (($section == '') && (isset($cnf[$key]))) {
             return $cnf[$key];
         } elseif (isset($cnf[$section]) && isset($cnf[$section][$key])) {
@@ -433,6 +437,10 @@ class TualoApplication
      */
     public static function get($key, $default = '')
     {
+        if (isset(self::$vars['inside_pug']) && self::$vars['inside_pug'] == true) {
+            // blocking variables in pug
+            return [];
+        }
         if (isset(self::$vars[$key])) {
             return self::$vars[$key];
         } else {

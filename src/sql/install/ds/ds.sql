@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `ds` (
 );
 
 alter table ds change column phpexporterfilename
-    phpexporterfilename varchar(255) not null default '{GUID}';
+    phpexporterfilename varchar(255) DEFAULT NULL;
 
 alter table ds add column if not exists autosave tinyint(1) default 0;
 alter table ds add column if not exists base_store_class varchar(50) default 'Tualo.DataSets.data.Store';
