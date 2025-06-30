@@ -11,6 +11,18 @@ class Route
     private static $methodNotAllowed = null;
     public static $finished = false;
 
+    public static function checkDoubleDots(array $arr, string $key, string $logMe): bool
+    {
+        if (!isset($arr[$key]) && (strpos($arr[$key], '..') !== false)) {
+            TualoApplication::body('Path not found');
+            TualoApplication::contenttype('text/plain');
+            http_response_code(404);
+            TualoApplication::logger('CMS')->error($logMe);
+            return false;
+        }
+        return true;
+    }
+
     public static function add($expression, $function, $method = ['get'], $needActiveSession = false)
     {
         if (!is_array($method)) {
