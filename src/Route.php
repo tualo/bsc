@@ -17,7 +17,7 @@ class Route
             TualoApplication::body('Path not found');
             TualoApplication::contenttype('text/plain');
             http_response_code(404);
-            TualoApplication::logger('CMS')->error($logMe);
+            TualoApplication::logger('BSC')->error($logMe);
             return false;
         }
         return true;
