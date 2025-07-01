@@ -66,13 +66,15 @@ class Route
                     // take care, run for all entries
                     // every method is one extra entry
                     $route = $r;
+
+                    if ($route != null) {
+                        $route['expression'] = $alias;
+                        TualoApplication::logger('BSC')->debug("alias $alias for $original added, method: " . $route['method']);
+                        array_push(self::$routes, $route);
+                    } else {
+                        TualoApplication::logger('BSC')->error("target route $original not found for $alias");
+                    }
                 }
-            }
-            if ($route != null) {
-                $route['expression'] = $alias;
-                array_push(self::$routes, $route);
-            } else {
-                TualoApplication::logger('BSC')->error("target route $original not found for $alias");
             }
         }
 
@@ -168,6 +170,7 @@ class Route
 
             if (preg_match('#' . $route['expression'] . '#', $path, $matches) && (!self::$finished)) {
 
+                TualoApplication::logger('BSC')->debug('USING Route: ' .   $route['expression']);
 
                 $path_match_found = true;
                 // Check method match
