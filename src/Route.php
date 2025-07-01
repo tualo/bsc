@@ -63,8 +63,9 @@ class Route
             $route = null;
             foreach (self::$routes as $r) {
                 if ($r['expression'] == $original) {
+                    // take care, run for all entries
+                    // every method is one extra entry
                     $route = $r;
-                    break;
                 }
             }
             if ($route != null) {

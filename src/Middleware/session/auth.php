@@ -8,14 +8,20 @@ TualoApplication::use('TualoApplicationSession_Auth', function () {
         $session = TualoApplication::get('session');
 
         if ($session->getHeader('Authorization') !== false) {
+
+            TualoApplication::logger('BSC')->debug('Authorization Header found: ' . $session->getHeader('Authorization'));
             $authToken = $session->getHeader('Authorization');
+
             if (strpos($authToken, 'Bearer ') !== false) {
                 $authToken = str_replace('Bearer ', '', $authToken);
-                if (($key = TualoApplication::configuration('oauth', 'key')) !== false) {
-                    $data = base64_decode($authToken);
-                    $authToken = \Tualo\Office\TualoPGP\TualoApplicationPGP::decrypt(file_get_contents($key), $data);
-                }
             }
+            TualoApplication::logger('BSC')->debug('Authorization using: ' . $authToken);
+
+            if (($key = TualoApplication::configuration('oauth', 'key')) !== false) {
+                $data = base64_decode($authToken);
+                $authToken = \Tualo\Office\TualoPGP\TualoApplicationPGP::decrypt(file_get_contents($key), $data);
+            }
+
             $session->loginByToken($authToken);
             header("Access-Control-Allow-Origin: *");
             session_commit();
