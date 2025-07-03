@@ -1,28 +1,29 @@
 {
-    "name": "tualo/bsc",
-    "description": "Tualo Office Application",
-    "type": "library",
-    "require": {
-        "phpseclib/phpseclib": "~3.0.41",
-        "ramsey/uuid": "~4.7.6",
-        "vanilla/garden-cli": "~v4.0",
-        "monolog/monolog": "~3.7.0",
-        "tualo/server": "*",
-        "tualo/pug": "*"
+  "name": "tualo/bsc",
+  "description": "Tualo Office Application",
+  "type": "library",
+  "require": {
+    "phpseclib/phpseclib": "~3.0.41",
+    "ramsey/uuid": "~4.7.6",
+    "vanilla/garden-cli": "~v4.0",
+    "monolog/monolog": "~3.7.0",
+    "tualo/server": "*",
+    "tualo/pug": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Tualo\\Office\\Basic\\": "src/"
     },
-    "autoload": {
-        "psr-4": {
-            "Tualo\\Office\\Basic\\": "src/"
-        },
-        "files": [
-            "src/functions.php"
-        ]
-    },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Thomas Hoffmann",
-            "email": "thomas.hoffmann@tualo.de"
-        }
+    "files": [
+      "src/functions.php"
     ]
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Thomas Hoffmann",
+      "email": "thomas.hoffmann@tualo.de"
+    }
+  ],
+  "version": "1.0.1"
 }
