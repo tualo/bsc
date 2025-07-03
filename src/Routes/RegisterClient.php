@@ -16,7 +16,7 @@ class RegisterClient implements IRoute
 
             //$tablename = $matches['tablename'];
             $session = App::get('session');
-            App::logger('BSC')->error("^__^ RegisterClient called with params: " . json_encode($_REQUEST));
+            App::logger('BSC')->debug("^__^ RegisterClient called with params: " . json_encode($_REQUEST));
             $db = $session->getDB();
             try {
                 if (($key = App::configuration('oauth', 'key')) !== false) {
