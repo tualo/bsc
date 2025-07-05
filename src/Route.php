@@ -89,7 +89,7 @@ class Route
         $method = $_SERVER['REQUEST_METHOD'];
         if ($method == 'OPTIONS') {
             header("HTTP/1.0 200 OK");
-            header('Access-Control-Allow-Origin: *');
+            header('Access-Control-Allow-Origin: ' . TualoApplication::configuration('options_request', 'accessControlAllowOrigin', '*'));
             header('Access-Control-Allow-Methods: ' . strtoupper(implode(', ', self::getAllowedMethods($path))));
             header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
             header('Access-Control-Max-Age: 86400');
