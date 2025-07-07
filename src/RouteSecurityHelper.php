@@ -110,7 +110,7 @@ class RouteSecurityHelper
         if (isset($contentTypes[$extension])) {
             TualoApplication::contenttype($contentTypes[$extension]);
         }
-
+        http_response_code(200);
         // Datei ausliefern
         TualoApplication::etagFile($fullPath);
         return true;

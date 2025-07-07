@@ -635,7 +635,7 @@ class TualoApplication
             header("HTTP/1.1 304 Not Modified");
             exit;
         }
-
+        http_response_code(200);
         return TualoApplication::body(file_get_contents($file));
     }
 
