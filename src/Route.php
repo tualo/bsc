@@ -2,6 +2,8 @@
 
 namespace Tualo\Office\Basic;
 
+use Tualo\Office\Basic\RouteSantizer;
+
 class Route
 {
 
@@ -30,18 +32,25 @@ class Route
         return true;
     }
 
-    public static function add($expression, $function, $method = ['get'], $needActiveSession = false)
-    {
+    public static function add(
+        string $expression,
+        callable $function,
+        array $method = ['get'],
+        callable|bool $needActiveSession = false,
+        array $expected_inputs = []
+    ) {
         if (!is_array($method)) {
             $method = array($method);
         }
+
         foreach ($method as $fn) {
             array_push(self::$routes, array(
                 'expression'        => $expression,
                 'function'          => $function,
                 'method'            => $fn,
                 'needActiveSession' => $needActiveSession,
-                'cls' => $GLOBALS['current_cls']
+                'cls' => $GLOBALS['current_cls'],
+                'expected_inputs'   => $expected_inputs
             ));
         }
     }
@@ -157,6 +166,8 @@ class Route
             if (($session_is_active === false) && ($route['needActiveSession'] === true)) {
                 continue;
             }
+
+
             // If the method matches check the path
             // Add basepath to matching string
             if (self::$basepath != '' && self::$basepath != '/') {
@@ -212,9 +223,54 @@ class Route
                     }
 
                     if ($session_condition_allowed === true) {
-                        $return = $route['function']($matches);
-                        if ($return === true) {
-                            break;
+                        $input = [];
+                        $errors = [];
+                        $sanitized = [];
+
+
+                        if ($route['method'] == 'get') $input = $_GET;
+                        if ($route['method'] == 'post') $input = $_POST;
+                        if ($route['method'] == 'put') {
+                            $input = json_decode(file_get_contents("php://input"), true);
+                            if (!is_array($input)) {
+                                $input = [];
+                            }
+                        }
+                        if (is_array($route['expected_inputs']) && !empty($route['expected_inputs']['fields'])) {
+
+                            $errorOnInvalid = true;
+                            $errorOnUnexpected = true;
+                            if (isset($route['expected_inputs']['errorOnInvalid'])) {
+                                $errorOnInvalid = $route['expected_inputs']['errorOnInvalid'];
+                            }
+                            if (isset($route['expected_inputs']['errorOnUnexpected'])) {
+                                $errorOnUnexpected = $route['expected_inputs']['errorOnUnexpected'];
+                            }
+                            if (TualoApplication::configuration('sanitizer', 'disabled', false)) {
+                                $errors = RouteSantizer::sanitize($input, $route['expected_inputs']['fields'], $sanitized, false,  false);
+                                if (!empty($errors)) {
+                                    TualoApplication::logger('BSC')->error("Route error: Sanitizer is disabled, but errors found for route: " . $route['expression']);
+                                    foreach ($errors as $key => $error) {
+                                        TualoApplication::logger('BSC')->error("Route error: $key - $error");
+                                        echo "Route error: $key - $error\n";
+                                    }
+                                }
+                            } else {
+                                $errors = RouteSantizer::sanitize($input, $route['expected_inputs']['fields'], $sanitized, $errorOnInvalid,  $errorOnUnexpected);
+                            }
+                        }
+                        if (!empty($errors)) {
+                            foreach ($errors as $key => $error) {
+                                TualoApplication::logger('BSC')->error("Route error: $key - $error");
+                                echo "Route error: $key - $error\n";
+                            }
+                            exit();
+                        } else {
+
+                            $return = $route['function']($matches);
+                            if ($return === true) {
+                                break;
+                            }
                         }
                     }
 
