@@ -70,7 +70,13 @@ class Index implements IRoute
                 $params['shortcut_iconurl'] =  TualoApplication::configuration(
                     'tualo-backend',
                     'shortcut_iconurl',
-                    'favicon-32x32.png'
+                    './bscimg/favicon-32x32.png'
+                );
+
+                $params['shortcut_iconurl_128'] =  TualoApplication::configuration(
+                    'tualo-backend',
+                    'shortcut_iconurl',
+                    './bscimg/favicon-128x128.png'
                 );
 
                 $params['checksum'] = Version::versionMD5();

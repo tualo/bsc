@@ -8,7 +8,7 @@ html(lang='de')
       meta(name="checksum", content=checksum)
       title=title
       link(rel="icon" type="image/png" sizes="32x32" href=shortcut_iconurl)
-      // link(href=shortcut_iconurl, rel="SHORTCUT ICON")
+      link(rel="icon" type="image/png" sizes="128x128" href=shortcut_iconurl_128)
       each val, index in stylesheets
         link(rel="stylesheet",type="text/css",href=val.filename,id=val.key)
       each val, index in javascripts

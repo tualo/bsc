@@ -42,6 +42,7 @@ require_once "SetConfigurationVariable.php";
 require_once "Routes/RegisterClient.php";
 require_once "Routes/Logout.php";
 require_once "Routes/PublicRoute.php";
+require_once "Routes/Img.php";
 
 require_once "Checks/Tables.php";
 require_once "Checks/HTAccess.php";
