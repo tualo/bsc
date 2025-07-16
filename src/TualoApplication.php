@@ -437,10 +437,10 @@ class TualoApplication
      */
     public static function get($key, $default = '')
     {
-        if (isset(self::$vars['inside_pug']) && (self::$vars['inside_pug'] == true) && ($key != 'session')) {
+        /*if (isset(self::$vars['inside_pug']) && (self::$vars['inside_pug'] == true) && ($key != 'session')) {
             // blocking variables in pug
             return [];
-        }
+        }*/
         if (isset(self::$vars[$key])) {
             return self::$vars[$key];
         } else {
