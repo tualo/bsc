@@ -636,7 +636,8 @@ class TualoApplication
             exit;
         }
         http_response_code(200);
-        return TualoApplication::body(file_get_contents($file));
+
+        return self::body(file_get_contents($file));
     }
 
 
@@ -836,9 +837,12 @@ class TualoApplication
                         ini_set('memory_limit', '12G');
                         $data =   json_encode(self::$result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
                     }
-
                     if ($is_web) header('Content-Type: ' . self::contenttype());
-                    echo $data;
+                    if (self::$resultbody == '') {
+                        echo $data;
+                    } else {
+                        echo self::$resultbody;
+                    }
                 } else {
                     if ($is_web) header('Content-Type: ' . self::contenttype());
                     echo  self::$resultbody;
