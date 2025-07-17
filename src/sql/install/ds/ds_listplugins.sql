@@ -8,3 +8,5 @@ CREATE TABLE IF NOT EXISTS `ds_listplugins` (
   KEY `fk_ds_listplugins_ds` (`table_name`),
   CONSTRAINT `fk_ds_listplugins_ds` FOREIGN KEY (`table_name`) REFERENCES `ds` (`table_name`) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+alter table `ds_listplugins` add if not exists `placement`  varchar(50) DEFAULT 'view';
