@@ -2,6 +2,7 @@
 
 namespace Tualo\Office\Basic;
 
+use FontLib\Table\Type\head;
 use Tualo\Office\Basic\TualoApplication;
 use Tualo\Office\Basic\Route as R;
 use Tualo\Office\Basic\IRoute;
@@ -108,7 +109,6 @@ class RouteSecurityHelper
 
         // Content-Type setzen
         if (isset($contentTypes[$extension])) {
-
             TualoApplication::contenttype($contentTypes[$extension]);
         }
         http_response_code(200);

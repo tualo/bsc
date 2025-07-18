@@ -398,7 +398,7 @@ class Session
           $this->db->execute_with_hash('set @sessionuserfullname = {fullname}', $_SESSION['tualoapplication']);
         }
       } else {
-        TualoApplication::logger('TualoApplication')->info('getDB existing', [__FILE__]);
+        // TualoApplication::logger('TualoApplication')->debug('getDB existing', [__FILE__]);
         $clientdb = self::$client_db_instance;
       }
     } catch (\Exception $e) {
