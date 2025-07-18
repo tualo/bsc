@@ -25,7 +25,7 @@ class RegisterClient implements IRoute
 
                 if (!isset($_REQUEST['path'])) throw new Exception('path not set');
                 $token = $session->registerOAuth(
-                    $params = ['cmp' => 'cmp_ds'],
+                    // $params = ['cmp' => 'cmp_ds'],
                     $force = true,
                     $anyclient = false,
                     $path = $_REQUEST['path'],

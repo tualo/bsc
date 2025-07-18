@@ -354,7 +354,7 @@ class Session
         &&  (is_null(self::$client_db_instance))
       ) {
         TualoApplication::timing("session new by row");
-        TualoApplication::logger('TualoApplication')->info('getDB new', [__FILE__]);
+        // TualoApplication::logger('TualoApplication')->info('getDB new', [__FILE__]);
         self::$client_db_instance = self::newDBByRow($_SESSION['db']);
 
         if (is_object(self::$client_db_instance)) {
