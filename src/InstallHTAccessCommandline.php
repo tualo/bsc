@@ -34,6 +34,14 @@ class InstallHTAccessCommandline implements ICommandline
 
         $paths = ['configuration', 'vendor', 'ext-build', 'ext-cache', 'cache', 'temp'];
         foreach ($paths as $path) {
+
+            if (!file_exists(App::get('basePath') . '/' . $path)) {
+                mkdir(App::get('basePath') . '/' . $path, 0777, true);
+                PostCheck::formatPrintLn(['green'], "\t " . $path . " created");
+            } else {
+                PostCheck::formatPrintLn(['green'], "\t " . $path . " already exists");
+            }
+
             if (!file_exists(App::get('basePath') . '/' . $path . '/.htaccess')) {
                 file_put_contents(App::get('basePath') . '/' . $path . '/.htaccess', implode("\n", [
                     'Order Allow,Deny',
