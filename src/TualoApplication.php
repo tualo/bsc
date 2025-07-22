@@ -313,19 +313,6 @@ class TualoApplication
      */
     public static function use($key, $middlewarefunction, $position = 99999, $options = [], $isMain = false)
     {
-        $session_is_active = (
-            isset($_SESSION)  &&
-            isset($_SESSION['tualoapplication'])  &&
-            isset($_SESSION['tualoapplication']['loggedIn'])  &&  ($_SESSION['tualoapplication']['loggedIn'] === true));
-
-        if (!isset($options['needActiveSession'])) {
-            $options['needActiveSession'] = false;
-        }
-
-
-        if ($options['needActiveSession'] && !$session_is_active) {
-            return self::$middlewares;
-        }
 
 
         array_push(
@@ -711,6 +698,25 @@ class TualoApplication
             $path = '/';
         }
         foreach (self::$middlewares as $middleware) {
+
+
+            $session_is_active = (
+                isset($_SESSION)  &&
+                isset($_SESSION['tualoapplication'])  &&
+                isset($_SESSION['tualoapplication']['loggedIn'])  &&  ($_SESSION['tualoapplication']['loggedIn'] === true));
+
+
+            if (!isset($options['needActiveSession'])) {
+                $options['needActiveSession'] = false;
+            }
+
+
+            if ($options['needActiveSession'] && !$session_is_active) {
+                return self::$middlewares;
+            }
+
+
+
             if (self::$runmiddlewares === true) self::callMiddlewareIntern($middleware, $path);
             self::timing($middleware['key']);
         }
