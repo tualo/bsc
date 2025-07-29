@@ -28,6 +28,7 @@ require_once "Middleware/UserDevice.php";
 require_once "Middleware/PHPSettings.php";
 
 require_once "PostCheckCommandline.php";
+require_once "SystemCheckCommandline.php";
 require_once "PreCheckCommandline.php";
 require_once "MaintainceCommandline.php";
 require_once "CreateSystemCommandline.php";

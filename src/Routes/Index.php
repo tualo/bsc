@@ -27,6 +27,7 @@ class Index implements IRoute
         Route::add('/versionsum', function () {
             TualoApplication::contenttype('application/json');
             TualoApplication::result('f', Version::versionMD5());
+            TualoApplication::result('success', true);
         }, ['get'], false);
 
         Route::add('/', function () {

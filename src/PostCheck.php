@@ -4,7 +4,7 @@ namespace Tualo\Office\Basic;
 
 use Tualo\Office\Basic\TualoApplication as App;
 
-class PostCheck implements IPostCheck
+class PostCheck extends FormatedCommandLineOutput implements IPostCheck
 {
 
     public static function testSessionDB(array $config) {}
@@ -121,6 +121,8 @@ class PostCheck implements IPostCheck
         }
     }
 
+    /*
+
     public static function formatPrint(array $format = [], string $text = '')
     {
         $codes = [
@@ -154,6 +156,8 @@ class PostCheck implements IPostCheck
     {
         echo self::formatPrint($format, $text) . PHP_EOL;
     }
+
+    */
 
     public static function tableCheck(string $displayName, array $tables, string $missingHint = '', string $differentHint = '')
     {
