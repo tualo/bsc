@@ -28,8 +28,8 @@ class SystemCheck extends FormatedCommandLineOutput implements ISystemCheck
 
     public static function test(array $config): int
     {
-        self::formatPrintLn(['blue'], 'SystemCheck:');
-        self::formatPrintLn(['blue'], '  - checking database connection');
+        // self::formatPrintLn(['blue'], 'SystemCheck:');
+        // self::formatPrintLn(['green'], '  - checking database connection');
         return 0;
     }
 }

@@ -104,7 +104,7 @@ class SystemCheckCommandline implements ICommandline
     public static function run(Args $args)
     {
         self::loopClients((array)App::get('configuration'), $args->getOpt('client'));
-        Version::versionMD5(true);
+        // Version::versionMD5(true);
         if (!file_exists(App::get('basePath') . '/cache')) {
             mkdir(App::get('basePath') . '/cache');
         }
