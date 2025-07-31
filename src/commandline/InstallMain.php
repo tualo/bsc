@@ -17,7 +17,7 @@ class InstallMain extends CommandLineInstallSessionSQL  implements ICommandline
         'install/doublequote' => 'setup doublequote ',
         'install/session_funcs' => 'setup session_funcs ',
         'install/session_views' => 'setup session_views ',
-        'install/view_session_oauth' => 'setup view_session_oauth ',
+        //'install/view_session_oauth' => 'setup view_session_oauth ',
 
     ];
 }
