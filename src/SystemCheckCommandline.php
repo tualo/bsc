@@ -75,6 +75,7 @@ class SystemCheckCommandline implements ICommandline
                                     }
                                 }
                             }
+                            App::get('clientDB')->close();
                         } catch (\Exception $e) {
                             SystemCheck::formatPrintLn(['red'], 'error on ' . $db['db_name'] . ':  ');
                             SystemCheck::formatPrintLn(['red'], $e->getMessage());
@@ -97,6 +98,7 @@ class SystemCheckCommandline implements ICommandline
                     }
                 }
             }
+            App::get('clientDB')->close();
         } catch (\Exception $e) {
         }
     }

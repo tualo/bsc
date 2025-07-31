@@ -43,6 +43,7 @@ class InstallMenuSQLCommandline implements ICommandline
                 PostCheck::formatPrint(['blue'], $msg . '(' . $db['db_name'] . '):  ');
                 $callback($file);
                 PostCheck::formatPrintLn(['green'], "\t" . ' done');
+                App::get('clientDB')->close();
             }
         }
     }

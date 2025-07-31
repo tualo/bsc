@@ -67,6 +67,7 @@ class Session
   }
 
 
+
   public function switchClient($client)
   {
     $hash = [
@@ -343,7 +344,9 @@ class Session
 
   public function getDB()
   {
-    if ($_SESSION['tualoapplication']['loggedIn'] === false) return null;
+    if ($_SESSION['tualoapplication']['loggedIn'] === false) {;
+      return TualoApplication::get('clientDB', null);
+    }
 
 
     TualoApplication::timing("session getDB");

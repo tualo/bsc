@@ -47,6 +47,7 @@ class PostCheck extends FormatedCommandLineOutput implements IPostCheck
                                     $cls::test($config);
                                 }
                             }
+                            App::get('clientDB')->close();
                         } catch (\Exception $e) {
                             self::formatPrintLn(['red'], 'error on ' . $db['db_name'] . ':  ');
                             self::formatPrintLn(['red'], $e->getMessage());
@@ -64,6 +65,7 @@ class PostCheck extends FormatedCommandLineOutput implements IPostCheck
                     $cls::testSessionDB($config);
                 }
             }
+            App::get('clientDB')->close();
         } catch (\Exception $e) {
 
             if (!file_exists(App::get('basePath') . '/tm')) {

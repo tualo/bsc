@@ -44,6 +44,7 @@ class PreCheck implements IPreCheck
                                 $cls::test($config);
                             }
                         }
+                        App::get('clientDB')->close();
                     }
                 }
             }
@@ -56,6 +57,7 @@ class PreCheck implements IPreCheck
                     $cls::testSessionDB($config);
                 }
             }
+            App::get('clientDB')->close();
         } catch (\Exception $e) {
 
             self::formatPrintLn(['red'], 'error on ' . $db['db_name'] . ':  ' . $e->getMessage());
