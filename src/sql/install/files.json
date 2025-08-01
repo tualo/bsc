@@ -1,5 +1,4 @@
 [
-    
     {
         "file": "cron_log_dateien.sql",
         "text": "setup cron_log_dateien"
@@ -372,12 +371,10 @@
         "file": "ds/test_ds_cmd.sql",
         "text": "setup test_ds_cmd.sql"
     },
-
     {
         "file": "blg_config.sql",
         "text": "setup blg_config"
     },
-
     {
         "file": "ds/func.fn_json_operator.sql",
         "text": "setup fn_json_operator"
@@ -493,19 +490,13 @@
     {
         "file": "ds/proc.addFieldIfNotExists.sql",
         "text": "setup addFieldIfNotExists"
-    }
-    ,
+    },
     {
         "file": "ds/view_session_groups.ds",
         "text": "setup view_session_groups.ds"
     },
-
     {
         "file": "defered_events",
         "text": "setup defered_events"
-        
     }
-    
-    
 ]
-
