@@ -1,5 +1,5 @@
 DELIMITER //
-CREATE FUNCTION IF NOT EXISTS `convertColumnType2DataType`(in_type varchar(128)) RETURNS varchar(64) CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE OR REPLACE FUNCTION  `convertColumnType2DataType`(in_type varchar(255)) RETURNS varchar(255)
     DETERMINISTIC
     COMMENT 'fix view column type'
 BEGIN 
@@ -67,6 +67,10 @@ BEGIN
         ELSE
             RETURN 'int';
         END IF;
+    END IF;
+
+    IF (INSTR(in_type,'enum')=1) THEN
+        RETURN 'enum';
     END IF;
 
     RETURN in_type;
