@@ -203,10 +203,6 @@ class Database_mysql extends Database_basic
 
     public function replace_hash($sql, $hash)
     {
-        //if ($hash instanceof DSModel) $hash = $hash->toArray();
-
-        //error_reporting(E_ALL);
-        ini_set("display_errors", "on");
 
         $matches = array();
         $i = preg_match_all('/\{(?P<name>(\w+)(.\w+)*)\}/', $sql, $matches);
