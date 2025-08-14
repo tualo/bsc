@@ -143,10 +143,13 @@ class TualoApplication
                 (isset($cnf['logger-file']['level']))
             ) {
 
-                $logger->pushHandler(new StreamHandler(
-                    $cnf['logger-file']['filename'],
-                    \Monolog\Level::fromName($cnf['logger-file']['level']) ??  \Monolog\Level::Debug
-                ));
+                // is writeable?
+                if (is_writable($cnf['logger-file']['filename'])) {
+                    $logger->pushHandler(new StreamHandler(
+                        $cnf['logger-file']['filename'],
+                        \Monolog\Level::fromName($cnf['logger-file']['level']) ??  \Monolog\Level::Debug
+                    ));
+                }
             }
 
             if (
