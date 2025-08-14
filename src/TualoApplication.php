@@ -126,6 +126,7 @@ class TualoApplication
             $cnf = self::get('configuration');
 
             /**** ALT */
+            /*
             if (isset($cnf['__LOGGER_FILE__'])) {
                 $level = Logger::toMonologLevel('WARNING');
                 if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__'] == 'WARNING') $level = \Monolog\Level::Warning;
@@ -135,6 +136,7 @@ class TualoApplication
                 if (isset($cnf['__LOGGER_LEVEL__']) && $cnf['__LOGGER_LEVEL__'] == 'DEBUG') $level = \Monolog\Level::Debug;
                 $logger->pushHandler(new StreamHandler($cnf['__LOGGER_FILE__'], $level));
             }
+            */
 
             /** neu */
             if (
