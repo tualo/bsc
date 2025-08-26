@@ -91,9 +91,8 @@ END //
 
 -- SOURCE FILE: ./src//010-FILL_DS_COLUMN.sql 
 DELIMITER //
-
-
-CREATE OR REPLACE PROCEDURE `FILL_DS_COLUMN`( in use_table_name varchar(128) )
+    
+CREATE OR REPLACE PROCEDURE `fill_ds_column`( in use_table_name varchar(128) )
     MODIFIES SQL DATA
 BEGIN
 
@@ -135,7 +134,7 @@ cte_ds
 
 join ds_column
         on cte_ds.read_table = ds_column.table_name 
---         and (cte_ds.table_name,ds_column.column_name) not in (select table_name,column_name from ds_column)
+
 and (use_table_name=''  or cte_ds.table_name = use_table_name)
  ) DO
 
@@ -287,7 +286,6 @@ FOR record IN (
     update 
         `table_name`=values(`table_name`),
         `column_name`=values(`column_name`),
-        `default_value`=values(`default_value`),
         `default_max_value`=values(`default_max_value`),
         `default_min_value`=values(`default_min_value`),
         `update_value`=values(`update_value`),
@@ -313,7 +311,7 @@ FOR record IN (
 
 END FOR;
 
--- Fehler beseitigen
+
 update ds_column_list_label set listfiltertype='' where listfiltertype="''";
 
 END //

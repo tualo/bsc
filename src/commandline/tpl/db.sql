@@ -3991,9 +3991,8 @@ END //
 
 
 
-DROP FUNCTION IF EXISTS `convertColumnType2DataType` //
-CREATE FUNCTION `convertColumnType2DataType`(in_type varchar(128))
-RETURNS varchar(64)
+CREATE OR REPLACE FUNCTION `convertColumnType2DataType`(in_type varchar(255))
+RETURNS varchar(255)
 DETERMINISTIC
 COMMENT 'fix view column type'
 BEGIN 
@@ -4006,14 +4005,14 @@ BEGIN
     IF (INSTR(in_type,'datetime')=1) THEN
         RETURN 'datetime';
     END IF;
-    IF (INSTR(in_type,'time')=1) THEN
-        RETURN 'time';
-    END IF;
     IF (INSTR(in_type,'date')=1) THEN
         RETURN 'date';
     END IF;
     IF (INSTR(in_type,'timestamp')=1) THEN
         RETURN 'timestamp';
+    END IF;
+    IF (INSTR(in_type,'time')=1) THEN
+        RETURN 'time';
     END IF;
 
     
@@ -4048,6 +4047,12 @@ BEGIN
     IF (INSTR(in_type,'text')=1) THEN
         RETURN 'text';
     END IF;
+
+
+    IF (INSTR(in_type,'enum')=1) THEN
+        RETURN 'varchar(255)';
+    END IF;
+    
     
     IF (INSTR(in_type,'longtext')=1) THEN
         RETURN 'longtext';
