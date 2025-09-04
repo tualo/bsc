@@ -43,7 +43,7 @@ class Index implements IRoute
             ]);
 
             $csp = TualoApplication::configuration('tualo-backend', 'csp', ["base-uri 'none', base-uri 'self'; default-src 'self' data:; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; form-action 'self'; img-src 'self' data:; worker-src 'self' 'unsafe-inline' * blob:; frame-src 'self';"]);
-            header("Content-Security-Policy: " . implode(' ', $csp));
+            header("Content-Security-Policy: " . implode(';', $csp));
 
 
 
