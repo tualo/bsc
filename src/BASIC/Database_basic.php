@@ -6,7 +6,7 @@ class  Database_basic
 {
   public  $version;
   public  $state = false;
-
+  public $last_sql = '';
   public  $dbname = '';
   public  $dbuser = '';
   public  $dbhost = '';
@@ -52,6 +52,11 @@ class  Database_basic
   {
     return 0;
   }
+  public function getLastSQL()
+  {
+    return $this->last_sql;
+  }
+
   function tinyIntAsBoolean($val)
   {
     $this->_tinyIntAsBoolean = $val;

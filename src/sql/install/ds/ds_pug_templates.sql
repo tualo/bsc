@@ -9,6 +9,9 @@ CREATE TABLE IF NOT EXISTS `ds_pug_templates` (
 )//
 
 
+
+alter table ds_pug_templates add constraint `chk_ds_pug_templates_allowed_chars`  check( (id rlike '[^a-z0-9_\.\-]')=0 ) //
+
 CREATE OR REPLACE TRIGGER `trigger_ds_pug_templates_bi_name`
     BEFORE INSERT
     ON `ds_pug_templates` FOR EACH ROW
