@@ -78,7 +78,7 @@ class Route
 
                     if ($route != null) {
                         $route['expression'] = $alias;
-                        TualoApplication::logger('BSC')->debug("alias $alias for $original added, method: " . $route['method']);
+                        // TualoApplication::logger('BSC')->debug("alias $alias for $original added, method: " . $route['method']);
                         array_push(self::$routes, $route);
                     } else {
                         TualoApplication::logger('BSC')->error("target route $original not found for $alias");
@@ -96,7 +96,11 @@ class Route
         }
         $path = preg_replace('/\/\//', '/', $path);
         $method = $_SERVER['REQUEST_METHOD'];
+
+        TualoApplication::logger('BSC')->error("answer OPTIONS: " . strtoupper(implode(', ', self::getAllowedMethods($path))));
+        /*
         if ($method == 'OPTIONS') {
+            TualoApplication::logger('BSC')->error("answer OPTIONS");
             header("HTTP/1.0 200 OK");
             header('Access-Control-Allow-Origin: ' . TualoApplication::configuration('options_request', 'accessControlAllowOrigin', '*'));
             header('Access-Control-Allow-Methods: ' . strtoupper(implode(', ', self::getAllowedMethods($path))));
@@ -104,6 +108,7 @@ class Route
             header('Access-Control-Max-Age: 86400');
             exit();
         }
+        */
         self::runpath($path, $method);
     }
 
@@ -181,7 +186,7 @@ class Route
 
             if (preg_match('#' . $route['expression'] . '#', $path, $matches) && (!self::$finished)) {
 
-                TualoApplication::logger('BSC')->debug('USING Route: ' .   $route['expression']);
+                // TualoApplication::logger('BSC')->debug('USING Route: ' .   $route['expression']);
 
                 $path_match_found = true;
                 // Check method match
@@ -202,6 +207,8 @@ class Route
 
                     if (isset($_SESSION['session_condition']) && isset($_SESSION['session_condition']['path'])) {
 
+
+                        TualoApplication::logger('DAV')->debug("DAV server:", print_r($_SERVER, true));
                         if (TualoApplication::configuration('logger-options', 'ROUTERUN', '0') == '1')
                             TualoApplication::logger('ROUTERUN')->debug("use path " . $_SESSION['session_condition']['path'] . " for " . $path);
 
