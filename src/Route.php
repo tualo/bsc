@@ -97,8 +97,8 @@ class Route
         $path = preg_replace('/\/\//', '/', $path);
         $method = $_SERVER['REQUEST_METHOD'];
 
-        TualoApplication::logger('BSC')->error("answer OPTIONS: " . strtoupper(implode(', ', self::getAllowedMethods($path))));
-        /*
+        // TualoApplication::logger('BSC')->error("answer OPTIONS: " . strtoupper(implode(', ', self::getAllowedMethods($path))));
+
         if ($method == 'OPTIONS') {
             TualoApplication::logger('BSC')->error("answer OPTIONS");
             header("HTTP/1.0 200 OK");
@@ -108,7 +108,7 @@ class Route
             header('Access-Control-Max-Age: 86400');
             exit();
         }
-        */
+
         self::runpath($path, $method);
     }
 
