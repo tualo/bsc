@@ -208,7 +208,7 @@ class Route
                     if (isset($_SESSION['session_condition']) && isset($_SESSION['session_condition']['path'])) {
 
 
-                        TualoApplication::logger('DAV')->debug("DAV server:" . print_r($_SERVER, true));
+                        // TualoApplication::logger('DAV')->debug("DAV server:" . print_r($_SERVER, true));
                         if (TualoApplication::configuration('logger-options', 'ROUTERUN', '0') == '1')
                             TualoApplication::logger('ROUTERUN')->debug("use path " . $_SESSION['session_condition']['path'] . " for " . $path);
 
