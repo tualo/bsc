@@ -490,6 +490,12 @@ class TualoApplication
         return self::$result;
     }
 
+    public static function resetResult()
+    {
+        self::$result = array('msg' => '', 'success' => false, 'errors' => array(), 'warnings' => array());
+    }
+
+
     /**
      * set a value of result
      * 
