@@ -455,7 +455,7 @@ class Session
   public function oauthValidDays($token, $days)
   {
     // alter table oauth add validuntil datetime default null;
-    $this->db->direct('update oauth set validuntil=  now() + interval 100 day where id={token}', array('token' => $token, 'validuntil' => $days));
+    $this->db->direct('update oauth set validuntil=  now() + interval {validuntil} day where id={token}', array('token' => $token, 'validuntil' => $days));
   }
 
 
