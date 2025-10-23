@@ -57,7 +57,7 @@ class CommandLineInstallSQL
             ->opt('debug', 'show command index', false, 'boolean');
     }
 
-    public static function setupClients(string $msg, string $clientName, string $file, callable $callback)
+    public static function setupClients(string $msg, string $clientName, string $file, callable $callback, string $operation_placeholder)
     {
         $_SERVER['REQUEST_URI'] = '';
         $_SERVER['REQUEST_METHOD'] = 'none';
@@ -74,7 +74,7 @@ class CommandLineInstallSQL
 
                 App::set('clientDB', $session->newDBByRow($db));
                 PostCheck::formatPrint(['blue'], $msg . '(' . $db['db_name'] . '):  ');
-                $callback($file);
+                $callback($file, $operation_placeholder);
                 PostCheck::formatPrintLn(['green'], "\t" . ' done');
                 App::get('clientDB')->close();
             }
@@ -82,12 +82,12 @@ class CommandLineInstallSQL
     }
 
 
-    public static function run(Args $args)
+    public static function run(Args $args, string $operation_placeholder     = 'insert ignore into '): void
     {
         $files = static::getFiles();
 
         foreach ($files as $file => $msg) {
-            $installSQL = function (string $file) {
+            $installSQL = function (string $file, string $operation_placeholder) {
                 global $args;
                 if ($args->getOpt('debug')) {
                     PostCheck::formatPrintLn(['blue'], "\n");
@@ -107,6 +107,10 @@ class CommandLineInstallSQL
                         }
                         $statement = str_replace('SESSIONDB.', App::get('session')->db->dbname . '.', $statement);
                         App::get('clientDB')->direct('select database()'); // keep connection alive
+
+
+                        $statement = str_replace('OPERATION_PLACEHOLDER', $operation_placeholder, $statement);
+
                         App::get('clientDB')->execute($statement);
 
 
@@ -126,7 +130,7 @@ class CommandLineInstallSQL
             };
             $clientName = $args->getOpt('client');
             if (is_null($clientName)) $clientName = '';
-            self::setupClients($msg, $clientName, $file, $installSQL);
+            self::setupClients($msg, $clientName, $file, $installSQL, $operation_placeholder);
         }
     }
 }
