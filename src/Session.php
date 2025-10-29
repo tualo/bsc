@@ -431,8 +431,56 @@ class Session
     return true;
   }
 
+  public function isLoggedIn(): bool
+  {
+    return isset($_SESSION['tualoapplication']['loggedIn']) && $_SESSION['tualoapplication']['loggedIn'] === true;
+  }
 
 
+  public function logScopes(): bool
+  {
+    if (
+      isset($_SESSION['tualoapplication']) &&
+      !isset($_SESSION['tualoapplication']['logScopes'])
+    ) {
+      $_SESSION['tualoapplication']['logScopes'] = TualoApplication::configuration('basic', 'log_scope_access', false) === '1';
+    }
+    return
+      isset($_SESSION['tualoapplication']) &&
+      isset($_SESSION['tualoapplication']['logScopes'])
+      && $_SESSION['tualoapplication']['logScopes'] === true;
+  }
+
+  public function getUserScopes(): array
+  {
+    try {
+      if (!$this->isLoggedIn()) {
+        return ['basic'];
+      }
+
+      if (isset($_SESSION['tualoapplication']['scopes']) && is_array($_SESSION['tualoapplication']['scopes'])) {
+        return $_SESSION['tualoapplication']['scopes'];
+      }
+
+      $scopes = $this->getDB()->directArray(
+        'select  
+        scope from route_scopes
+      join route_scopes_permissions
+        on route_scopes.scope = route_scopes_permissions.scope
+      join view_session_groups
+        on view_session_groups.`group` = route_scopes_permissions.`groups`  
+     ',
+        [],
+        'scope'
+      );
+      $_SESSION['tualoapplication']['scopes'] = $scopes;
+
+      return $_SESSION['tualoapplication']['scopes'] ?? [];
+    } catch (\Exception $e) {
+      TualoApplication::logger('BSC')->error($e->getMessage());
+      return ['basic'];
+    }
+  }
 
   /**
    * OAuth

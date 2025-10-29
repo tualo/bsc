@@ -37,6 +37,7 @@ require_once "CreateTMShell.php";
 
 require_once "InstallViewSQLCommandline.php";
 require_once "InstallMenuSQLCommandline.php";
+require_once "InstallScopes.php";
 require_once "InstallHTAccessCommandline.php";
 require_once "SetConfigurationVariable.php";
 
@@ -49,3 +50,4 @@ require_once "Checks/Tables.php";
 require_once "Checks/HTAccess.php";
 require_once "commandline/InstallMain.php";
 require_once "SetupCommandline.php";
+require_once "ScopeSetupCommand.php";

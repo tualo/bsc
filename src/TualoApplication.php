@@ -197,6 +197,15 @@ class TualoApplication
         return self::$logger[$channel];
     }
 
+    public static function getClientIP(): string
+    {
+        $section = 'basic';
+        $keys =  json_decode(self::configuration($section, 'forward_headers', "['HTTP_X_DDOSPROXY', 'HTTP_X_FORWARDED_FOR', 'HTTP_CLIENT_IP', 'REMOTE_ADDR']"), true);
+        if (is_null($keys)) {
+            $keys = ['HTTP_X_DDOSPROXY', 'HTTP_X_FORWARDED_FOR', 'HTTP_CLIENT_IP', 'REMOTE_ADDR'];
+        }
+        return CIDR::getIP($keys);
+    }
     /**
      * Check if the current request needs an active login
      * 
@@ -250,6 +259,7 @@ class TualoApplication
     /** 
     * TualoApplication::getClientIP()
     */
+    /*
     public static function getClientIP()
     {
         if (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)) {
@@ -263,7 +273,7 @@ class TualoApplication
 
         return '';
     }
-
+*/
 
     public static function timing($key = '', $data = '')
     {

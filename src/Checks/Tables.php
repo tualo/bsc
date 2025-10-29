@@ -52,7 +52,10 @@ class Tables  extends PostCheck
                     'zeichen' => 'varchar(255)',
                     'fax' => 'varchar(255)'
                 ]
-            ]
+            ],
+            'route_scopes' => [],
+            'route_scopes_permissions' => [],
+            'bsc_route_log' => []
         ];
         self::tableCheck('bsc', $tables);
     }

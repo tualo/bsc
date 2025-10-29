@@ -5,15 +5,15 @@ namespace Tualo\Office\Basic;
 use Garden\Cli\Cli;
 use Garden\Cli\Args;
 
-class BaseSetupCommand implements ISetupCommandline
+class ScopeSetupCommand implements ISetupCommandline
 {
     public static function getCommandName(): string
     {
-        return 'base-setup';
+        return 'scopes';
     }
     public static function getCommandDescription(): string
     {
-        return 'perform a base setup';
+        return 'perform a scope setup';
     }
     public static function setup(Cli $cli)
     {
@@ -26,10 +26,6 @@ class BaseSetupCommand implements ISetupCommandline
     public static function getCommands(Args $args): array
     {
         return [
-            'install-sessionsql-bsc-main',
-            'install-sql-sessionviews',
-            'install-sql-bsc-main-ds',
-            'install-sql-bsc-menu',
             'install-sql-bsc-scopes'
 
         ];

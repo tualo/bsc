@@ -37,7 +37,8 @@ class Route
         callable $function,
         array $method = ['get'],
         callable|bool $needActiveSession = false,
-        array $expected_inputs = []
+        array $expected_inputs = [],
+        string $accessScope = 'basic'
     ) {
         if (!is_array($method)) {
             $method = array($method);
@@ -50,7 +51,8 @@ class Route
                 'method'            => $fn,
                 'needActiveSession' => $needActiveSession,
                 'cls' => $GLOBALS['current_cls'],
-                'expected_inputs'   => $expected_inputs
+                'expected_inputs'   => $expected_inputs,
+                'accessScope'  => $accessScope
             ));
         }
     }
@@ -151,6 +153,65 @@ class Route
         return self::$routes;
     }
 
+    public static function finish()
+    {
+        self::$finished = true;
+    }
+
+
+    public static function logRequestedRoute($expression, $accessScope, $method, $checkRouteAccessResult)
+    {
+
+        $session = TualoApplication::get('session');
+        if ($session->logScopes() === false) {
+            return;
+        }
+
+        $db = $session->getDB();
+        if (!is_null($db)) {
+            if (is_bool($checkRouteAccessResult)) {
+                $checkRouteAccessResult = $checkRouteAccessResult ? 1 : 0;
+            }
+            try {
+                $db->direct(
+                    'insert into bsc_route_log (
+                        expression, 
+                        access_scope,
+                        method, ip, user_agent, username, access_result,last_access) 
+                values ({expression}, {access_scope}, {method}, {ip}, {user_agent}, {username}, {access_result}, now())
+                on duplicate key update 
+                    access_result=values(access_result),
+                    ip=values(ip),
+                    user_agent=values(user_agent),
+                    last_access=now()
+                ',
+                    [
+                        'expression' => $expression,
+                        'access_scope' => $accessScope,
+                        'method' => $method,
+                        'ip' => TualoApplication::getClientIP(),
+                        'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
+                        'access_result' => $checkRouteAccessResult,
+                        'username' => $_SESSION['tualoapplication']['username'] ?? ''
+                    ]
+                );
+            } catch (\Exception $e) {
+                TualoApplication::logger('BSC')->error("Could not log route access: " . $e->getMessage());
+            }
+        }
+    }
+
+    public static function canAccessByScope(string $scope): bool
+    {
+        $session = TualoApplication::get('session');
+        if ($session->isLoggedIn()) {
+            $userScopes = $session->getUserScopes();
+            return in_array($scope, $userScopes);
+        } else {
+            return false;
+        }
+    }
+
     public static function runpath($path, $method)
     {
         $path_match_found = false;
@@ -165,6 +226,9 @@ class Route
 
 
         foreach (self::$routes as $route) {
+
+            $route['expression_check'] = $route['expression'];
+
             TualoApplication::timing("route expression (" . $route['expression'] . " - " . $route['method'] . " request " . $path . " - " . $method . ")");
 
 
@@ -274,6 +338,13 @@ class Route
                             exit();
                         } else {
 
+
+                            $checkRouteAccessResult = self::canAccessByScope($route['accessScope']);
+                            self::logRequestedRoute($route['expression_check'], $route['accessScope'], $method, $checkRouteAccessResult);
+                            if ($checkRouteAccessResult === false) {
+                                header("HTTP/1.0 405 Method Not Allowed");
+                                break;
+                            }
                             $return = $route['function']($matches);
                             if ($return === true) {
                                 break;

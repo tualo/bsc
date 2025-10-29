@@ -12,7 +12,7 @@ use Tualo\Office\Basic\Version;
 use Tualo\Office\PUG\PUG;
 
 
-class Index implements IRoute
+class Index extends \Tualo\Office\Basic\RouteWrapper
 {
 
 

@@ -13,7 +13,7 @@ use Tualo\Office\Basic\Version;
 use Tualo\Office\PUG\PUG;
 
 
-class Img implements IRoute
+class Img extends \Tualo\Office\Basic\RouteWrapper
 {
 
 
