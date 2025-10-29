@@ -6,9 +6,7 @@
     "phpseclib/phpseclib": "~3.0.41",
     "ramsey/uuid": "~4.9.0",
     "vanilla/garden-cli": "~v4.0",
-    "monolog/monolog": "~3.7.0",
-    "tualo/server": "^1.0",
-    "tualo/pug": "^1.3"
+    "monolog/monolog": "~3.7.0"
   },
   "autoload": {
     "psr-4": {
@@ -25,5 +23,5 @@
       "email": "thomas.hoffmann@tualo.de"
     }
   ],
-  "version": "1.4.6"
+  "version": "1.4.7"
 }
