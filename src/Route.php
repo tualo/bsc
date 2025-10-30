@@ -323,7 +323,7 @@ class Route
                                     TualoApplication::logger('BSC')->error("Route error: Sanitizer is disabled, but errors found for route: " . $route['expression']);
                                     foreach ($errors as $key => $error) {
                                         TualoApplication::logger('BSC')->error("Route error: $key - $error");
-                                        echo "Route error: $key - $error\n";
+                                        // echo "Route error: $key - $error\n";
                                     }
                                 }
                             } else {
@@ -333,8 +333,13 @@ class Route
                         if (!empty($errors)) {
                             foreach ($errors as $key => $error) {
                                 TualoApplication::logger('BSC')->error("Route error: $key - $error");
-                                echo "Route error: $key - $error\n";
+                                TualoApplication::contenttype('application/json');
+                                TualoApplication::result('msg', 'Input validation error');
+                                TualoApplication::result('success', false);
+
+                                // echo "Route error: $key - $error\n";
                             }
+                            TualoApplication::end();
                             exit();
                         } else {
 
