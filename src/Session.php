@@ -435,7 +435,10 @@ class Session
   {
     return isset($_SESSION['tualoapplication']['loggedIn']) && $_SESSION['tualoapplication']['loggedIn'] === true;
   }
-
+  public function isMaster(): bool
+  {
+    return isset($_SESSION['tualoapplication']) && isset($_SESSION['tualoapplication']['typ']) && ($_SESSION['tualoapplication']['typ'] == 'master');
+  }
 
   public function logScopes(): bool
   {

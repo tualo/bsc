@@ -289,6 +289,16 @@ class TualoApplication
         */
     }
 
+    public static function getSession(): Session
+    {
+        $session = self::get('session');
+        if ($session instanceof Session) {
+            return $session;
+        } else {
+            throw new \Exception('not of type Session');
+        }
+    }
+
     public static function executeDefferedRoute($route, $time = "now + 1min")
     {
         $session = self::get('session');
