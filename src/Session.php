@@ -342,10 +342,15 @@ class Session
   }
 
 
-  public function getDB()
+  public function getDB(): ?MYSQL\Database
   {
-    if ($_SESSION['tualoapplication']['loggedIn'] === false) {;
-      return TualoApplication::get('clientDB', null);
+    if ($_SESSION['tualoapplication']['loggedIn'] === false) {
+      $db = TualoApplication::get('clientDB', null);
+      if ($db instanceof MYSQL\Database) {
+        return $db;
+      } else {
+        return null;
+      }
     }
 
 
