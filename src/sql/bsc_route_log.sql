@@ -20,9 +20,9 @@ create table if not exists route_scopes (
 
 create table if not exists route_scopes_permissions (
     scope varchar(255) not null,
-    `groups` varchar(255) not null,
+    `group` varchar(255) not null,
     allowed tinyint(1) default 0,
     constraint fk_route_scopes_permissions_scope foreign key (scope) 
     references route_scopes(scope) on delete cascade on update cascade,
-    primary key (scope, `groups`)
+    primary key (scope, `group`)
 ) ;

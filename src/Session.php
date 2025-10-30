@@ -468,7 +468,7 @@ class Session
       join route_scopes_permissions
         on route_scopes.scope = route_scopes_permissions.scope
       join view_session_groups
-        on view_session_groups.`group` = route_scopes_permissions.`groups`  
+        on view_session_groups.`group` = route_scopes_permissions.`group`  
      ',
         [],
         'scope'
