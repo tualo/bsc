@@ -110,6 +110,9 @@ class Route
             header('Access-Control-Max-Age: 86400');
             exit();
         }
+        if (TualoApplication::configuration('options_request', 'accessControlAllowOrigin', false) !== false) {
+            header('Access-Control-Allow-Origin: ' . TualoApplication::configuration('options_request', 'accessControlAllowOrigin', '*'));
+        }
 
         self::runpath($path, $method);
     }

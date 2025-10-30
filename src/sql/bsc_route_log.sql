@@ -26,3 +26,21 @@ create table if not exists route_scopes_permissions (
     references route_scopes(scope) on delete cascade on update cascade,
     primary key (scope, `group`)
 ) ;
+
+
+create or replace view view_readtable_route_scopes_permissions as 
+
+select  
+    route_scopes.scope,
+    view_session_groups.`group` ,
+    ifnull( route_scopes_permissions.allowed, 0) allowed
+
+from 
+    route_scopes
+    join view_session_groups
+        on 1=1
+
+    left join route_scopes_permissions
+        on route_scopes_permissions.`group` = view_session_groups.`group`
+        and route_scopes.scope = route_scopes_permissions.scope
+;
