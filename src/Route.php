@@ -340,10 +340,14 @@ class Route
 
 
                             $checkRouteAccessResult = self::canAccessByScope($route['accessScope']);
-                            self::logRequestedRoute($route['expression_check'], $route['accessScope'], $method, $checkRouteAccessResult);
-                            if ($checkRouteAccessResult === false) {
-                                header("HTTP/1.0 405 Method Not Allowed");
-                                break;
+
+                            if ($route['accessScope'] != 'basic') {
+                                TualoApplication::logger('BSC')->debug("Route " . $route['expression'] . " needs scope " . $route['accessScope'] . " access check: " . ($checkRouteAccessResult ? 'allowed' : 'denied'));
+                                self::logRequestedRoute($route['expression_check'], $route['accessScope'], $method, $checkRouteAccessResult);
+                                if ($checkRouteAccessResult === false) {
+                                    header("HTTP/1.0 405 Method Not Allowed");
+                                    break;
+                                }
                             }
                             $return = $route['function']($matches);
                             if ($return === true) {
