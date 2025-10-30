@@ -464,7 +464,7 @@ class Session
 
       $scopes = $this->getDB()->directArray(
         'select  
-        scope from route_scopes
+        route_scopes.scope from route_scopes
       join route_scopes_permissions
         on route_scopes.scope = route_scopes_permissions.scope
       join view_session_groups
