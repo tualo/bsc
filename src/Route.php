@@ -111,7 +111,10 @@ class Route
             exit();
         }
         if (TualoApplication::configuration('options_request', 'accessControlAllowOrigin', false) !== false) {
-            header('Access-Control-Allow-Origin: ' . TualoApplication::configuration('options_request', 'accessControlAllowOrigin', '*'));
+            // check is header already sent
+            if (!headers_sent()) {
+                header('Access-Control-Allow-Origin: ' . TualoApplication::configuration('options_request', 'accessControlAllowOrigin', '*'));
+            }
         }
 
         self::runpath($path, $method);
