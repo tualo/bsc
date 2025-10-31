@@ -488,7 +488,6 @@ class Session
         and route_scopes_permissions.allowed=1
       join view_session_groups
         on view_session_groups.`group` = route_scopes_permissions.`group`  
-      where view_session_groups.login = {username}
      ',
         [
           'username' => $this->getUsername() ?: '-----------'
