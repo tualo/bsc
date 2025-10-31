@@ -440,6 +440,16 @@ class Session
   {
     return isset($_SESSION['tualoapplication']['loggedIn']) && $_SESSION['tualoapplication']['loggedIn'] === true;
   }
+
+  public function getUsername(): string|false
+  {
+    if ($this->isLoggedIn()) {
+      return $_SESSION['tualoapplication']['username'];
+    } else {
+      return false;
+    }
+  }
+
   public function isMaster(): bool
   {
     return isset($_SESSION['tualoapplication']) && isset($_SESSION['tualoapplication']['typ']) && ($_SESSION['tualoapplication']['typ'] == 'master');
