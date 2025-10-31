@@ -485,10 +485,14 @@ class Session
         route_scopes.scope from route_scopes
       join route_scopes_permissions
         on route_scopes.scope = route_scopes_permissions.scope
+        and route_scopes_permissions.allowed=1
       join view_session_groups
         on view_session_groups.`group` = route_scopes_permissions.`group`  
+      where view_session_groups.login = {username}
      ',
-        [],
+        [
+          'username' => $this->getUsername() ?: '-----------'
+        ],
         'scope'
       );
       $_SESSION['tualoapplication']['scopes'] = $scopes;
