@@ -10,6 +10,10 @@ use Tualo\Office\Basic\IRoute;
 
 class RegisterClient extends \Tualo\Office\Basic\RouteWrapper
 {
+    public static function scope(): string
+    {
+        return 'bsc.registerclient';
+    }
     public static function register()
     {
         Route::add('/registerclient', function ($matches) {
@@ -47,6 +51,6 @@ class RegisterClient extends \Tualo\Office\Basic\RouteWrapper
                 App::result('msg', $e->getMessage());
             }
             App::contenttype('application/json');
-        }, ['get', 'post'], true);
+        }, ['get', 'post'], true, [], self::scope());
     }
 };
