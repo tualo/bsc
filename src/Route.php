@@ -390,7 +390,9 @@ class Route
                 if (!$route_method_found) {
 
                     if ($is_web) {
-                        header("HTTP/1.0 405 Method Not Allowed");
+                        if (http_response_code() !== 403) {
+                            header("HTTP/1.0 405 Method Not Allowed");
+                        }
                     }
 
                     TualoApplication::logger('TualoApplication')->warning("*$path* *$method* is not allowed ", [TualoApplication::get('clientIP')]);
@@ -404,7 +406,9 @@ class Route
                     }
                 } else {
                     if ($is_web) {
-                        header("HTTP/1.0 404 Not Found");
+                        if (http_response_code() !== 403) {
+                            header("HTTP/1.0 405 Method Not Allowed");
+                        }
                     }
                     if (self::$pathNotFound) {
                         call_user_func_array(self::$pathNotFound, array($path));
