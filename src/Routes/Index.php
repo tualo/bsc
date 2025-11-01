@@ -20,16 +20,6 @@ class Index extends \Tualo\Office\Basic\RouteWrapper
     {
 
 
-
-        // usage: to find the test.zip file recursively
-        // $result = rsearch($_SERVER['DOCUMENT_ROOT'], '/.*\/test\.zip/'));
-
-        Route::add('/versionsum', function () {
-            TualoApplication::contenttype('application/json');
-            TualoApplication::result('f', Version::versionMD5());
-            TualoApplication::result('success', true);
-        }, ['get'], false);
-
         Route::add('/', function () {
 
             TualoApplication::contenttype('text/html');

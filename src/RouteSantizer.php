@@ -10,6 +10,7 @@ class RouteSantizer
     $expected_inputs = [
         'name' => [
             'type' => 'string',
+            
             'max_length' => 50,
             'pattern' => '/^[a-zA-ZäöüÄÖÜß\s\-]+$/u'  // nur Buchstaben, Leerzeichen, Bindestriche
         ],
