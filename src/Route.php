@@ -360,7 +360,7 @@ class Route
                             );
                             if ($route['accessScope'] != 'basic') {
                                 if ($checkRouteAccessResult === false) {
-                                    header("HTTP/1.0 405 Method Not Allowed");
+                                    header("HTTP/1.0 403 Forbidden");
                                     break;
                                 }
                             }
