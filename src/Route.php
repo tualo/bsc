@@ -90,14 +90,15 @@ class Route
         }
 
         self::$basepath = $basepath;
-        $parsed_url = parse_url($_SERVER['REQUEST_URI']); //Parse Uri
+        $parsed_url = []; //Parse Uri
+        if (isset($_SERVER['REQUEST_URI'])) $parsed_url = parse_url($_SERVER['REQUEST_URI']);
         if (isset($parsed_url['path'])) {
             $path = $parsed_url['path'];
         } else {
             $path = '/';
         }
         $path = preg_replace('/\/\//', '/', $path);
-        $method = $_SERVER['REQUEST_METHOD'];
+        $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : '';
 
         // TualoApplication::logger('BSC')->error("answer OPTIONS: " . strtoupper(implode(', ', self::getAllowedMethods($path))));
 

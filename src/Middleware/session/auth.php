@@ -140,6 +140,7 @@ TualoApplication::use('TualoApplicationSession_Auth', function () {
         $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : '';
         TualoApplication::logger('BSC')->warning("Session method: " . $method);
         $parsed_url = []; //Parse Uri
+        if (isset($_SERVER['REQUEST_URI'])) $parsed_url = parse_url($_SERVER['REQUEST_URI']);
         if (isset($_SERVER['REDIRECT_URL'])) $parsed_url = parse_url($_SERVER['REDIRECT_URL']);
         if (isset($parsed_url['path'])) {
             $path = $parsed_url['path'];

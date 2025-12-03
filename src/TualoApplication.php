@@ -721,7 +721,8 @@ class TualoApplication
         }
         $cb = self::class . "::compare_position";
         usort(self::$middlewares,     $cb);
-        $parsed_url = parse_url($_SERVER['REQUEST_URI']); //Parse Uri
+        $parsed_url = []; //Parse Uri
+        if (isset($_SERVER['REQUEST_URI'])) $parsed_url = parse_url($_SERVER['REQUEST_URI']);
         if (isset($_SERVER['REDIRECT_URL'])) $parsed_url = parse_url($_SERVER['REDIRECT_URL']);
         if (isset($parsed_url['path'])) {
             $path = $parsed_url['path'];
