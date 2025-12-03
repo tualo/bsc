@@ -44,3 +44,4 @@ from
         on route_scopes_permissions.`group` = view_session_groups.`group`
         and route_scopes.scope = route_scopes_permissions.scope
 ;
+
