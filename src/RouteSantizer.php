@@ -66,6 +66,7 @@ class RouteSantizer
                     $sanitized[$key] = $value;
                     break;
 
+                case 'integer':
                 case 'int':
                     if (filter_var($value, FILTER_VALIDATE_INT) === false) {
                         $errors[$key] = 'Keine gültige Zahl';
