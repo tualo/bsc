@@ -93,5 +93,30 @@ class InstallScopes implements ICommandline
             if (is_null($clientName)) $clientName = '';
             self::setupClients($msg, $clientName, $file, $installSQL);
         }
+
+        $files = [
+            'base.scopes' => 'setup base.scopes '
+        ];
+
+        foreach ($files as $file => $msg) {
+            $installSQL = function (string $file) {
+
+                $filename = __DIR__ . '/sql/' . $file . '.sql';
+
+
+                exec('cat ' . $filename . ' | sed -E \'s#SESSIONDB#' . App::get('session')->db->dbname . '#g\' | sed -E \'s#DBNAME#' . App::get('clientDB')->dbname . '#g\' | mysql --force=true -D ' . App::get('clientDB')->dbname . ' ', $res, $err);
+
+                if ($err != 0) {
+                    PostCheck::formatPrintLn(['red'], 'failed');
+                    PostCheck::formatPrintLn(['red'], implode("\n", $res));
+                    exit();
+                } else {
+                    PostCheck::formatPrintLn(['green'], 'done');
+                }
+            };
+            $clientName = $args->getOpt('client');
+            if (is_null($clientName)) $clientName = '';
+            self::setupClients($msg, $clientName, $file, $installSQL);
+        }
     }
 }
