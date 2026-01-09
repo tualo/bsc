@@ -29,7 +29,7 @@ class ActiveSessionRouter implements IMiddleware
 
         TualoApplication::use('TualoApplicationActiveSessionRouter', function () {
             try {
-                Router::load();
+                ActiveSessionRouter::load();
             } catch (\Exception $e) {
                 TualoApplication::set('maintanceMode', 'on');
                 TualoApplication::addError($e->getMessage());
