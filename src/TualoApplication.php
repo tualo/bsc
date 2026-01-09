@@ -732,6 +732,7 @@ class TualoApplication
         foreach (self::$middlewares as $middleware) {
 
 
+
             $session_is_active = (
                 isset($_SESSION)  &&
                 isset($_SESSION['tualoapplication'])  &&
@@ -744,7 +745,10 @@ class TualoApplication
 
 
             if ($options['needActiveSession'] && !$session_is_active) {
+                self::logger("MIDDLEWARES")->debug($middleware['key'] . " run skipped - no active session");
                 return self::$middlewares;
+            } else {
+                self::logger("MIDDLEWARES")->debug($middleware['key'] . " skipped");
             }
 
 
