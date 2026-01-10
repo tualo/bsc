@@ -26,6 +26,7 @@ class Router implements IMiddleware
     {
         self::load();
 
+
         TualoApplication::use('TualoApplicationRouter', function () {
             try {
                 Route::run(TualoApplication::get('requestPath'));

@@ -21,7 +21,6 @@ TualoApplication::use('TualoApplicationSession_Auth', function () {
                 $authToken = str_replace('Bearer ', '', $authToken);
             }
 
-
             if (trim($authToken) === '' || $authToken === 'Bearer') {
                 // throw new \Exception("No Authorization Token");
                 TualoApplication::logger('BSC')->warning("No Authorization Token, but bearer found");
@@ -118,7 +117,7 @@ TualoApplication::use('TualoApplicationSession_Auth', function () {
                 TualoApplication::logger('BSC')->warning("Session: " . __FILE__ . ":" . __LINE__);
 
                 session_commit();
-                TualoApplication::logger('BSC')->warning("Session: " . print_r($_SESSION, true));
+                // TualoApplication::logger('BSC')->warning("Session: " . print_r($_SESSION, true));
             }
         } elseif (
             isset($_SESSION['tualoapplication']['loggedIn'])

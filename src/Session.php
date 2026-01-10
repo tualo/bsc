@@ -113,6 +113,16 @@ class Session
 
 
     if ($is_web) {
+
+      $cookie_post_field_name = TualoApplication::configuration('cookie', 'cookie_post_field_name', '');
+
+      if (
+        $cookie_post_field_name != ''
+        && isset($_POST[$cookie_post_field_name])
+        && (trim($_POST[$cookie_post_field_name]) != '')
+      ) {
+        session_id($_POST[$cookie_post_field_name]);
+      }
       @session_start();
     }
 
