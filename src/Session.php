@@ -531,6 +531,7 @@ class Session
     $this->db->direct('update oauth set singleuse=1 where id={token}', array('token' => $token));
   }
 
+
   public function oauthValidDays($token, $days)
   {
     // alter table oauth add validuntil datetime default null;
@@ -568,9 +569,16 @@ class Session
 
 
     if ($force === false) {
-      $sql = 'select oauth.id from oauth join oauth_path on oauth.id = oauth_path.id where oauth.singleuse=0 and oauth_path.path = {path}';
-      $list = $this->db->direct($sql, ['path' => $path]);
+      $list = [];
+      if ($anyclient === false) {
+        $sql = 'select oauth.id from oauth join oauth_path on oauth.id = oauth_path.id where oauth.singleuse=0 and oauth.client={client} and oauth.username={username} and oauth.singleuse=0 and oauth_path.path = {path}';
+        $list = $this->db->direct($sql, ['client' => $_SESSION['tualoapplication']['client'], 'username' => $_SESSION['tualoapplication']['username'], 'path' => $path]);
+      } else {
+        $sql = 'select oauth.id from oauth join oauth_path on oauth.id = oauth_path.id where oauth.singleuse=0 and oauth.username={username} and  oauth.singleuse=0 and oauth_path.path = {path}';
+        $list = $this->db->direct($sql, ['username' => $_SESSION['tualoapplication']['username'], 'path' => $path]);
+      }
       if (count($list) > 0) {
+        echo "Reusing existing token for path " . $path . "\n";
         $token = $list[0]['id'];
       } else {
         $force = true;

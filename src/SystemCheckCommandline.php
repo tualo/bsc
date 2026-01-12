@@ -22,13 +22,14 @@ class SystemCheckCommandline implements ICommandline
     {
         $cli->command(self::getCommandName())
             ->description('runs systemcheck commands for all modules')
-            ->opt('client', 'only use this client', false, 'string');
+            ->opt('client', 'only use this client', false, 'string')
+            ->opt('halt', 'halt on first error', false, 'bool');
     }
 
 
 
 
-    public static function loopClients(array $config, ?string $clientName = null)
+    public static function loopClients(array $config, ?string $clientName = null, bool $haltOnError = false)
     {
         try {
             $_SERVER['REQUEST_URI'] = '';
@@ -45,7 +46,11 @@ class SystemCheckCommandline implements ICommandline
                         if ($cls::hasClientTest()) {
                             SystemCheck::formatPrintLn(['blue'], 'SystemCheck for ' . $cls::getModuleName() . ':');
                             SystemCheck::intent();
-                            $cls::test($config);
+                            $returnCode = $cls::test($config);
+                            if ($haltOnError && ($returnCode !== 0)) {
+                                SystemCheck::formatPrintLn(['red'], 'halting on error as requested.');
+                                exit($returnCode);
+                            }
                             SystemCheck::unintent();
                         }
                     }
@@ -70,7 +75,11 @@ class SystemCheckCommandline implements ICommandline
                                     if ($cls::hasClientTest()) {
                                         SystemCheck::formatPrintLn(['blue'], 'SystemCheck for ' . $cls::getModuleName() . ':');
                                         SystemCheck::intent();
-                                        $cls::test($config);
+                                        $returnCode = $cls::test($config);
+                                        if ($haltOnError && ($returnCode !== 0)) {
+                                            SystemCheck::formatPrintLn(['red'], 'halting on error as requested.');
+                                            exit($returnCode);
+                                        }
                                         SystemCheck::unintent();
                                     }
                                 }
@@ -105,7 +114,7 @@ class SystemCheckCommandline implements ICommandline
 
     public static function run(Args $args)
     {
-        self::loopClients((array)App::get('configuration'), $args->getOpt('client'));
+        self::loopClients((array)App::get('configuration'), $args->getOpt('client'), (bool)$args->getOpt('halt'));
         // Version::versionMD5(true);
         if (!file_exists(App::get('basePath') . '/cache')) {
             mkdir(App::get('basePath') . '/cache');
