@@ -496,6 +496,10 @@
         "text": "setup view_session_groups.ds"
     },
     {
+        "file": "ds/view_session_users.ds",
+        "text": "setup view_session_users.ds"
+    },
+    {
         "file": "defered_events",
         "text": "setup defered_events"
     }

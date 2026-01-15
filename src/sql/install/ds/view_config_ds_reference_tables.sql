@@ -78,9 +78,8 @@ select
                 ),
                 '__',
                 */
-                lower(
-                    ds_referenced_manual_columns.referenced_column_name
-                ),
+                lower(ds_referenced_manual_columns.column_name),
+                
                 '"',
                 ':',
                 '"',
@@ -88,7 +87,9 @@ select
                 lower(ds_referenced_manual_columns.table_name),
                 '__',
                 */
-                lower(ds_referenced_manual_columns.column_name),
+                lower(
+                    ds_referenced_manual_columns.referenced_column_name
+                ),
                 '"'
             ) separator ','
         ),
