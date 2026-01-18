@@ -60,14 +60,6 @@
         "text": "setup ds_column.sql"
     },
     {
-        "file": "ds/docsystem_ds.sql",
-        "text": "setup docsystem_ds.sql"
-    },
-    {
-        "file": "ds/docsystem_ds_column.sql",
-        "text": "setup docsystem_ds_column.sql"
-    },
-    {
         "file": "ds/ds_access.sql",
         "text": "setup ds_access.sql"
     },
@@ -138,6 +130,14 @@
     {
         "file": "ds/ds_combined_tables.sql",
         "text": "setup ds_combined_tables.sql"
+    },
+    {
+        "file": "ds/docsystem_ds.sql",
+        "text": "setup docsystem_ds.sql"
+    },
+    {
+        "file": "ds/docsystem_ds_column.sql",
+        "text": "setup docsystem_ds_column.sql"
     },
     {
         "file": "ds/ds_contextmenu.sql",
