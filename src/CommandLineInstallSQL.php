@@ -83,8 +83,8 @@ class CommandLineInstallSQL
             // do nothing
         }
 
-        if (TualoApplication::configuration('database', 'force_client', false) === false) {
-            $clientRequired = true;
+        if (TualoApplication::configuration('database', 'force_client', false) !== false) {
+            $clientRequired = false;
         }
 
         $cli->command(static::getCommandName())
