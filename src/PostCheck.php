@@ -65,7 +65,8 @@ class PostCheck extends FormatedCommandLineOutput implements IPostCheck
                     $cls::testSessionDB($config);
                 }
             }
-            App::get('clientDB')->close();
+            if (!is_null(App::get('clientDB')))
+                App::get('clientDB')->close();
         } catch (\Exception $e) {
 
             if (!file_exists(App::get('basePath') . '/tm')) {

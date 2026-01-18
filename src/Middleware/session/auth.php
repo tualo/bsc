@@ -5,6 +5,8 @@ use Tualo\Office\Basic\Session;
 
 TualoApplication::use('TualoApplicationSession_Auth', function () {
     try {
+
+
         $session = TualoApplication::get('session');
 
 
