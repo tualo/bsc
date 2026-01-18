@@ -48,11 +48,48 @@ class CommandLineInstallSQL
         return static::$files;
     }
 
+    public static function defaultClient(): string|false
+    {
+        $client_id = false;
+        try {
+            App::run();
+            $session = App::get('session');
+            $sessiondb = $session->db;
+            $count = $sessiondb->singleValue('select count(*) c from macc_clients ', [], 'c');
+            if ($count == 1) {
+
+                $client_id = $sessiondb->singleValue('select id from macc_clients ', [], 'id');
+            }
+        } catch (\Exception $e) {
+            // do nothing
+        }
+
+        $client_id = TualoApplication::configuration('database', 'force_client', $client_id);
+        return $client_id;
+    }
+
     public static function setup(Cli $cli)
     {
+        $clientRequired = true;
+        try {
+            App::run();
+            $session = App::get('session');
+            $sessiondb = $session->db;
+            $count = $sessiondb->singleValue('select count(*) c from macc_clients ', [], 'c');
+            if ($count == 1) {
+                $clientRequired = false;
+            }
+        } catch (\Exception $e) {
+            // do nothing
+        }
+
+        if (TualoApplication::configuration('database', 'force_client', false) === false) {
+            $clientRequired = true;
+        }
+
         $cli->command(static::getCommandName())
             ->description('installs needed sql for ' . self::getShortName())
-            ->opt('client', 'only use this client', true, 'string')
+            ->opt('client', 'only use this client', $clientRequired, 'string')
             ->opt('sleep', 'seconds to sleep between each command', false, 'integer')
             ->opt('debug', 'show command index', false, 'boolean');
     }
@@ -129,7 +166,14 @@ class CommandLineInstallSQL
                 }
             };
             $clientName = $args->getOpt('client');
-            if (is_null($clientName)) $clientName = '';
+            if (is_null($clientName)) {
+                $clientName = '';
+                if (!self::defaultClient()) {
+                    $clientName = '';
+                } else {
+                    $clientName = self::defaultClient();
+                }
+            }
             self::setupClients($msg, $clientName, $file, $installSQL, $operation_placeholder);
         }
     }
