@@ -55,10 +55,12 @@ class CommandLineInstallSQL
             App::run();
             $session = App::get('session');
             $sessiondb = $session->db;
-            $count = $sessiondb->singleValue('select count(*) c from macc_clients ', [], 'c');
-            if ($count == 1) {
+            if (!is_null($sessiondb)) {
+                $count = $sessiondb->singleValue('select count(*) c from macc_clients ', [], 'c');
+                if ($count == 1) {
 
-                $client_id = $sessiondb->singleValue('select id from macc_clients ', [], 'id');
+                    $client_id = $sessiondb->singleValue('select id from macc_clients ', [], 'id');
+                }
             }
         } catch (\Exception $e) {
             // do nothing
@@ -75,9 +77,11 @@ class CommandLineInstallSQL
             App::run();
             $session = App::get('session');
             $sessiondb = $session->db;
-            $count = $sessiondb->singleValue('select count(*) c from macc_clients ', [], 'c');
-            if ($count == 1) {
-                $clientRequired = false;
+            if (!is_null($sessiondb)) {
+                $count = $sessiondb->singleValue('select count(*) c from macc_clients ', [], 'c');
+                if ($count == 1) {
+                    $clientRequired = false;
+                }
             }
         } catch (\Exception $e) {
             // do nothing
