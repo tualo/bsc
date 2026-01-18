@@ -145,8 +145,8 @@ CREATE TABLE IF NOT EXISTS `macc_users_groups` (
 
 CREATE TABLE IF NOT EXISTS `oauth` (
   `id` varchar(36) NOT NULL,
-  `client` varchar(255) NOT NULL,
-  `username` varchar(255) NOT NULL,
+  `client` varchar(100) NOT NULL,
+  `username` varchar(100) NOT NULL,
   `create_time` datetime DEFAULT NULL,
   `lastcontact` datetime DEFAULT NULL,
   `validuntil` datetime DEFAULT NULL,
