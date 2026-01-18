@@ -157,28 +157,6 @@ class CreateSystemCommandline implements ICommandline
                     PostCheck::formatPrintLn(['green'], 'done');
                 }
 
-                /*
-                if (( $args->getOpt('createusers'))===true){
-
-                    $clientOptions = "";
-                    if (($client_host = $args->getOpt('host'))!='') $clientOptions .= " --host=".$client_host." ";
-                    $clientOptions .= " --user=".$client_database_user." ";
-                    $clientOptions .= ' --password="'.$client_database_password.'" ';
-                    
-                }
-                */
-
-                /*
-                PostCheck::formatPrint(['blue'],"\tsetup client db... ");
-                exec('cat '.__DIR__.'/commandline/sql/plain-system.sql | sed -E \'s#SESSIONDB#'.$sessionDBName.'#g\' | mysql '.$clientOptions.' --force=true -D '.$clientDBName.' ',$res,$err);
-                if ($err!=0){
-                    PostCheck::formatPrintLn(['red'],'failed');
-                    PostCheck::formatPrintLn(['red'],implode("\n",$res));
-                    exit();
-                }else{
-                    PostCheck::formatPrintLn(['green'],'done');
-                }
-                */
 
                 $clientUsername = 'admin';
                 $clientpassword = (Uuid::uuid4())->toString();
