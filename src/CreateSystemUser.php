@@ -52,6 +52,8 @@ class CreateSystemUser implements ICommandline
                 $sessionDBName = readline("Enter the session db name: ");
             }
         }
+        $msg = 'create user ' . $clientUsername;
+        PostCheck::formatPrint(['blue'], $msg . '(' . $sessionDBName . ', ' . $clientDBName . '):  ');
 
         $sql = "call ADD_TUALO_USER('" . $clientUsername . "','" . $clientpassword . "','" . $clientDBName . "','" . $clientGroups[0] . "')";
         exec('echo "' . $sql . '" | mysql ' . $clientOptions . ' --force=true -D ' . $sessionDBName . ' ', $res, $err);
@@ -64,6 +66,6 @@ class CreateSystemUser implements ICommandline
             $sql = "update macc_users set typ='master' where  login = '" . $clientUsername . "' ";
             exec('echo "' . $sql . '" | mysql ' . $clientOptions . ' --force=true -D ' . $sessionDBName . ' ', $res, $err);
         }
-        PostCheck::formatPrint(['green'], "\tdone:   \n");
+        PostCheck::formatPrint(['green'], "\tdone   \n");
     }
 }
