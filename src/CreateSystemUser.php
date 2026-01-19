@@ -28,7 +28,7 @@ class CreateSystemUser implements ICommandline
             ->opt('username', 'username', true, 'string')
             ->opt('password', 'password plain text', true, 'string')
             ->opt('groups', 'groups separated by comma', true, 'string')
-            ->opt('session', 'session db name', true, 'string')
+            ->opt('session', 'session db name', false, 'string')
             ->opt('master', 'set master flag', false, 'boolean');
     }
 
