@@ -73,6 +73,8 @@ class CreateSystemUser implements ICommandline
                 'clientDBName' => $clientDBName,
                 'clientgroup' => $clientGroups[0]
             ]);
+            // prevent out of sync
+            $sessiondb->moreResults();
             // exec('echo "' . $sql . '" | mysql ' . $clientOptions . ' --force=true -D ' . $sessionDBName . ' ', $res, $err);
 
             foreach ($clientGroups as $group) {
@@ -81,6 +83,8 @@ class CreateSystemUser implements ICommandline
                     'clientUsername' => $clientUsername,
                     'clientgroup' => $group
                 ]);
+                // prevent out of sync
+                $sessiondb->moreResults();
             }
             if ($args->getOpt('master', false)) {
                 $sql = "update macc_users set typ='master' where  login = {clientUsername} ";
