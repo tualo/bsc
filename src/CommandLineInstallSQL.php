@@ -169,6 +169,7 @@ class CommandLineInstallSQL
                     }
                 }
             };
+
             $clientName = $args->getOpt('client');
             if (is_null($clientName)) {
                 $clientName = '';

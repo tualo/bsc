@@ -70,7 +70,9 @@ class InstallScopes implements ICommandline
     public static function run(Args $args)
     {
         $files = [
-            'bsc_route_log' => 'setup scopes '
+            'bsc_route_log' => 'setup scopes ',
+            'route_scopes_permissions.ds' => 'setup route_scopes_permissions ds',
+            'route_scopes.ds' => 'setup route_scopes ds'
         ];
 
         foreach ($files as $file => $msg) {
