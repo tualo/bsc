@@ -31,7 +31,8 @@ class CreateSystemCommandline implements ICommandline
             ->opt('createusers', 'createusers', false, 'boolean')
             ->opt('silent', 'silent', false, 'boolean')
             ->opt('db', 'db name', false, 'string')
-            ->opt('session', 'session db name', false, 'string');
+            ->opt('session', 'session db name', false, 'string')
+            ->opt('master', 'set master flag', false, 'boolean');
     }
 
 
@@ -169,7 +170,7 @@ class CreateSystemCommandline implements ICommandline
                     $clientOptions .= " --user=".$session_database_user." ";
                     $clientOptions .= ' --password="'.$session_database_password.'" ';
                     
-                }
+                }v
                 */
 
                 $sql = "INSERT IGNORE INTO macc_clients (id,username,password,host,port) VALUES ('" . $clientDBName . "','" .
@@ -181,6 +182,10 @@ class CreateSystemCommandline implements ICommandline
                 PostCheck::formatPrint(['blue'], "\tcreate client user... admin: " . $clientpassword . " \n");
                 $sql = "call ADD_TUALO_USER('" . $clientUsername . "','" . $clientpassword . "','" . $clientDBName . "','administration')";
                 exec('echo "' . $sql . '" | mysql ' . $clientOptions . ' --force=true -D ' . $sessionDBName . ' ', $res, $err);
+                if ($args->getOpt('master', false)) {
+                    $sql = "update macc_users set typ='master' where  login = '" . $clientUsername . "' ";
+                    exec('echo "' . $sql . '" | mysql ' . $clientOptions . ' --force=true -D ' . $sessionDBName . ' ', $res, $err);
+                }
 
 
                 break;
