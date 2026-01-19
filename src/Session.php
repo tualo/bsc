@@ -578,7 +578,7 @@ class Session
         $list = $this->db->direct($sql, ['username' => $_SESSION['tualoapplication']['username'], 'path' => $path]);
       }
       if (count($list) > 0) {
-        echo "Reusing existing token for path " . $path . "\n";
+        // echo "Reusing existing token for path " . $path . "\n";
         $token = $list[0]['id'];
       } else {
         $force = true;
