@@ -178,6 +178,8 @@ class CommandLineInstallSQL
                 } else {
                     $clientName = self::defaultClient();
                 }
+                PostCheck::formatPrintLn(['red'], '\t' . ' --client is required when multiple clients exist');
+                exit();
             }
             self::setupClients($msg, $clientName, $file, $installSQL, $operation_placeholder);
         }
