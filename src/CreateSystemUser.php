@@ -52,20 +52,43 @@ class CreateSystemUser implements ICommandline
                 $sessionDBName = readline("Enter the session db name: ");
             }
         }
+
+
         $msg = 'create user ' . $clientUsername;
-        PostCheck::formatPrint(['blue'], $msg . '(' . $sessionDBName . ', ' . $clientDBName . '):  ');
+        PostCheck::formatPrint(['blue'], $msg . ' (' . $sessionDBName . ', ' . $clientDBName . '):  ');
 
-        $sql = "call ADD_TUALO_USER('" . $clientUsername . "','" . $clientpassword . "','" . $clientDBName . "','" . $clientGroups[0] . "')";
-        exec('echo "' . $sql . '" | mysql ' . $clientOptions . ' --force=true -D ' . $sessionDBName . ' ', $res, $err);
 
-        foreach ($clientGroups as $group) {
-            $sql = "call ADD_TUALO_USER_GROUP('" . $clientUsername . "','" . $group . "')";
-            exec('echo "' . $sql . '" | mysql ' . $clientOptions . ' --force=true -D ' . $sessionDBName . ' ', $res, $err);
+        App::run();
+
+        $session = App::get('session');
+        $sessiondb = $session->db;
+
+        if (is_null($sessiondb)) {
+            PostCheck::formatPrint(['red'], "\tno session db\n");
+        } else {
+            $sql = "call ADD_TUALO_USER({clientUsername},{clientpassword},{clientDBName},{clientgroup})";
+            $sessiondb->direct($sql, [
+                'clientUsername' => $clientUsername,
+                'clientpassword' => $clientpassword,
+                'clientDBName' => $clientDBName,
+                'clientgroup' => $clientGroups[0]
+            ]);
+            // exec('echo "' . $sql . '" | mysql ' . $clientOptions . ' --force=true -D ' . $sessionDBName . ' ', $res, $err);
+
+            foreach ($clientGroups as $group) {
+                $sql = "call ADD_TUALO_USER_GROUP({clientUsername},{clientgroup})";
+                $sessiondb->direct($sql, [
+                    'clientUsername' => $clientUsername,
+                    'clientgroup' => $group
+                ]);
+            }
+            if ($args->getOpt('master', false)) {
+                $sql = "update macc_users set typ='master' where  login = {clientUsername} ";
+                $sessiondb->direct($sql, [
+                    'clientUsername' => $clientUsername
+                ]);
+            }
+            PostCheck::formatPrint(['green'], "\tdone   \n");
         }
-        if ($args->getOpt('master', false)) {
-            $sql = "update macc_users set typ='master' where  login = '" . $clientUsername . "' ";
-            exec('echo "' . $sql . '" | mysql ' . $clientOptions . ' --force=true -D ' . $sessionDBName . ' ', $res, $err);
-        }
-        PostCheck::formatPrint(['green'], "\tdone   \n");
     }
 }
