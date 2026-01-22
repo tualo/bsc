@@ -409,7 +409,10 @@ class Session
           } catch (\Exception $e) {
           }
 
-          $clientdb->execute_with_hash('SET lc_time_names = {lc_time_name};', array('lc_time_name' => 'de_DE'));
+          try {
+            $clientdb->execute_with_hash('SET lc_time_names = {lc_time_name};', array('lc_time_name' => 'de_DE'));
+          } catch (\Exception $e) {
+          }
           $clientdb->execute_with_hash('set @sessiondb = {sessiondb}', array('sessiondb' => $this->db->dbname));
 
           $this->db->execute_with_hash('set @sessionuser = {username}', $_SESSION['tualoapplication']);
