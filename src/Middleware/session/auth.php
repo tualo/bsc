@@ -41,10 +41,8 @@ TualoApplication::use('TualoApplicationSession_Auth', function () {
         }
 
 
-        TualoApplication::logger('BSC')->warning("Session: ");
-
         if (!isset($_SESSION['tualoapplication']['loggedInType'])) $_SESSION['tualoapplication']['loggedInType'] = 'none';
-        TualoApplication::logger('BSC')->warning("Session: " . __FILE__ . ":" . __LINE__);
+        TualoApplication::logger('BSC')->debug("Session: " . __FILE__ . ":" . __LINE__);
 
         if (
             isset($_SESSION['tualoapplication']['loggedIn'])
@@ -52,7 +50,7 @@ TualoApplication::use('TualoApplicationSession_Auth', function () {
             &&  (!is_null($session))
             &&  (isset($_SERVER['REQUEST_METHOD']))
         ) {
-            TualoApplication::logger('BSC')->warning("Session: " . __FILE__ . ":" . __LINE__);
+            TualoApplication::logger('BSC')->debug("Session: " . __FILE__ . ":" . __LINE__);
             $path = '';
             $parsed_url = parse_url($_SERVER['REQUEST_URI']); //Parse Uri
             if (isset($_SERVER['REDIRECT_URL'])) $parsed_url = parse_url($_SERVER['REDIRECT_URL']);
@@ -75,7 +73,7 @@ TualoApplication::use('TualoApplicationSession_Auth', function () {
         }
 
 
-        TualoApplication::logger('BSC')->warning("Session: " . __FILE__ . ":" . __LINE__);
+        TualoApplication::logger('BSC')->debug("Session: " . __FILE__ . ":" . __LINE__);
         if (
 
             isset($_SESSION['tualoapplication']['loggedIn'])
@@ -91,7 +89,7 @@ TualoApplication::use('TualoApplicationSession_Auth', function () {
 
 
         ) {
-            TualoApplication::logger('BSC')->warning("Session: " . __FILE__ . ":" . __LINE__);
+            TualoApplication::logger('BSC')->debug("Session: " . __FILE__ . ":" . __LINE__);
             //if (is_null($session->db)) throw new \Exception("Session DB not loaded");
             $path = '';
             $method = $_SERVER['REQUEST_METHOD'];
@@ -116,7 +114,7 @@ TualoApplication::use('TualoApplicationSession_Auth', function () {
                 $session->inputToRequest();
                 $token = $matches['oauth'];
                 $session->loginByToken($token);
-                TualoApplication::logger('BSC')->warning("Session: " . __FILE__ . ":" . __LINE__);
+                TualoApplication::logger('BSC')->debug("Session: " . __FILE__ . ":" . __LINE__);
 
                 session_commit();
                 // TualoApplication::logger('BSC')->warning("Session: " . print_r($_SESSION, true));
@@ -139,7 +137,7 @@ TualoApplication::use('TualoApplicationSession_Auth', function () {
 
         $path = '';
         $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : '';
-        TualoApplication::logger('BSC')->warning("Session method: " . $method);
+        TualoApplication::logger('BSC')->debug("Session method: " . $method);
         $parsed_url = []; //Parse Uri
         if (isset($_SERVER['REQUEST_URI'])) $parsed_url = parse_url($_SERVER['REQUEST_URI']);
         if (isset($_SERVER['REDIRECT_URL'])) $parsed_url = parse_url($_SERVER['REDIRECT_URL']);
