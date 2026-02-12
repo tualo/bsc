@@ -354,11 +354,19 @@ class Route
                             $checkRouteAccessResult = self::canAccessByScope($route['accessScope']);
                             $session = TualoApplication::get('session');
                             self::logRequestedRoute($route['expression_check'], $route['accessScope'], $method, $checkRouteAccessResult);
-                            TualoApplication::logger('BSC')->debug(
-                                "Route " . $route['expression'] . " needs scope " . $route['accessScope']
-                                    . " access check: " . ($checkRouteAccessResult ? 'allowed' : 'denied') .
-                                    ($session->isLoggedIn() ? ' user ' . $session->getUsername() : ' anonymous user')
-                            );
+
+                            if ($checkRouteAccessResult) {
+                                TualoApplication::logger('BSC')->debug(
+                                    "Route " . $route['expression'] . " needs scope " . $route['accessScope']
+                                        . " access check: " . ($checkRouteAccessResult ? 'allowed' : 'denied') .
+                                        ($session->isLoggedIn() ? ' user ' . $session->getUsername() : ' anonymous user')
+                                );
+                            } else {
+                                TualoApplication::logger('BSC')->warning(
+                                    "Unauthorized access attempt to route " . $route['expression'] . " needs scope " . $route['accessScope'] .
+                                        ($session->isLoggedIn() ? ' user ' . $session->getUsername() : ' anonymous user')
+                                );
+                            }
                             if ($route['accessScope'] != 'basic') {
                                 if ($checkRouteAccessResult === false) {
                                     header("HTTP/1.0 403 Forbidden");
