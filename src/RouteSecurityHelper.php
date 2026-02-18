@@ -109,6 +109,7 @@ class RouteSecurityHelper
 
         // Content-Type setzen
         if (isset($contentTypes[$extension])) {
+
             TualoApplication::contenttype($contentTypes[$extension]);
         }
         http_response_code(200);
