@@ -963,7 +963,7 @@ class TualoApplication
                 if (strlen($data) > 1024 * 32) throw new \Exception("setDatabaseRequestParameter data to large");
                 $json = json_decode($data, true);
                 if (!is_null($json)) {
-                    $db->execute('set @request_parameter={request_parameter}', [
+                    $db->execute_with_hash('set @request_parameter={request_parameter}', [
                         'request_parameter' => json_encode($json)
                     ]);
                 }
