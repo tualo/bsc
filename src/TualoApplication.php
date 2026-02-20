@@ -923,4 +923,55 @@ class TualoApplication
             // self::debug($e->getMessage());
         }
     }
+
+
+    /**
+     * Übergibt Anfrage-Parameter an die Datenbank-Session
+     * 
+     * Diese Funktion setzt die übergebenen Parameter als JSON in der MySQL-Session-Variable
+     * `@request_parameter`. Die Daten stehen dann während der gesamten Datenbank-Session
+     * zur Verfügung und können in Views, Stored Procedures oder Triggern verwendet werden,
+     * um beispielsweise Daten vorab zu filtern.
+     * 
+     * Beispiel-Verwendung:
+     * ```php
+     * TualoApplication::setDatabaseRequestParameter([
+     *     'user_id' => 123,
+     *     'filter_status' => 'active',
+     *     'date_from' => '2024-01-01'
+     * ]);
+     * ```
+     * 
+     * In einer View oder Query kann dann auf die Parameter zugegriffen werden:
+     * ```sql
+     * SELECT * FROM my_table 
+     * WHERE user_id = JSON_UNQUOTE(JSON_EXTRACT(@request_parameter, '$.user_id'))
+     * ```
+     * 
+     * @param array $parameter Assoziatives Array mit Schlüssel-Wert-Paaren, die als Parameter
+     *                         an die Datenbank übergeben werden sollen
+     * @return bool Gibt `true` bei Erfolg zurück, `false` bei Fehler oder wenn die Daten
+     *              größer als 32 KB sind
+     * @throws \Exception Wenn die JSON-Daten größer als 32 KB sind
+     */
+    public static function setDatabaseRequestParameter(array $parameter): bool
+    {
+        try {
+            $db =  self::get('session')->getDB();
+            if (isset($parameter)) {
+                $data = json_encode($parameter);
+                if (strlen($data) > 1024 * 32) throw new \Exception("setDatabaseRequestParameter data to large");
+                $json = json_decode($data, true);
+                if (!is_null($json)) {
+                    $db->execute('set @request_parameter={request_parameter}', [
+                        'request_parameter' => json_encode($json)
+                    ]);
+                }
+                return false;
+            }
+        } catch (\Exception $e) {
+            self::logger('debug')->error($e->getMessage());
+        }
+        return false;
+    }
 }
