@@ -87,6 +87,8 @@ class Database_mysql extends Database_basic
             // $this->execute("SET NAMES 'utf8mb4' COLLATE 'utf8mb3_general_ci'");
             $this->execute('SET collation_connection = @@collation_database;');
             $this->execute('SET character_set_client = @@character_set_database;');
+
+            if ($val = TualoApplication::configuration('database', 'lc_time_names', false)) $this->execute('SET SESSION lc_time_names= ' . $val . ';');
         }
 
 

@@ -700,5 +700,8 @@ INSERT  IGNORE INTO `extjs_base_types` VALUES
 ('IconFont.form.field.ComboBox (widget.iconcombo)','IconFont.form.field.ComboBox','Ext.form.field.ComboBox','widget.iconcombo',NULL,'IconFont.form.field.ComboBox','Sencha ExtJS','',0,1),
 ('Tualo.cherrymarkdown.form.field.CherryMarkdown (widget.cherrymarkdown)','Tualo.cherrymarkdown.form.field.CherryMarkdown','Ext.field.Field','widget.cherrymarkdown','widget.cherrymarkdown','Tualo.cherrymarkdown.form.field.CherryMarkdown','tualo solutions GmbH','',0,1),
 ('Tualo.DataSets.grid.Grid','Tualo.DataSets.grid.Grid','Ext.grid.Panel','widget.dsgrid','widget.dsgrid','Tualo.DataSets.grid.Grid','Tualo','Basic Tualo Grid',0,0),
+
+('Tualo.DataSets.grid.SummaryGrid','Tualo.DataSets.grid.SummaryGrid','Ext.grid.Panel','widget.ds_summary_grid','widget.ds_summary_grid','Tualo.DataSets.grid.SummaryGrid','Tualo','Tualo Summary Grid',0,0),
+
 ('Tualo.DataSets.ListView','Tualo.DataSets.ListView','Tualo.DataSets.grid.Grid','widget.dslistview','widget.dsgrid','Tualo.DataSets.ListView','Tualo','Basic Tualo Grid',0,0),
 ('Tualo.DataSets.ListViewAutoNew','Tualo.DataSets.ListViewAutoNew','Tualo.DataSets.ListView','widget.dslistviewautonew','widget.dslistviewautonew','Tualo.DataSets.ListViewAutoNew','Tualo','Basic Tualo Grid Auto New',0,0);
