@@ -583,6 +583,9 @@ class TualoApplication
         }
         $last_modified_time = filemtime($file);
         $etag = md5_file($file);
+        if (file_exists($file . '.etag')) {
+            $etag = file_get_contents($file . '.etag');
+        }
         if ($sendContentType == true) {
 
             $mime_types = [
