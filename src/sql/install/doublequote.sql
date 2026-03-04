@@ -1,5 +1,5 @@
 DELIMITER //
-CREATE FUNCTION IF NOT EXISTS `doublequote`(txt longtext)
+CREATE OR REPLACE FUNCTION `doublequote`(txt longtext)
 RETURNS longtext
 NO SQL
 BEGIN 

@@ -28,6 +28,7 @@ class BaseSetupCommand implements ISetupCommandline
         return [
             'install-sessionsql-bsc-main',
             'install-sql-sessionviews',
+            'install-sql-bsc-main',
             'install-sql-bsc-main-ds',
             'install-sql-bsc-menu',
             'install-sql-bsc-scopes'
