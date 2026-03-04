@@ -84,11 +84,16 @@ class Database_mysql extends Database_basic
             // $this->autocommit($this->commit_state);
             $this->state = true;
 
-            // $this->execute("SET NAMES 'utf8mb4' COLLATE 'utf8mb3_general_ci'");
+            // $this->execute("SET NAMES 'utf8mb4' COLLATE 'utf8mb4_general_ci'");
             $this->execute('SET collation_connection = @@collation_database;');
             $this->execute('SET character_set_client = @@character_set_database;');
 
             if ($val = TualoApplication::configuration('database', 'lc_time_names', false)) $this->execute('SET SESSION lc_time_names= ' . $val . ';');
+
+            if ($val = TualoApplication::configuration('database', 'set_names', false)) {
+                //"SET NAMES 'utf8mb4' COLLATE 'utf8mb4_general_ci'")) 
+                $this->execute($val);
+            }
         }
 
 
