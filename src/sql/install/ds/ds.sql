@@ -28,11 +28,11 @@ CREATE TABLE IF NOT EXISTS `ds` (
   `listxtypeprefix` varchar(30) DEFAULT 'listview',
   `phpexporter` varchar(30) DEFAULT 'XlsxWriter',
   `phpexporterfilename` varchar(255) DEFAULT NULL,
-  `combined` tinyint(4) DEFAULT 0,
+  `combined` tinyint(1) DEFAULT 0,
   `default_pagesize` int(11) DEFAULT 100,
   `allowForm` tinyint(4) DEFAULT 1,
   `listviewbaseclass` varchar(255) DEFAULT 'Tualo.DataSets.ListView',
-  `showactionbtn` tinyint(4) DEFAULT 1,
+  `showactionbtn` tinyint(1) DEFAULT 1,
   `modelbaseclass` varchar(100) DEFAULT 'Tualo.DataSets.model.Basic',
   PRIMARY KEY (`table_name`),
   KEY `fk_ds_class_name` (`class_name`),
@@ -42,9 +42,11 @@ CREATE TABLE IF NOT EXISTS `ds` (
 alter table ds change column phpexporterfilename
     phpexporterfilename varchar(255) DEFAULT NULL;
 
+alter table ds add column if not exists allowform tinyint(1) DEFAULT 1;
 alter table ds add column if not exists autosave tinyint(1) default 0;
 alter table ds add column if not exists base_store_class varchar(50) default 'Tualo.DataSets.data.Store';
 alter table ds add column if not exists use_insert_for_update tinyint(1) default 0;
+alter table ds add column if not exists combined tinyint(1) default 0;
 
 update ds set use_insert_for_update = 1 where table_name like 'ds%';
 
@@ -52,6 +54,7 @@ update ds set base_store_class = 'Tualo.DataSets.data.Store' where  base_store_c
 
 alter table ds add column if not exists modelbaseclass varchar(100) default 'Tualo.DataSets.model.Basic';
 
+update ds set modelbaseclass = 'Tualo.DataSets.model.Basic' where  modelbaseclass is null or modelbaseclass = '';
 
 
 CREATE TABLE IF NOT EXISTS `ds_reference_tables` (

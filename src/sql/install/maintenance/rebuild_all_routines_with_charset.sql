@@ -44,37 +44,38 @@ BEGIN
     )
     DO
 
-        -- Temporäre Tabelle für SHOW CREATE Ergebnis erstellen
-        DROP TEMPORARY TABLE IF EXISTS temp_show_create;
-        CREATE TEMPORARY TABLE temp_show_create (
-            routine_type VARCHAR(20),
-            routine_name VARCHAR(64),
-            sql_mode TEXT,
-            create_statement LONGTEXT,
-            character_set_client VARCHAR(32),
-            collation_connection VARCHAR(32),
-            database_collation VARCHAR(32)
-        );
+        -- Parameter-Liste aus INFORMATION_SCHEMA.PARAMETERS aufbauen
+        SELECT GROUP_CONCAT(
+            CONCAT(
+                IFNULL(CONCAT(PARAMETER_MODE, ' '), ''),
+                '`', PARAMETER_NAME, '` ',
+                DTD_IDENTIFIER
+            )
+            ORDER BY ORDINAL_POSITION
+            SEPARATOR ', '
+        ) INTO @param_list
+        FROM INFORMATION_SCHEMA.PARAMETERS
+        WHERE SPECIFIC_SCHEMA = DATABASE()
+          AND SPECIFIC_NAME   = rec.ROUTINE_NAME
+          AND ROUTINE_TYPE    = rec.ROUTINE_TYPE
+          AND ORDINAL_POSITION > 0;
 
-        -- SHOW CREATE Ergebnis in temporäre Tabelle einfügen
-        SET @create_sql = CONCAT(
-            'INSERT INTO temp_show_create ',
-            'SELECT * FROM (SHOW CREATE ', rec.routine_type, ' `', rec.routine_name, '`) AS t'
+        -- CREATE Statement aus INFORMATION_SCHEMA aufbauen
+        SET @routine_create_statement = CONCAT(
+            'CREATE ',
+            IF(rec.SECURITY_TYPE = 'DEFINERXYZ',
+               CONCAT('DEFINER=`', REPLACE(rec.DEFINER, '@', '`@`'), '` '),
+               ''),
+            rec.ROUTINE_TYPE, ' `', rec.ROUTINE_NAME, '`(',
+            IFNULL(@param_list, ''), ')',
+            IF(rec.ROUTINE_TYPE = 'FUNCTION', CONCAT(' RETURNS ', rec.DTD_IDENTIFIER), ''),
+            '\n', rec.ROUTINE_DEFINITION
         );
-        
-        PREPARE stmt FROM @create_sql;
-        EXECUTE stmt;
-        DEALLOCATE PREPARE stmt;
-        
-        -- Create Statement aus temporärer Tabelle in Variable lesen
-        SELECT create_statement INTO @routine_create_statement 
-        FROM temp_show_create 
-        LIMIT 1;
         
         -- Alternative: CREATE Statement aus INFORMATION_SCHEMA aufbauen
         SET @full_create_statement = CONCAT(
             'CREATE ',
-            IF(rec.security_type = 'DEFINER', CONCAT('DEFINER=`', rec.definer, '` '), ''),
+            IF(rec.security_type = 'DEFINERXYZ', CONCAT('DEFINER=`', rec.definer, '` '), ''),
             rec.routine_type, ' `', rec.routine_name, '`',
             '(', IFNULL(rec.routine_definition, ''), ')'
         );
@@ -130,11 +131,15 @@ BEGIN
                 -- View löschen
                 
                 
-                -- View mit korrigierten Charset/Collation neu erstellen
-                SET @create_sql = CONCAT(
-                    'CREATE OR REPLACE ', rec.routine_type, ' `', rec.routine_name, '` AS ', 
-                    v_new_definition
-                );
+                -- Routine mit korrigierten Charset/Collation neu erstellen
+                SET @create_sql = REGEXP_REPLACE(@routine_create_statement, '^CREATE ', 'CREATE OR REPLACE ');
+                SET @create_sql = REGEXP_REPLACE(@create_sql, ' CHARACTER SET [a-zA-Z0-9_]+', '');
+                SET @create_sql = REGEXP_REPLACE(@create_sql, ' CHARSET [a-zA-Z0-9_]+', '');
+                SET @create_sql = REGEXP_REPLACE(@create_sql, ' COLLATE [a-zA-Z0-9_]+', '');
+                SET @create_sql = REGEXP_REPLACE(@create_sql, 'CAST\\((.+?) AS CHAR\\([0-9]+\\) CHARACTER SET [a-zA-Z0-9_]+\\)',
+                                                CONCAT('CAST(\\1 AS CHAR CHARACTER SET ', p_target_charset, ')'));
+                SET @create_sql = REGEXP_REPLACE(@create_sql, 'CONVERT\\((.+?) USING [a-zA-Z0-9_]+\\)',
+                                                CONCAT('CONVERT(\\1 USING ', p_target_charset, ')'));
                 
                 PREPARE stmt FROM @create_sql;
                 EXECUTE stmt;
@@ -178,52 +183,40 @@ CREATE OR REPLACE PROCEDURE `get_routine_create_statement`(
 READS SQL DATA
 SQL SECURITY DEFINER
 BEGIN
-    DECLARE v_sql TEXT;
-    
-    -- Temporäre Tabelle erstellen
-    DROP TEMPORARY TABLE IF EXISTS temp_routine_create;
-    
-    IF p_routine_type = 'PROCEDURE' THEN
-        CREATE TEMPORARY TABLE temp_routine_create (
-            `Procedure` VARCHAR(64),
-            sql_mode TEXT,
-            `Create Procedure` LONGTEXT,
-            character_set_client VARCHAR(32),
-            collation_connection VARCHAR(32),
-            `Database Collation` VARCHAR(32)
-        );
-    ELSE
-        CREATE TEMPORARY TABLE temp_routine_create (
-            `Function` VARCHAR(64),
-            sql_mode TEXT,
-            `Create Function` LONGTEXT,
-            character_set_client VARCHAR(32),
-            collation_connection VARCHAR(32),
-            `Database Collation` VARCHAR(32)
-        );
-    END IF;
-    
-    -- SHOW CREATE Statement ausführen und Ergebnis einfügen
-    SET v_sql = CONCAT(
-        'INSERT INTO temp_routine_create SELECT * FROM (SHOW CREATE ', 
-        p_routine_type, ' `', p_routine_name, '`) AS t'
-    );
-    
-    SET @sql = v_sql;
-    PREPARE stmt FROM @sql;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
-    
-    -- CREATE Statement extrahieren
-    IF p_routine_type = 'PROCEDURE' THEN
-        SELECT `Create Procedure` INTO p_create_statement 
-        FROM temp_routine_create LIMIT 1;
-    ELSE
-        SELECT `Create Function` INTO p_create_statement 
-        FROM temp_routine_create LIMIT 1;
-    END IF;
-    
-    DROP TEMPORARY TABLE temp_routine_create;
+    DECLARE v_param_list TEXT DEFAULT '';
+
+    -- Parameter-Liste aus INFORMATION_SCHEMA.PARAMETERS aufbauen
+    SELECT GROUP_CONCAT(
+        CONCAT(
+            IFNULL(CONCAT(PARAMETER_MODE, ' '), ''),
+            '`', PARAMETER_NAME, '` ',
+            DTD_IDENTIFIER
+        )
+        ORDER BY ORDINAL_POSITION
+        SEPARATOR ', '
+    ) INTO v_param_list
+    FROM INFORMATION_SCHEMA.PARAMETERS
+    WHERE SPECIFIC_SCHEMA = DATABASE()
+      AND SPECIFIC_NAME   = p_routine_name
+      AND ROUTINE_TYPE    = p_routine_type
+      AND ORDINAL_POSITION > 0;
+
+    -- CREATE Statement aus INFORMATION_SCHEMA.ROUTINES aufbauen
+    SELECT CONCAT(
+        'CREATE ',
+        IF(SECURITY_TYPE = 'DEFINERXYZ',
+           CONCAT('DEFINER=`', REPLACE(DEFINER, '@', '`@`'), '` '),
+           ''),
+        ROUTINE_TYPE, ' `', ROUTINE_NAME, '`(',
+        IFNULL(v_param_list, ''), ')',
+        IF(ROUTINE_TYPE = 'FUNCTION', CONCAT(' RETURNS ', DTD_IDENTIFIER), ''),
+        '\n', ROUTINE_DEFINITION
+    ) INTO p_create_statement
+    FROM INFORMATION_SCHEMA.ROUTINES
+    WHERE ROUTINE_SCHEMA = DATABASE()
+      AND ROUTINE_NAME   = p_routine_name
+      AND ROUTINE_TYPE   = p_routine_type
+    LIMIT 1;
 END //
 
 -- Verwendung in der Hauptprocedure
@@ -259,5 +252,3 @@ BEGIN
     end for;
     
 END //
-
-DELIMITER ;

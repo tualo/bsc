@@ -357,6 +357,10 @@ class Session
     if ($_SESSION['tualoapplication']['loggedIn'] === false) {
       $db = TualoApplication::get('clientDB', null);
       if ($db instanceof MYSQL\Database) {
+        if ($val = TualoApplication::configuration('database', 'set_names', false)) {
+          $db->execute($val);
+        }
+
         return $db;
       } else {
         return null;
@@ -425,6 +429,12 @@ class Session
     } catch (\Exception $e) {
       TualoApplication::logger('TualoApplication')->error($e->getMessage(), $_SESSION['db']);
     }
+
+    if ($val = TualoApplication::configuration('database', 'set_names', false)) {
+      $clientdb->execute($val);
+    }
+
+
     return $clientdb;
   }
 
