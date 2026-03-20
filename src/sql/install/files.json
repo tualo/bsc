@@ -456,6 +456,10 @@
         "text": "setup debug_message"
     },
     {
+        "file": "ds/proc.fill_ds_create_enum_views.sql",
+        "text": "setup fill_ds_create_enum_views"
+    },
+    {
         "file": "ds/proc.ds_fill_column.sql",
         "text": "setup ds_fill_column"
     },
