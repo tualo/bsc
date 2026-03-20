@@ -2,6 +2,39 @@ DELIMITER //
 
 CREATE OR REPLACE PROCEDURE `fill_ds_create_enum_views`( in use_table_name varchar(128) )
     MODIFIES SQL DATA
+    COMMENT '
+# fill_ds_create_enum_views
+
+Erzeugt fuer alle `enum`-Spalten einer angegebenen Tabelle automatisch lesbare
+Datasets-Views samt zugehoeriger Metadaten fuer das Tualo-DS-System.
+
+## Parameter
+
+- `use_table_name`: Name der Tabelle, deren `enum`-Spalten verarbeitet werden sollen.
+
+## Ablauf
+
+1. Sucht in `ds_column` alle Spalten der angegebenen Tabelle mit `data_type = \'enum\'`.
+2. Erstellt pro Treffer eine View im Format `ds_enum_view_<table>_<column>`.
+3. Wandelt den `enum(...)`-Definitionstext aus `ds_column.column_type` in ein JSON-Array um.
+4. Zerlegt dieses JSON per `json_table(...)` in die Spalten `id` und `name`.
+5. Registriert die neue View in den DS-Metadaten-Tabellen, damit sie in Listen,
+   Formularen, Dropdowns und Berechtigungen verwendet werden kann.
+6. Hinterlegt fuer die urspruengliche Tabellen-Spalte passende List- und Formularfelder,
+   die auf die generierte Enum-View zeigen.
+
+## Seiteneffekte
+
+- `create or replace view` fuer jede gefundene Enum-Spalte.
+- `insert` bzw. `insert ignore` in Tabellen wie `ds`, `ds_column`,
+  `ds_column_list_label`, `ds_column_form_label`, `ds_dropdownfields` und `ds_access`.
+
+## Hinweis
+
+Die Procedure ist nicht rein lesend: sie baut Views neu auf und schreibt mehrfach in
+Metadaten-Tabellen. Mehrfaches Ausfuehren ist fuer viele Inserts ueber `insert ignore`
+oder `on duplicate key update` abgefedert.    
+    '
 BEGIN
     select * from ds_column where data_type = 'enum' and table_name=use_table_name;
     for rec in (
@@ -97,5 +130,22 @@ BEGIN
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
 
+
+    set @sql=concat("INSERT IGNORE INTO `ds_column_list_label` (`active`,`align`,`column_name`,`editor`,`filterstore`,`flex`,`grouped`,`hidden`,`label`,`language`,`listfiltertype`,`position`,`renderer`,`summaryrenderer`,`summarytype`,`table_name`,`xtype`) VALUES ('0','start','status','','','1','0','1','status','DE','ds_enum_view_todo_item_status_name_listfilter','999','','','','todo_item','gridcolumn') ");
+    set @sql=replace(@sql,'ds_enum_view_todo_item_status',@new_view);
+    set @sql=replace(@sql,'todo_item',rec.table_name);
+    set @sql=replace(@sql,'status',rec.column_name);
+    
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+    set @sql=concat("INSERT IGNORE INTO `ds_column_form_label` (`active`,`allowempty`,`column_name`,`fieldgroup`,`field_path`,`flex`,`hidden`,`label`,`language`,`position`,`table_name`,`xtype`) VALUES ('0','0','status','','Allgemein','1','1','status','DE','999','todo_item','combobox_ds_enum_view_todo_item_status_name') ");
+    set @sql=replace(@sql,'ds_enum_view_todo_item_status',@new_view);
+    set @sql=replace(@sql,'todo_item',rec.table_name);
+    set @sql=replace(@sql,'status',rec.column_name);
+
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
 end for;
 end //
