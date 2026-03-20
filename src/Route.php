@@ -308,6 +308,16 @@ class Route
 
                         if ($route['method'] == 'get') $input = $_GET;
                         if ($route['method'] == 'post') $input = $_POST;
+                        if ($route['method'] == 'post') {
+                            $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+                            if (stripos($contentType, 'application/json') !== false) {
+                                $input = json_decode(file_get_contents("php://input"), true);
+                                if (!is_array($input)) {
+                                    $input = [];
+                                }
+                            }
+                        }
+
                         if ($route['method'] == 'put') {
                             $input = json_decode(file_get_contents("php://input"), true);
                             if (!is_array($input)) {
