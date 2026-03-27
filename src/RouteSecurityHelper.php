@@ -48,7 +48,7 @@ class RouteSecurityHelper
     /**
      * Prüft ob ein Pfad sicher ist (kein Path Traversal)
      */
-    private static function isSecurePath(string $file): bool
+    public static function isSecurePath(string $file): bool
     {
         // URL-Decoding für versteckte Traversal-Versuche
         $decodedFile = urldecode($file);
@@ -67,7 +67,7 @@ class RouteSecurityHelper
     /**
      * Löst Pfad sicher auf und prüft ob er im erlaubten Bereich liegt
      */
-    private static function resolveSafePath(string $file, string $baseDir): ?string
+    public static function resolveSafePath(string $file, string $baseDir): ?string
     {
         // Basis-Pfad auflösen
         $basePath = realpath($baseDir);
