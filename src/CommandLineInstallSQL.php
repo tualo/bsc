@@ -98,6 +98,7 @@ class CommandLineInstallSQL
             ->opt('debug', 'show command index', false, 'boolean');
     }
 
+
     public static function setupClients(string $msg, string $clientName, string $file, callable $callback, string $operation_placeholder)
     {
         $_SERVER['REQUEST_URI'] = '';
