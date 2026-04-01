@@ -10,7 +10,9 @@ CREATE TABLE IF NOT EXISTS `ds_dropdownfields` (
   CONSTRAINT `fk_ds_dropdownfields_ds` FOREIGN KEY (`table_name`) REFERENCES `ds` (`table_name`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+ALTER TABLE `ds_dropdownfields`  add  IF NOT EXISTS  additional_fields JSON DEFAULT '[]' ;
 
+/*
 INSERT  IGNORE INTO `ds_dropdownfields` VALUES
 ('crontab_applications','Anwendung','id','name',''),
 ('crontab_weekdays','Wochhentag','id','name',''),
@@ -26,3 +28,4 @@ INSERT  IGNORE INTO `ds_dropdownfields` VALUES
 ('farben','rgb','rgb','name',''),
 ('setup_parameters','id','id','name',''),
 ('view_ds_listfilters','id','id','name','');
+*/
