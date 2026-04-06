@@ -44,7 +44,7 @@ FOR record IN (select * from view_config_ds where (use_table_name=''  or table_n
     )
     values
     (
-        record.table_name,
+        lower(record.table_name),
         record.title,
         record.reorderfield,
         record.use_history,
