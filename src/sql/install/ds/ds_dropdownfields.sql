@@ -11,21 +11,3 @@ CREATE TABLE IF NOT EXISTS `ds_dropdownfields` (
 );
 
 ALTER TABLE `ds_dropdownfields`  add  IF NOT EXISTS  additional_fields JSON DEFAULT '[]' ;
-
-/*
-INSERT  IGNORE INTO `ds_dropdownfields` VALUES
-('crontab_applications','Anwendung','id','name',''),
-('crontab_weekdays','Wochhentag','id','name',''),
-('cron_queries','id','id','name',''),
-('ds','Tabelle','table_name','title',''),
-('ds_addcommands_xtypes','id','id','name',''),
-('ds_addcommand_locations','id','id','id',''),
-('ds_class','class_name','class_name','class_name',''),
-('ds_form_properties','property','property','property',''),
-('ds_pug_templates','id','id','name',''),
-('ds_renderer_stylesheet_groups','id','id','name',''),
-('ds_sync_data','Name','id','name',''),
-('farben','rgb','rgb','name',''),
-('setup_parameters','id','id','name',''),
-('view_ds_listfilters','id','id','name','');
-*/
