@@ -3,6 +3,7 @@ DELIMITER //
 CREATE OR REPLACE PROCEDURE `proc_deferred_sql_tasks`()
     MODIFIES SQL DATA
 BEGIN
+    SET @deferred_sql_tasks_proc_running = 1;
     SET @sql=concat("set @rem_sessionuser=@sessionuser");
     PREPARE stmt FROM @sql;
     EXECUTE stmt;
@@ -60,6 +61,9 @@ CREATE OR REPLACE EVENT `event_deferred_sql_tasks` ON SCHEDULE EVERY 1 SECOND ST
 		-- and hostname=@@hostname
 		order by createtime asc
     ) DO
+
+        SET @deferred_sql_tasks_proc_running = 1;
+        
     	update deferred_sql_tasks set state=-1 where taskid=rec.taskid;
         
         SET @sql=concat("set @sessionuser='",rec.sessionuser,"'");

@@ -61,7 +61,7 @@ class Database_mysql extends Database_basic
             $c = @$this->mysqli->real_connect($host, ($user), ($pass), $db, $port, NULL, MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT);
             TualoApplication::timing("db __construct connect ssl");
         } else {
-            $c = @$this->mysqli->real_connect($host, ($user), ($pass), $db, $port);
+            $c = @$this->mysqli->real_connect($host, ($user), ($pass), $db, $port, null,  MYSQLI_CLIENT_SSL);
             TualoApplication::timing("db __construct connect plain");
         }
         TualoApplication::timing("db __construct connect step a");
