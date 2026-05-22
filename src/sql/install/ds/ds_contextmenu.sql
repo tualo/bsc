@@ -41,5 +41,4 @@ from
 where 
     ds_contextmenu.position is not null 
 group by
- ds_contextmenu.position,
  ds.table_name;
