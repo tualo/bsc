@@ -12,6 +12,8 @@ TualoApplication::use('TualoApplicationSession_Auth', function () {
 
         TualoApplication::logger('BSC')->debug('Testing Cookie: ' . @session_id());
 
+
+
         if ($session->getHeader('Authorization') !== false) {
 
             TualoApplication::logger('BSC')->debug('Authorization Header found: ' . $session->getHeader('Authorization'));

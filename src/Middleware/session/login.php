@@ -7,6 +7,7 @@ TualoApplication::use('TualoApplicationSession_Login', function () {
         $session = TualoApplication::get('session');
 
 
+
         if (
             isset($_SESSION['tualoapplication']['loggedIn'])
             &&  (
@@ -20,6 +21,8 @@ TualoApplication::use('TualoApplicationSession_Login', function () {
             &&  (isset($_REQUEST['password']))
             &&  (!is_null($session))
         ) {
+            header('Access-Control-Allow-Origin: ' . TualoApplication::configuration('options_request', 'accessControlAllowOrigin', '*'));
+
 
             TualoApplication::result('success', false);
             TualoApplication::result('msg', '');
@@ -100,6 +103,7 @@ TualoApplication::use('TualoApplicationSession_Login', function () {
                     TualoApplication::logger('BSC')->error('Fehler beim Zugriff auf die Datenbank (418)');
                     $session->destroy();
                 } else {
+                    TualoApplication::result('sid',      session_id());
                     TualoApplication::result('fullname',    $_SESSION['tualoapplication']['fullname']);
                     TualoApplication::result('username',    $_SESSION['tualoapplication']['username']);
                     TualoApplication::result('client',      $_SESSION['tualoapplication']['client']);
