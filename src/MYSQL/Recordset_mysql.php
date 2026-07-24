@@ -18,7 +18,7 @@ use Tualo\Office\Basic\TualoApplication;
  * @package basic
  * @subpackage classes
  */
-class Recordset_mysql
+class Recordset_mysql extends \Tualo\Office\Basic\BASIC\RecordsetBasic
 {
 
 	public  $version;
@@ -115,12 +115,13 @@ class Recordset_mysql
 		}
 	}
 
-	function tinyIntAsBoolean($val)
+	public function tinyIntAsBoolean(bool $val): bool
 	{
 		$this->_tinyIntAsBoolean = $val;
+		return $this->_tinyIntAsBoolean;
 	}
 
-	function useDBTypes($val)
+	public function useDBTypes(bool $val): void
 	{
 		$this->dbTypes = $val;
 	}
@@ -133,7 +134,7 @@ class Recordset_mysql
 		}
 	}
 
-	public function moveNext()
+	public function moveNext(): array | false
 	{
 
 		$res = $this->rs_ref = $this->ref->fetch_row();
@@ -143,10 +144,13 @@ class Recordset_mysql
 				$this->ref->free();
 			}
 		}
+		if (is_null($res)) {
+			$res = false;
+		}
 		return $res;
 	}
 
-	public function singleRow($utf8 = false)
+	public function singleRow($utf8 = false): array | bool
 	{
 		$rows = $this->toArray('', $utf8);
 		$this->unload();
@@ -156,7 +160,7 @@ class Recordset_mysql
 		return false;
 	}
 
-	public function toArray($id = '', $utf8 = false, $start = 0, $limit = 999999999, $byName = false)
+	public function toArray(string $id = '', bool $utf8 = false, int $start = 0, int $limit = 999999999, bool $byName = false): array
 	{
 		$d = array();
 		$i = 0;
@@ -248,7 +252,7 @@ class Recordset_mysql
 			//return $data[$ds[$id]];
 		}
 	}
-	public function toHash($id = '', $utf8 = false, $start = 0, $limit = 999999999, $byName = false)
+	public function toHash(string $id = '', bool $utf8 = false, int $start = 0, int $limit = 999999999, bool $byName = false): array
 	{
 		$d = array();
 		$i = 0;
@@ -307,7 +311,7 @@ class Recordset_mysql
 		return $d;
 	}
 
-	public function fieldValue($field_name)
+	public function fieldValue(string $field_name): mixed
 	{
 		$field_name = strtolower($field_name);
 		$value = '';
@@ -323,29 +327,29 @@ class Recordset_mysql
 		return $value;
 	}
 
-	public function fieldName($n)
+	public function fieldName(int $n): string
 	{
 		return $this->a_info[$n]->name;
 	}
-	public function rows()
+	public function rows(): int
 	{
 		return $this->row_count;
 	}
-	public function fields()
+	public function fields(): int
 	{
 		return count($this->a_fields);
 	}
-	public function LongReadLen($n)
+	public function LongReadLen(int $n): void
 	{
 		// odbc_longreadlen($this->rs_ref,$n);
 	}
 
-	public function fieldType($fieldName)
+	public function fieldType(string $fieldName): string
 	{
 		return $this->a_fields[$fieldName]["type"];
 	}
 
-	public function unload()
+	public function unload(): void
 	{
 		if ($this->open) {
 			$this->open = false;

@@ -2,11 +2,12 @@
 
 namespace Tualo\Office\Basic\BASIC;
 
+use Tualo\Office\Basic\BASIC\RecordsetBasic;
+
 class  Database_basic
 {
-  public  $version;
   public  $state = false;
-  public $last_sql = '';
+  public  $last_sql = '';
   public  $dbname = '';
   public  $dbuser = '';
   public  $dbhost = '';
@@ -21,7 +22,7 @@ class  Database_basic
    * @param {String} Datenbankhost, IP oder Name
    * @return {database_basic}
    */
-  function __construct($user, $pass, $db, $host, $port = 3306, $ssl_key = '', $ssl_cert = '', $ssl_ca = '')
+  function __construct(string $user, string $pass, string $db, string $host, int $port = 3306, ?string $ssl_key = null, ?string $ssl_cert = null, ?string $ssl_ca = null)
   {
     $this->dbname = $db;
     $this->dbuser = $user;
@@ -31,7 +32,7 @@ class  Database_basic
   public $dbTypes = true;
   private $_tinyIntAsBoolean = false;
 
-  function useDBTypes($val)
+  public function useDBTypes(bool $val): void
   {
     $this->dbTypes = $val;
   }
@@ -57,13 +58,15 @@ class  Database_basic
     return $this->last_sql;
   }
 
-  function tinyIntAsBoolean($val)
+  public function tinyIntAsBoolean(bool $val): bool
   {
     $this->_tinyIntAsBoolean = $val;
+    return $this->_tinyIntAsBoolean;
   }
 
 
-  public function direct($statement, $hash = array(), $key = '', $byName = false)
+
+  public function direct(string $statement, array $hash = [], string $key = '', bool $byName = false): array | bool
   {
     $res = array();
     $rs = $this->execute_with_hash($statement, $hash);
@@ -86,7 +89,7 @@ class  Database_basic
     }
   }
 
-  public function directMap($statement, $hash = array(), $key = '', $value = '')
+  public function directMap(string $statement, array $hash = [], string $key = '', string $value = ''): array
   {
     $res = [];
     $vals = $this->direct($statement, $hash, $key);
@@ -97,7 +100,7 @@ class  Database_basic
   }
 
 
-  public function directArray($statement, $hash = array(), $value = '')
+  public function directArray(string $statement, array $hash = [], string $value = ''): array
   {
     $res = [];
     $vals = $this->direct($statement, $hash);
@@ -111,7 +114,7 @@ class  Database_basic
 
 
 
-  public function directHash($statement, $hash = array(), $key = '')
+  public function directHash(string $statement, array $hash = [], string $key = ''): array|bool
   {
     $res = array();
     $rs = $this->execute_with_hash($statement, $hash);
@@ -128,7 +131,7 @@ class  Database_basic
     }
   }
 
-  public function directSingleHash($statement, $hash = [])
+  public function directSingleHash(string $statement, array $hash = []): array | bool
   {
     $row = $this->singleRow($statement, $hash, '');
     if ($row === false) return false;
@@ -176,18 +179,18 @@ class  Database_basic
     return $sql;
   }
 
-  public function execute_with_hash($sql_statement, $hash, $decode = false)
+  public function execute_with_hash(string $sql_statement, array $hash, $decode = false): RecordsetBasic | bool
   {
 
     return $this->execute($this->replace_hash($sql_statement, $hash));
   }
 
-  public function escape_string($str)
+  public function escape_string(string $str): string
   {
     return $str;
   }
 
-  public function singleRow($statement, $hash = array(), $key = '')
+  public function singleRow(string $statement, array $hash = [], string $key = ''): array | bool
   {
     $rs = $this->execute_with_hash($statement, $hash);
     $res = $rs->toArray($key);
@@ -198,7 +201,7 @@ class  Database_basic
     return false;
   }
 
-  public function singleValue($statement, $hash = array(), $key = '')
+  public function singleValue(string $statement, array $hash = [], string $key = ''): mixed
   {
     $rs = $this->singleRow($statement, $hash, '');
     if ($rs !== false) {
@@ -213,9 +216,9 @@ class  Database_basic
    * F�hrt ein SQL-Statement aus und gibt bei SELECT Statements ein Recordset-Objekt zur�ck.
    * Bei INSERT, UPDATE, DROP, CREATE oder ALTER Statements gibt es true bei Erfolg zur�ck.
    * @param {String} SQL Statement
-   * @return {recordset_basic|Boolean}
+   * @return {IRecordset|Boolean}
    */
-  public function execute($statement)
+  public function execute(string $statement): RecordsetBasic | bool
   {
     return false;
   }
@@ -228,9 +231,9 @@ class  Database_basic
    *
    * @param {String} $statement
    * @param {String[]} $params
-   * @return {recordset_basic|Boolean}
+   * @return {IRecordset|Boolean}
    */
-  public function execute_with_params($statement, $params)
+  public function execute_with_params(string $statement, array $params): RecordsetBasic | bool
   {
     return false;
   }
@@ -246,7 +249,7 @@ class  Database_basic
    * @param {Boolean} $bool_state
    * @return {Boolean}
    */
-  public function autocommit($bool_state)
+  public function autocommit(bool $bool_state): bool
   {
     return false;
   }
@@ -257,7 +260,7 @@ class  Database_basic
    *
    * @return {Boolean}
    */
-  public function commit()
+  public function commit(): bool
   {
     return false;
   }
@@ -268,35 +271,9 @@ class  Database_basic
    * @param {String} $table_name
    * @return {Boolean}
    */
-  public function isLocked($table_name)
+  public function isLocked(string $table_name): bool
   {
     return false;
-  }
-
-  /**
-   * Wartet max. `$iterations` Durchläufe auf das entsperren der 
-   * der Tabelle, sonst wird eine exception ausgelöst
-   * 
-   * @param {String} $table_name
-   * @param {Integer} $iterations, default 5
-   * @param {Integer} $ms, dafault 500
-   * @return {Boolean}
-   */
-  public function waitForUnlock($table_name, $iterations = 10, $ms = 1500)
-  {
-    $count = 0;
-    while ($this->isLocked($table_name) && ($count < $iterations)) {
-      usleep($ms);
-      $count++;
-    }
-    if (defined('__THROW_ERROR_ON_WAIT_TIMEOUT__')) {
-      if (constant('__THROW_ERROR_ON_WAIT_TIMEOUT__') == 1) {
-        if ($count >= $iterations) {
-          throw new \Exception("Wait to long for unlocking table `" . $table_name . "`");
-        }
-      }
-    }
-    return true;
   }
 
   /**
@@ -305,7 +282,7 @@ class  Database_basic
    *
    * @return {Boolean}
    */
-  public function rollback()
+  public function rollback(): bool
   {
     return false;
   }
@@ -315,7 +292,7 @@ class  Database_basic
    *
    * @return {Boolean}
    */
-  public function commitstate()
+  public function commitstate(): bool
   {
     return false;
   }
@@ -325,7 +302,7 @@ class  Database_basic
    *
    * @return {String[]}
    */
-  public function getTables()
+  public function getTables(): array
   {
     return array();
   }
@@ -358,7 +335,7 @@ $element = array(
    * @param {String} $table_name
    * @return {String[]}
    */
-  public function getColumns($table_name)
+  public function getColumns(string $table_name): array
   {
     return array();
   }
@@ -378,7 +355,7 @@ $element = array(
   }
 
 
-  public function explode_by_delimiter($sql)
+  public function explode_by_delimiter(string $sql): array
   {
     $all_queries = [];
     preg_match_all("/delimiter\s*(?P<delimiter>(\/\/|;))/i", $sql, $matches);
@@ -406,7 +383,7 @@ $element = array(
     return $all_queries;
   }
 
-  public function split_delimiter($sql, $current_delimiter = ';')
+  public function split_delimiter(string $sql, string $current_delimiter = ';'): array
   {
     $sqls = array();
     $in_single_qoute = false;

@@ -5,14 +5,14 @@ namespace Tualo\Office\Basic\MYSQL;
 use Tualo\Office\Basic\TualoApplication;
 
 use Tualo\Office\Basic\BASIC\Database_basic;
+use Tualo\Office\Basic\BASIC\RecordsetBasic;
 use Tualo\Office\Basic\MYSQL\Recordset_mysql;
 use Mysqli;
 
 class Database_mysql extends Database_basic
 {
-    public $version;
     private $_version = '1.2.001';
-    public $mysqli;
+    public \Mysqli $mysqli;
     private $commit_state = true;
     public $state = false;
     public $dbname = '';
@@ -33,12 +33,14 @@ class Database_mysql extends Database_basic
     private $_tinyIntAsBoolean = false;
 
 
-    function tinyIntAsBoolean($val)
+    public function tinyIntAsBoolean(bool $value): bool
     {
-        $this->_tinyIntAsBoolean = $val;
+        $this->_tinyIntAsBoolean = $value;
+        return $this->_tinyIntAsBoolean;
     }
 
-    public function __construct($user, $pass, $db, $host, $port = 3306, $ssl_key = '', $ssl_cert = '', $ssl_ca = '')
+
+    public function __construct(string $user, string $pass, string $db, string $host, int $port = 3306, ?string $ssl_key = null, ?string $ssl_cert = null, ?string $ssl_ca = null)
     {
         parent::__construct($user, $pass, $db, $host);
         if (strpos($host, ':') !== false) {
@@ -56,7 +58,7 @@ class Database_mysql extends Database_basic
 
         TualoApplication::timing("db __construct options");
 
-        if (($ssl_key != '') && ($ssl_cert != '') && ($ssl_ca != '')) {
+        if ($ssl_key !== null && $ssl_key !== '' && $ssl_cert !== null && $ssl_cert !== '' && $ssl_ca !== null && $ssl_ca !== '') {
             $this->mysqli->ssl_set($ssl_key, $ssl_cert, $ssl_ca, NULL, NULL);
             $c = @$this->mysqli->real_connect($host, ($user), ($pass), $db, $port, NULL, MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT);
             TualoApplication::timing("db __construct connect ssl");
@@ -266,28 +268,9 @@ class Database_mysql extends Database_basic
         return $results;
     }
 
-    public function execute_with_hash($sql_statement, $hash, $decode = false)
+    public function execute_with_hash(string $sql_statement, array $hash, $decode = false): Recordset_mysql | bool
     {
-        /*
-        if ($this->charset == 'utf8') {
-            $decode = false;
-        }
-        $matches = array();
-        $i = preg_match_all('/\{(?P<name>(\w+)(.\w+)*)\}/', $sql_statement, $matches);
-        if ($i === false) {
-        } else {
-            if (isset($matches['name'])) {
-                foreach ($matches['name'] as $p) {
-                    if ($decode === true) {
-                        $sql_statement = str_replace('{'.$p.'}', isset($hash[$p]) ? ' \''.$this->escape_string(utf8_decode($hash[$p])).'\' ' : 'null', $sql_statement);
-                    } else {
-                        $sql_statement = str_replace('{'.$p.'}', isset($hash[$p]) ? ' \''.$this->escape_string($hash[$p]).'\' ' : 'null', $sql_statement);
-                    }
-                }
-            }
-        }
-        return $this->execute( $sql_statement );
-        */
+
         return $this->execute($this->replace_hash($sql_statement, $hash));
     }
 
@@ -303,12 +286,12 @@ class Database_mysql extends Database_basic
     {
         $this->logfile = $filename;
     }
-    public function execute($sql_statement)
+
+    public function execute(string $statement): Recordset_mysql | bool
     {
-        //TualoApplication::timing(self::class.' execute start '.__LINE__);
         $this->check_start();
-        $sql_statement = trim($sql_statement);
-        $this->log($sql_statement);
+        $statement = trim($statement);
+        $this->log($statement);
 
 
         $this->warnings = array();
@@ -317,34 +300,34 @@ class Database_mysql extends Database_basic
                 if (!file_exists($this->logfile)) {
                     file_put_contents($this->logfile, '');
                 }
-                $space_pos = strpos($sql_statement, ' ');
+                $space_pos = strpos($statement, ' ');
                 if ($space_pos !== false) {
-                    $keyword = strtoupper(substr($sql_statement, 0, $space_pos));
+                    $keyword = strtoupper(substr($statement, 0, $space_pos));
                     if (isset($this->logcommands[$keyword])) {
                         if ($this->logcommands[$keyword] === true) {
-                            file_put_contents($this->logfile, utf8_encode($sql_statement) . ";\n", FILE_APPEND);
+                            file_put_contents($this->logfile, utf8_encode($statement) . ";\n", FILE_APPEND);
                         }
                     }
                 }
             }
         }
-        $this->last_sql = $sql_statement;
+        $this->last_sql = $statement;
 
-        if ($sql_statement != '') {
+        if ($statement != '') {
             if (
-                (strtoupper(substr($sql_statement, 0, 6)) == 'SELECT') ||
-                (strtoupper(substr($sql_statement, 0, 4)) == 'SHOW') ||
-                (strtoupper(substr($sql_statement, 0, 4)) == 'WITH') ||
-                (strtoupper(substr($sql_statement, 0, 5)) == 'CHECK') ||
-                (strtoupper(substr($sql_statement, 0, 6)) == 'REPAIR') ||
-                (strtoupper(substr($sql_statement, 0, 7)) == 'EXPLAIN')
+                (strtoupper(substr($statement, 0, 6)) == 'SELECT') ||
+                (strtoupper(substr($statement, 0, 4)) == 'SHOW') ||
+                (strtoupper(substr($statement, 0, 4)) == 'WITH') ||
+                (strtoupper(substr($statement, 0, 5)) == 'CHECK') ||
+                (strtoupper(substr($statement, 0, 6)) == 'REPAIR') ||
+                (strtoupper(substr($statement, 0, 7)) == 'EXPLAIN')
             ) {
                 $rs = false;
-                $this->lastSQL = $sql_statement;
+                $this->lastSQL = $statement;
 
 
                 //TualoApplication::timing(self::class.' mysqli->query start '.__LINE__);
-                $res = $this->mysqli->query($sql_statement);
+                $res = $this->mysqli->query($statement);
                 //TualoApplication::timing(self::class.' mysqli->query stop '.__LINE__);
 
                 if ($res !== false) {
@@ -370,8 +353,8 @@ class Database_mysql extends Database_basic
 
                 return $rs;
             } else {
-                $this->lastSQL = $sql_statement;
-                $res = $this->mysqli->query($sql_statement);
+                $this->lastSQL = $statement;
+                $res = $this->mysqli->query($statement);
                 if ($this->mysqli->warning_count != 0) {
                     $e = $this->mysqli->get_warnings();
                     do {
@@ -381,21 +364,18 @@ class Database_mysql extends Database_basic
 
 
                 if ($res) {
-                    //TualoApplication::timing(self::class.' execute return '.__LINE__);
-                    return $res;
+                    return true;
                 } else {
                     throw new \Exception($this->GetError());
-                    //					throw new mException($this->GetError()." ".addslashes($sql_statement)." ",__FILE__,__LINE__);
                 }
             }
         } else {
-            //TualoApplication::timing(self::class.' execute return false '.__LINE__);
             return false;
         }
-        $this->check_stop($sql_statement);
+        $this->check_stop($statement);
     }
 
-    public function escape_string($str)
+    public function escape_string(string $str): string
     {
         if (is_string($str)) {
             return $this->mysqli->real_escape_string($str);
@@ -409,16 +389,16 @@ class Database_mysql extends Database_basic
         return $this->warnings;
     }
 
-    public function execute_with_params($sql_statement, $params, $debug = false)
+    public function execute_with_params(string $statement, array $params): Recordset_mysql | bool
     {
-        $sql_statement = trim($sql_statement);
-        if (strtoupper(substr($sql_statement, 0, 6)) == 'SELECT') {
-            throw new \Exception('Parameterbindung bei auswählenden Anweisungen nicht möglich. ' . addslashes($sql_statement));
+        $statement = trim($statement);
+        if (strtoupper(substr($statement, 0, 6)) == 'SELECT') {
+            throw new \Exception('Parameterbindung bei auswählenden Anweisungen nicht möglich. ' . addslashes($statement));
 
             return false;
         } else {
             $sql_temp = '';
-            $parts = explode('?', $sql_statement);
+            $parts = explode('?', $statement);
             for ($i = 0, $m = count($parts); $i < $m; ++$i) {
                 $sql_temp .= $parts[$i];
                 $value = '';
@@ -436,26 +416,18 @@ class Database_mysql extends Database_basic
                             $value = 'null';
                         }
                     } else {
-                        throw new \Exception($sql_statement . ' - ' . print_r($params, true) . ' - Parameteranzahl stimmt nicht überein. ' . $i . ' < ' . count($params));
+                        throw new \Exception($statement . ' - ' . print_r($params, true) . ' - Parameteranzahl stimmt nicht überein. ' . $i . ' < ' . count($params));
 
                         return false;
                     }
                     $sql_temp .= $value;
                 }
             }
-            if ($debug) {
-                echo $sql_temp;
-            }
-            /*
-            if (isset($_REQUEST['mysql.db.param.debug']) && ($_REQUEST['mysql.db.param.debug'] == 1)) {
-                file_put_contents('mysql.db.param.txt', $sql_temp);
-            }
-                        */
             return $this->execute($sql_temp);
         }
     }
 
-    public function autocommit($bool_state)
+    public function autocommit(bool $bool_state): bool
     {
         $this->commit_state = $bool_state;
         $this->mysqli->autocommit($bool_state);
@@ -466,22 +438,22 @@ class Database_mysql extends Database_basic
         return $this->commit_state;
     }
 
-    public function commit()
+    public function commit(): bool
     {
         return $this->mysqli->commit();
     }
 
-    public function rollback()
+    public function rollback(): bool
     {
         return $this->mysqli->rollback();
     }
 
-    public function commitstate()
+    public function commitstate(): bool
     {
         return $this->commit_state;
     }
 
-    public function isLocked($table_name)
+    public function isLocked(string $table_name): bool
     {
         $item = $this->singleRow('show open tables from ' . $this->dbname . ' like {table_name}', array('table_name' => $table_name));
         if ($item === false) {
@@ -497,7 +469,7 @@ class Database_mysql extends Database_basic
      * Listet alle Tabellen
      */
 
-    public function getTables()
+    public function getTables(): array
     {
         $tables = array();
         $sql = 'select table_name from information_schema.tables where table_schema=\'' . $this->dbname . '\' ';
@@ -509,8 +481,7 @@ class Database_mysql extends Database_basic
 
         return $tables;
     }
-
-    public function getColumns($table_name)
+    public function getColumns(string $table_name): array
     {
         $types = array();
         $types['int'] = 'integer';
