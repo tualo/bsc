@@ -108,6 +108,9 @@ class  Database_basic
     return $res;
   }
 
+
+
+
   public function directHash($statement, $hash = array(), $key = '')
   {
     $res = array();

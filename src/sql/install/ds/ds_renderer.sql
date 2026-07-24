@@ -11,3 +11,7 @@ CREATE TABLE IF NOT EXISTS `ds_renderer` (
   CONSTRAINT `fk_ds_renderer_pug_template` FOREIGN KEY (`pug_template`) REFERENCES `ds_pug_templates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_ds_renderer_table_name` FOREIGN KEY (`table_name`) REFERENCES `ds` (`table_name`) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+alter table `ds_renderer` add column if not exists `xtype` varchar(150) default 'cmp_ds_pdfrendererpanel';
+update `ds_renderer` set `xtype` = 'cmp_ds_pdfrendererpanel' where `xtype` is null or `xtype` = '';
+
