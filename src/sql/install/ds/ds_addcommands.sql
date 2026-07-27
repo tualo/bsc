@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `ds_addcommands` (
 
 alter table ds_addcommands add column if not exists iconCls varchar(255) DEFAULT 'x-fa fa-plus';
 
-INSERT  IGNORE INTO `ds_addcommands` VALUES
+INSERT  IGNORE INTO `ds_addcommands` (table_name,xtype,location,position,label,iconCls) VALUES
 ('ds','cmp_setup_export_config_command','toolbar',1,'','x-fa fa-plus'),
 ('ds','cmp_setup_update_history_tables_command','toolbar',1,'','x-fa fa-plus'),
 ('ds','compiler_command','toolbar',1,'Kompiler',NULL),
