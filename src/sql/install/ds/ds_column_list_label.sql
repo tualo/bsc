@@ -31,3 +31,40 @@ alter table ds_column_list_label add column if not exists `align` varchar(8) DEF
 alter table ds_column_list_label add column if not exists `listfiltertype` varchar(255) DEFAULT '';
 alter table ds_column_list_label add column if not exists `hint` varchar(255) DEFAULT NULL;
 alter table ds_column_list_label add column if not exists `width` int(11) DEFAULT 0;
+
+
+delimiter // 
+
+CREATE
+OR REPLACE PROCEDURE `ds_listcolumn_formatter`() 
+
+BEGIN 
+
+
+if not exists (
+    select
+        *
+    from
+        information_schema.columns
+    where
+        table_schema = database()
+        and table_name = 'ds_column_list_label'
+        and column_name = 'formatter'
+) then
+
+
+alter table  ds_column_list_label add formatter varchar(255);
+
+update
+    ds_column_list_label
+set
+    formatter = renderer;
+
+update
+    ds_column_list_label
+set
+    renderer = null;
+
+end if;
+
+END // 
