@@ -37,6 +37,32 @@ BEGIN
     DEALLOCATE PREPARE stmt;
 END //
 
+
+CREATE OR REPLACE PROCEDURE `proc_deferred_sql_tasks_by_current_user`()
+    MODIFIES SQL DATA
+BEGIN
+    SET @deferred_sql_tasks_proc_running = 1;
+
+
+    FOR rec in (
+    	select * from deferred_sql_tasks WHERE state=0 
+		and sessionuser=getSessionUser()
+		order by createtime asc
+    ) DO
+    	update deferred_sql_tasks set state=-1 where taskid=rec.taskid;
+        
+
+		SET @sql = rec.sqlstatement;
+		PREPARE stmt FROM @sql;
+		EXECUTE stmt;
+		DEALLOCATE PREPARE stmt;
+    
+        update deferred_sql_tasks set state=1 where taskid=rec.taskid;
+        
+    END FOR;
+
+END //
+
 CREATE TABLE IF NOT EXISTS `deferred_sql_tasks` (
   `taskid` varchar(36) NOT NULL,
   `sessionuser` varchar(255) NOT NULL,

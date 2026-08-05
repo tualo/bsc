@@ -920,8 +920,14 @@ class TualoApplication
         if (!self::configuration('deferred', 'enabled', false)) return;
         try {
             $db = self::get('session')->getDB();
-            $db->execute('call proc_deferred_sql_tasks()');
-            $db->moreResults();
+
+            if (self::configuration('deferred', 'use_by_user', '0') != '1') {
+                $db->execute('call proc_deferred_sql_tasks()');
+                $db->moreResults();
+            } else {
+                $db->execute('call proc_deferred_sql_tasks_by_current_user()');
+                $db->moreResults();
+            }
         } catch (\Exception $e) {
             // self::debug($e->getMessage());
         }

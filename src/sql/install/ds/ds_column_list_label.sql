@@ -35,36 +35,37 @@ alter table ds_column_list_label add column if not exists `width` int(11) DEFAUL
 
 delimiter // 
 
-CREATE
-OR REPLACE PROCEDURE `ds_listcolumn_formatter`() 
-
+CREATE OR REPLACE PROCEDURE `ds_listcolumn_formatter`() 
 BEGIN 
 
 
-if not exists (
-    select
-        *
-    from
-        information_schema.columns
-    where
-        table_schema = database()
-        and table_name = 'ds_column_list_label'
-        and column_name = 'formatter'
-) then
+  if not exists (
+      select
+          *
+      from
+          information_schema.columns
+      where
+          table_schema = database()
+          and table_name = 'ds_column_list_label'
+          and column_name = 'formatter'
+  ) then
 
 
-alter table  ds_column_list_label add formatter varchar(255);
+  alter table  ds_column_list_label add formatter varchar(255);
 
-update
-    ds_column_list_label
-set
-    formatter = renderer;
+  update
+      ds_column_list_label
+  set
+      formatter = renderer;
 
-update
-    ds_column_list_label
-set
-    renderer = null;
+  update
+      ds_column_list_label
+  set
+      renderer = null;
 
 end if;
 
 END // 
+
+
+call ds_listcolumn_formatter() // 
