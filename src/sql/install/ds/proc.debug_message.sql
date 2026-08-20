@@ -1,5 +1,5 @@
 DELIMITER //
-CREATE PROCEDURE IF NOT EXISTS `debug_message`( in msg LONGTEXT)
+CREATE OR REPLACE PROCEDURE `debug_message`( in msg LONGTEXT)
     MODIFIES SQL DATA
     COMMENT '\nPrint messages if the session variable @debug is set to 1.\n'
 BEGIN
