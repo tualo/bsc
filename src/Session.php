@@ -48,7 +48,7 @@ class Session
   public static function newDBByRow($row)
   {
 
-    $config = TualoApplication::get('configuration');
+    $config = (array)TualoApplication::get('configuration');
     if (isset($config['database']) && isset($config['database']['force_db_host'])) $row['db_host'] = $config['database']['force_db_host'];
     if (isset($config['database']) && isset($config['database']['force_db_host'])) $row['db_port'] = $config['database']['force_db_host'];
 
@@ -127,7 +127,7 @@ class Session
     }
 
 
-    $settings = TualoApplication::get('configuration');
+    $settings = (array)TualoApplication::get('configuration');
 
     if (!isset($_SESSION['db'])) $_SESSION['db'] = [];
     if (!isset($_SESSION['tualoapplication'])) $_SESSION['tualoapplication'] = [];
@@ -142,7 +142,11 @@ class Session
     }
 
     if (
-      isset($settings['database']['db_name'])
+      isset($settings['database']) &&
+      isset($settings['database']['db_name']) &&
+      isset($settings['database']['db_user']) &&
+      isset($settings['database']['db_pass']) &&
+      isset($settings['database']['db_host'])
     ) {
 
 
