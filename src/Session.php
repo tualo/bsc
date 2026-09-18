@@ -157,8 +157,9 @@ class Session
         }
       }
     } else {
-      echo "*Bitte richten Sie die Sitzungsdatenbank ein." . PHP_EOL;
-      exit();
+      // dies behindert die Ausführung, wenn es zum commandline erfolgt
+      // echo "*Bitte richten Sie die Sitzungsdatenbank ein." . PHP_EOL;
+      // exit();
     }
     if (is_object($this->db)) $this->db->mysqli->set_charset('utf8');
   }
