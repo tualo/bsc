@@ -74,6 +74,7 @@ TualoApplication::use('TualoApplicationSession_Login', function () {
                 TualoApplication::result('msg', 'Login OK');
 
 
+
                 $_SESSION['db']['db_host'] = $row['db_host'];
                 $_SESSION['db']['db_user'] = $row['db_user'];
                 $_SESSION['db']['db_pass'] = $row['db_pass'];
