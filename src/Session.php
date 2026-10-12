@@ -45,7 +45,7 @@ class Session
     }
   }
 
-  public static function newDBByRow($row)
+  public static function newDBByRow(array $row)
   {
 
     $config = (array)TualoApplication::get('configuration');
@@ -60,7 +60,8 @@ class Session
     if (!isset($row['db_pass']) && isset($row['dbpass'])) $row['db_pass'] = $row['dbpass'];
     if (!isset($row['db_name']) && isset($row['dbname'])) $row['db_name'] = $row['dbname'];
 
-
+    if (!isset($row['db_host']) || empty($row['db_host'])) $row['db_host'] = '127.0.0.1';
+    if (!isset($row['db_port']) || empty($row['db_port'])) $row['db_port'] = 3306;
 
     $db = new MYSQL\Database($row['db_user'], $row['db_pass'], $row['db_name'], $row['db_host'], intval($row['db_port']), $row['key_file'] ?? null, $row['cert_file'] ?? null, $row['ca_file'] ?? null);
     return $db;
@@ -68,7 +69,7 @@ class Session
 
 
 
-  public function switchClient($client)
+  public function switchClient(string $client)
   {
     $hash = [
       'username' => $_SESSION['tualoapplication']['username'],
