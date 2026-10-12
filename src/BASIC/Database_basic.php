@@ -64,6 +64,10 @@ class  Database_basic
     return $this->_tinyIntAsBoolean;
   }
 
+  public function getRealHost(): string
+  {
+    return $this->dbhost;
+  }
 
 
   public function direct(string $statement, array $hash = [], string $key = '', bool $byName = false): array | bool

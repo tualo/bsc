@@ -50,7 +50,7 @@ class Session
 
     $config = (array)TualoApplication::get('configuration');
     if (isset($config['database']) && isset($config['database']['force_db_host'])) $row['db_host'] = $config['database']['force_db_host'];
-    if (isset($config['database']) && isset($config['database']['force_db_host'])) $row['db_port'] = $config['database']['force_db_host'];
+    if (isset($config['database']) && isset($config['database']['force_db_port'])) $row['db_port'] = $config['database']['force_db_port'];
 
 
     // for backward compatibility
@@ -168,7 +168,7 @@ class Session
     if (is_object($this->db)) $this->db->mysqli->set_charset('utf8');
   }
 
-  public function loginByToken($token)
+  public function loginByToken(string $token)
   {
     $session = $this;
     $_SESSION['session_condition'] = array();
@@ -286,7 +286,7 @@ class Session
       if ($byPath == 1) {
         TualoApplication::result('success', false);
         TualoApplication::result('msg', 'Anmeldung fehlerhaft');
-        TualoApplication::logger('BSC')->error('Anmeldung fehlerhaft, Token: ' . $token . ' Path: ' . TualoApplication::get('requestPath') . $path . ' URI: ' . $uri);
+        TualoApplication::logger('BSC')->error('Anmeldung fehlerhaft, Token: ' . $token . ' Path: ' . (string)TualoApplication::get('requestPath') . $path . ' URI: ' . $uri);
         return;
       }
 
@@ -347,7 +347,7 @@ class Session
   }
 
 
-  public function removeToken($token)
+  public function removeToken(string $token)
   {
     try {
       $session = $this;

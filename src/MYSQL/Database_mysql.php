@@ -112,6 +112,16 @@ class Database_mysql extends Database_basic
         }
     }
 
+    public function getRealHost(): string
+    {
+        $server = $this->singleRow('SELECT @@hostname AS hostname');
+        if ($server === false || !isset($server['hostname'])) {
+            throw new \RuntimeException('Unable to determine MySQL backend hostname');
+        }
+
+        return (string)$server['hostname'];
+    }
+
     private function get_callee()
     {
         $backtrace = debug_backtrace();
