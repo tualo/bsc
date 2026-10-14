@@ -414,6 +414,9 @@ class Route
                         }
                     }
 
+                    file_put_contents('php://stderr', print_r([$path, $method], true));
+                    file_put_contents('php://stderr', print_r(self::$routes, true));
+
                     TualoApplication::logger('TualoApplication')->warning("*$path* *$method* is not allowed ", [TualoApplication::get('clientIP')]);
 
 

@@ -360,7 +360,7 @@ class Session
 
   public function getDB(): ?MYSQL\Database
   {
-    if ($_SESSION['tualoapplication']['loggedIn'] === false) {
+    if (isset($_SESSION['tualoapplication']) && $_SESSION['tualoapplication']['loggedIn'] === false) {
       $db = TualoApplication::get('clientDB', null);
       if ($db instanceof MYSQL\Database) {
         if ($val = TualoApplication::configuration('database', 'set_names', false)) {
