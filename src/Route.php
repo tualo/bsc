@@ -215,6 +215,9 @@ class Route
             $userScopes = $session->getUserScopes();
             return in_array($scope, $userScopes);
         } else {
+            if ($scope === 'public') {
+                return true;
+            }
             return false;
         }
     }
