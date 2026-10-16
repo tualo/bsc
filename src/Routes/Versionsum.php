@@ -9,14 +9,15 @@ use Tualo\Office\Basic\TualoApplication;
 use Tualo\Office\Basic\Route;
 use Tualo\Office\Basic\IRoute;
 use Tualo\Office\Basic\Version;
-use Tualo\Office\PUG\PUG;
+use \Tualo\Office\Basic\Scopes\VersionsumScope;
+
 
 
 class Versionsum extends \Tualo\Office\Basic\RouteWrapper
 {
     public static function scope(): string
     {
-        return 'bsc.versionsum';
+        return VersionsumScope::identifier();
     }
 
     public static function register()

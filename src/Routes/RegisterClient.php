@@ -5,14 +5,14 @@ namespace Tualo\Office\BSC\Routes;
 use Exception;
 use Tualo\Office\Basic\TualoApplication as App;
 use Tualo\Office\Basic\Route;
-use Tualo\Office\Basic\IRoute;
+use Tualo\Office\Basic\Scopes\RegisterClientScope as RCS;
 
 
 class RegisterClient extends \Tualo\Office\Basic\RouteWrapper
 {
     public static function scope(): string
     {
-        return 'bsc.registerclient';
+        return RCS::identifier();
     }
     public static function register()
     {
