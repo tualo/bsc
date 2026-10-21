@@ -53,6 +53,15 @@ class InstallScopes implements ICommandline
                         $GLOBALS['current_cls'] = $cls;
                         $scopes[] = $cls::scope();
                     }
+
+                    // new style
+                    if ($class->implementsInterface('Tualo\Office\Basic\IScope')) {
+                        $scope = $cls::identifier();
+                        if ($scope != '----') {
+                            $scopes[] = $scope;
+                        }
+                        // echo $cls::identifier() . " " . $class->getName() . "\n";
+                    }
                 }
                 $scopes = array_unique($scopes);
                 $sql = 'insert ignore into route_scopes (scope) values ({scope}) ';

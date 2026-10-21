@@ -4,12 +4,12 @@ namespace Tualo\Office\Basic;
 
 class Scope implements IScope
 {
-    private static string $identifier = '----';
-    private static array $name = [
+    protected static string $identifier = '----';
+    protected static array $name = [
         'EN' => 'Basic',
         'DE' => 'Basis',
     ];
-    private static array $description = [
+    protected static array $description = [
         'EN' => 'standard functions',
         'DE' => 'Grundlegende Funktionen',
     ];
@@ -17,18 +17,18 @@ class Scope implements IScope
     public static function identifier(): string
     {
         // Implement the method
-        return self::$identifier;
+        return static::$identifier;
     }
 
     public static function name(string $language = 'EN'): string
     {
         // Implement the method
-        return self::$name[$language] ?? self::$name['EN'];
+        return static::$name[$language] ?? static::$name['EN'];
     }
 
     public static function description(string $language = 'EN'): string
     {
         // Implement the method
-        return self::$description[$language] ?? self::$description['EN'];
+        return static::$description[$language] ?? static::$description['EN'];
     }
 }

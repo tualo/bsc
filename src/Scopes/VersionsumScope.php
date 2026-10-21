@@ -6,12 +6,12 @@ use Tualo\Office\Basic\Scope;
 
 class VersionsumScope extends Scope
 {
-    private static string $identifier = 'bsc.versionsum';
-    private static array $name = [
+    protected static string $identifier = 'bsc.versionsum';
+    protected static array $name = [
         'EN' => 'Version Summary',
         'DE' => 'Versionsübersicht',
     ];
-    private static array $description = [
+    protected static array $description = [
         'EN' => 'Summarize versions',
         'DE' => 'Versionen zusammenfassen',
     ];
