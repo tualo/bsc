@@ -32,7 +32,7 @@ class TualoApplication
      * @var array $modules Array of all modules
      */
     private static $modules = array();
-    private static $modulesTree;
+    private static DependTree $modulesTree;
 
     private static $headers = [];
 
@@ -252,6 +252,8 @@ class TualoApplication
         return 0;
     }
 
+
+
     /*
 
     }
@@ -407,23 +409,24 @@ class TualoApplication
         // return array_map($cb, self::$javascripts);
     }
 
-    public static function module($key = '', $filename = '', $dependOn = array(), $pos = 0)
+    public static function module(string $key = '', string $filename = '', array $dependOn = []): array
     {
         $cb = self::class . "::map_filename";
         if ($filename != '') {
-            self::$modules[$key] = array('key' => $key, 'filename' => $filename, 'pos' => $pos);
+            self::$modules[$key] = array('key' => $key, 'filename' => $filename);
 
+            /*
             if (is_null(self::$modulesTree)) {
                 self::$modulesTree = new DependTree($key);
                 self::$modulesTree->mergeChilds($dependOn);
             } else {
                 self::$modulesTree = self::$modulesTree->append($key, $dependOn);
-            }
+            }*/
         } else {
-            usort(self::$modules, ["Tualo\Office\Basic\TualoApplication", "javascript_cmp"]);
-            return array_unique(array_map($cb, self::$modules));
+            // usort(self::$modules, ["Tualo\Office\Basic\TualoApplication", "module_cmp"]);
+
         }
-        return array_map($cb, self::$javascripts);
+        return  self::$modules;
     }
 
     public static function javascriptLoader($filedata)

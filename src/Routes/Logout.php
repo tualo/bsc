@@ -20,6 +20,11 @@ class Logout extends \Tualo\Office\Basic\RouteWrapper
             ) {
                 @session_start();
                 $_SESSION['tualoapplication']['loggedIn'] = false;
+                if (isset($_SESSION['db'])) {
+                    unset($_SESSION['db']);
+                }
+
+                TualoApplication::logger('TualoApplication')->warning('logout start');
                 session_destroy();
 
                 TualoApplication::result('success', true);
