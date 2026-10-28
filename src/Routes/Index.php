@@ -23,22 +23,19 @@ class Index extends \Tualo\Office\Basic\RouteWrapper
         Route::add('/', function () {
 
             TualoApplication::contenttype('text/html');
-            if (!file_exists(TualoApplication::get('cachePath') . '/pugcache')) {
-                mkdir(TualoApplication::get('cachePath') . '/pugcache', 0777, true);
+            if (!file_exists((string)TualoApplication::get('cachePath') . '/pugcache')) {
+                mkdir((string)TualoApplication::get('cachePath') . '/pugcache', 0777, true);
             }
 
             $pug = PUG::getPug([
                 'pretty' => true,
-                'cache' => TualoApplication::get('cachePath') . '/pugcache'
+                'cache' => (string)TualoApplication::get('cachePath') . '/pugcache'
             ]);
 
             $csp = TualoApplication::configuration('tualo-backend', 'csp', ["base-uri 'self'; default-src 'self' data:; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; form-action 'self'; img-src 'self' data:; worker-src 'self' 'unsafe-inline' * blob:; frame-src 'self';"]);
             header("Content-Security-Policy: " . implode(';', $csp));
 
-
-
             try {
-                // $pugfile = TualoApplication::get('basePath').'/pages/custom/index.pug';
 
                 $pugfile =  TualoApplication::configuration(
                     'tualo-backend',
@@ -54,16 +51,12 @@ class Index extends \Tualo\Office\Basic\RouteWrapper
                     );
                 }
 
-                // if (!file_exists( $pugfile )) $pugfile = dirname(__DIR__).'/tpl/pages/basic/index.pug';
-                // if ( defined( 'INDEX_PUG' ) && file_exists( INDEX_PUG ) ) $pugfile = INDEX_PUG;
-
-
                 $params = array(
                     'title'             =>  TualoApplication::get('htmltitle', 'tualo office'),
                     'message'           =>  TualoApplication::get('message', 'tualo office'),
                     'stylesheets'       =>  TualoApplication::stylesheet(),
                     'javascripts'       =>  TualoApplication::javascript(),
-                    'modules'       =>  TualoApplication::module()
+                    'modules'           =>  TualoApplication::module()
 
                 );
 
