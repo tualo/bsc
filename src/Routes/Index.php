@@ -46,12 +46,21 @@ class Index extends \Tualo\Office\Basic\RouteWrapper
                     dirname(__DIR__) . '/tpl/pages/basic/index.pug'
                 );
 
+                if (TualoApplication::get('maintanceMode') == 'on') {
+                    $pugfile =  TualoApplication::configuration(
+                        'tualo-backend',
+                        'maintenance',
+                        dirname(__DIR__) . '/tpl/pages/basic/maintance.pug'
+                    );
+                }
+
                 // if (!file_exists( $pugfile )) $pugfile = dirname(__DIR__).'/tpl/pages/basic/index.pug';
                 // if ( defined( 'INDEX_PUG' ) && file_exists( INDEX_PUG ) ) $pugfile = INDEX_PUG;
 
 
                 $params = array(
                     'title'             =>  TualoApplication::get('htmltitle', 'tualo office'),
+                    'message'           =>  TualoApplication::get('message', 'tualo office'),
                     'stylesheets'       =>  TualoApplication::stylesheet(),
                     'javascripts'       =>  TualoApplication::javascript(),
                     'modules'       =>  TualoApplication::module()

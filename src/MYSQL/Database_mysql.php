@@ -57,17 +57,13 @@ class Database_mysql extends Database_basic
         // $this->mysqli->options(MYSQLI_SET_CHARSET_NAME ,"utf8mb4");
         $c = false;
 
-        TualoApplication::timing("db __construct options");
-
         if ($ssl_key !== null && $ssl_key !== '' && $ssl_cert !== null && $ssl_cert !== '' && $ssl_ca !== null && $ssl_ca !== '') {
             $this->mysqli->ssl_set($ssl_key, $ssl_cert, $ssl_ca, NULL, NULL);
             $c = @$this->mysqli->real_connect($host, ($user), ($pass), $db, $port, NULL, MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT);
             TualoApplication::timing("db __construct connect ssl");
         } else {
             $c = @$this->mysqli->real_connect($host, ($user), ($pass), $db, $port, null,  MYSQLI_CLIENT_SSL);
-            TualoApplication::timing("db __construct connect plain");
         }
-        TualoApplication::timing("db __construct connect step a");
         if (!$c) {
             TualoApplication::logger("Database")->critical("Database not reachable $host:$port, $user, $db " . gethostname());
             throw new \Exception('Verbindungsfehler, die Datenbank kann nicht erreicht werden (' . $this->mysqli->connect_error . ') ' . $this->mysqli->connect_errno);

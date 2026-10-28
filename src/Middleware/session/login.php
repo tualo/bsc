@@ -7,7 +7,6 @@ TualoApplication::use('TualoApplicationSession_Login', function () {
         $session = TualoApplication::get('session');
 
 
-
         if (
             isset($_SESSION['tualoapplication']['loggedIn'])
             &&  (
@@ -67,7 +66,10 @@ TualoApplication::use('TualoApplicationSession_Login', function () {
 
                 LIMIT 1
             ';
+
+
             $row = $session->db->singleRow($sql, $hash);
+
             if (false !== $row) {
 
                 TualoApplication::result('success', true);
@@ -100,7 +102,7 @@ TualoApplication::use('TualoApplicationSession_Login', function () {
                 // Test DB Access
                 if (is_null($session->getDB())) {
                     TualoApplication::result('success', false);
-                    TualoApplication::result('msg', 'Fehler beim Zugriff auf die Datenbank (418)');
+                    TualoApplication::result('msg', 'Fehler beim Zugriff auf die Datenbank');
                     TualoApplication::logger('BSC')->error('Fehler beim Zugriff auf die Datenbank (418)');
                     $session->destroy();
                 } else {
@@ -123,8 +125,7 @@ TualoApplication::use('TualoApplicationSession_Login', function () {
         } else {
         }
     } catch (\Exception $e) {
-        //echo $e->getMessage();
-
+        TualoApplication::logger('BSC')->error($e->getMessage());
         TualoApplication::set('maintanceMode', 'on');
         TualoApplication::addError($e->getMessage());
     }
