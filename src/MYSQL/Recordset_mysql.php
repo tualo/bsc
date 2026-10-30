@@ -160,6 +160,45 @@ class Recordset_mysql extends \Tualo\Office\Basic\BASIC\RecordsetBasic
 		return false;
 	}
 
+	/**
+	 * Yields the rows one by one with the same type conversion as toArray(),
+	 * so unbuffered results (MYSQLI_USE_RESULT) never have to be held in memory completely.
+	 */
+	public function iterate(bool $byName = false): \Generator
+	{
+		try {
+			while ($this->moveNext()) {
+				yield $this->convertRow($byName);
+			}
+		} finally {
+			$this->unload();
+		}
+	}
+
+	private function convertRow(bool $byName): array
+	{
+		$ds = array();
+		foreach ($this->a_fields as $fname => $x) {
+			$cname = $byName ? $x['name'] : $fname;
+			$value = $this->rs_ref[$x['index']];
+			if ($this->dbTypes) {
+				switch ($x['type_string']) {
+					case 'd':
+						$value = doubleval($value);
+						break;
+					case 'x':
+						$value = boolval($value);
+						break;
+					case 'i':
+						$value = intval($value);
+						break;
+				}
+			}
+			$ds[$cname] = $value;
+		}
+		return $ds;
+	}
+
 	public function toArray(string $id = '', bool $utf8 = false, int $start = 0, int $limit = 999999999, bool $byName = false): array
 	{
 		$d = array();

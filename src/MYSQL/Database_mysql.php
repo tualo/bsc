@@ -382,6 +382,37 @@ class Database_mysql extends Database_basic
         $this->check_stop($statement);
     }
 
+    /**
+     * Executes a SELECT unbuffered (MYSQLI_USE_RESULT): rows are transferred while they are read.
+     * The connection is blocked for other statements until the recordset is read completely or unloaded.
+     */
+    public function executeUnbuffered(string $statement): Recordset_mysql
+    {
+        $statement = trim($statement);
+        $this->log($statement);
+        $this->last_sql = $statement;
+        $this->lastSQL = $statement;
+        $this->warnings = array();
+
+        $res = $this->mysqli->query($statement, MYSQLI_USE_RESULT);
+        if (!($res instanceof \mysqli_result)) {
+            throw new \Exception($this->GetError());
+        }
+        $rs = new Recordset_mysql($res);
+        $rs->useDBTypes($this->dbTypes);
+        $rs->tinyIntAsBoolean($this->_tinyIntAsBoolean);
+        return $rs;
+    }
+
+    public function directIterate(string $statement, array $hash = [], bool $byName = false): \Generator
+    {
+        $rs = $this->executeUnbuffered($this->replace_hash($statement, $hash));
+        yield from $rs->iterate($byName);
+        if ($this->mysqli->errno != 0) {
+            throw new \Exception($this->GetError());
+        }
+    }
+
     public function escape_string(string $str): string
     {
         if (is_string($str)) {

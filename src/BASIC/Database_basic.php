@@ -93,6 +93,17 @@ class  Database_basic
     }
   }
 
+  /**
+   * Like direct(), but yields the rows one by one.
+   * Database_mysql reads unbuffered: no other statement may be executed on this
+   * connection until the generator is finished (or destroyed).
+   */
+  public function directIterate(string $statement, array $hash = [], bool $byName = false): \Generator
+  {
+    $rows = $this->direct($statement, $hash, '', $byName);
+    if (is_array($rows)) yield from $rows;
+  }
+
   public function directMap(string $statement, array $hash = [], string $key = '', string $value = ''): array
   {
     $res = [];

@@ -18,6 +18,10 @@ class RecordsetBasic implements IRecordset
     {
         return [];
     }
+    public function iterate(bool $byName = false): \Generator
+    {
+        yield from $this->toArray('', false, 0, 999999999, $byName);
+    }
     public function moveNext(): array | false
     {
         return false;

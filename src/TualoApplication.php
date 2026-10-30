@@ -94,7 +94,7 @@ class TualoApplication
 
     public static function configuration(string $section, string $key, mixed $defaultReturn = false): mixed
     {
-        $cnf = self::get('configuration');
+        $cnf = (array)self::get('configuration');
         /*if (isset(self::$vars['inside_pug']) && self::$vars['inside_pug'] == true) {
             // blocking variables in pug
             return [];
@@ -109,7 +109,7 @@ class TualoApplication
 
 
 
-    public static function logger($channel, $occurence = 'daily')
+    public static function logger(string $channel, string $occurence = 'daily')
     {
         if (!isset(self::$logger[$channel])) {
             $logger = new Logger($channel);
@@ -123,7 +123,7 @@ class TualoApplication
                 }
             );
             */
-            $cnf = self::get('configuration');
+            $cnf = (array)self::get('configuration');
 
             /**** ALT */
             /*
@@ -240,7 +240,7 @@ class TualoApplication
         self::$appendDebug = $var;
     }
 
-    public static function debug($data)
+    public static function debug(mixed $data)
     {
         self::$debug_result[] = $data;
     }
@@ -253,29 +253,6 @@ class TualoApplication
     }
 
 
-
-    /*
-
-    }
-
-    /** 
-    * TualoApplication::getClientIP()
-    */
-    /*
-    public static function getClientIP()
-    {
-        if (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)) {
-            $i = explode(',', $_SERVER["HTTP_X_FORWARDED_FOR"]);
-            return  trim($i[0]);
-        } else if (array_key_exists('REMOTE_ADDR', $_SERVER)) {
-            return $_SERVER["REMOTE_ADDR"];
-        } else if (array_key_exists('HTTP_CLIENT_IP', $_SERVER)) {
-            return $_SERVER["HTTP_CLIENT_IP"];
-        }
-
-        return '';
-    }
-*/
 
     public static function timing($key = '', $data = '')
     {
@@ -317,7 +294,7 @@ class TualoApplication
             ':' . $_SERVER['SERVER_PORT'],
             str_replace('/index.php', '', $_SERVER['PHP_SELF'])
         ]);
-        $cnf = self::get('configuration');
+        $cnf = (array)self::get('configuration');
         if (isset($cnf['use_base_url'])) $baseURL = $cnf['use_base_url'];
         $curlURL = $baseURL . '/~/' . $token . '' . $route;
         $command = 'echo "curl ' . $curlURL . '" | at "' . $time . '"';
@@ -467,20 +444,15 @@ class TualoApplication
      */
     public static function get($key, $default = '')
     {
-        /*if (isset(self::$vars['inside_pug']) && (self::$vars['inside_pug'] == true) && ($key != 'session')) {
-            // blocking variables in pug
-            return [];
-        }*/
         if (isset(self::$vars[$key])) {
             return self::$vars[$key];
         } else {
             if ($default != '') {
                 return $default;
             } else {
-                if ($key != 'configuration') {
+                if (!in_array($key, ['configuration', 'session', 'maintanceMode']) && $key != '') {
                     self::addError('Variable *' . $key . '* wurde nicht gefunden');
                 }
-                // self::$result['errors'][] = 'Variable *' . $key . '* wurde nicht gefunden';
             }
         }
     }
@@ -577,7 +549,7 @@ class TualoApplication
      * @param string $buffer The Data to be append
      * @return self::$resultbody
      */
-    public static function etagFile($file, $sendContentType = false)
+    public static function etagFile(string $file, bool $sendContentType = false)
     {
 
         if (!file_exists($file)) {
