@@ -358,7 +358,7 @@ class Session
   }
 
 
-  public function getDB(): ?MYSQL\Database
+  public function getDB(bool $freshConnection = false): ?MYSQL\Database
   {
     if (isset($_SESSION['tualoapplication']) && $_SESSION['tualoapplication']['loggedIn'] === false) {
       $db = TualoApplication::get('clientDB', null);
@@ -379,7 +379,8 @@ class Session
     try {
       if (
         isset($_SESSION['db']['db_user'])
-        &&  (is_null(self::$client_db_instance))
+        &&  (is_null(self::$client_db_instance) || $freshConnection)
+
       ) {
         TualoApplication::timing("session new by row");
         // TualoApplication::logger('TualoApplication')->info('getDB new', [__FILE__]);
