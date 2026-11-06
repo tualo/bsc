@@ -12,7 +12,7 @@ class SettingsCheck implements IMiddleware{
                             !isset($settings['session.save_path'])
                         || (strpos(@$settings['session.save_path']['local_value'],'tcp')!==0)
                     ){
-                        TualoApplication::logger('BSC')->error("redis save handler not set ".__FILE__." (".__LINE__.")");
+                        TualoApplication::logger('BSC')->error("redis save handler not set ".__FILE__." (".__LINE__.")", []);
                     }
                 }
                 

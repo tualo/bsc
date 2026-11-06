@@ -103,7 +103,7 @@ TualoApplication::use('TualoApplicationSession_Login', function () {
                 if (is_null($session->getDB())) {
                     TualoApplication::result('success', false);
                     TualoApplication::result('msg', 'Fehler beim Zugriff auf die Datenbank');
-                    TualoApplication::logger('BSC')->error('Fehler beim Zugriff auf die Datenbank (418)');
+                    TualoApplication::logger('BSC')->error('Fehler beim Zugriff auf die Datenbank (418)', []);
                     $session->destroy();
                 } else {
                     TualoApplication::result('sid',      session_id());
@@ -125,7 +125,7 @@ TualoApplication::use('TualoApplicationSession_Login', function () {
         } else {
         }
     } catch (\Exception $e) {
-        TualoApplication::logger('BSC')->error($e->getMessage());
+        TualoApplication::logger('BSC')->error($e->getMessage(), []);
         TualoApplication::set('maintanceMode', 'on');
         TualoApplication::addError($e->getMessage());
     }

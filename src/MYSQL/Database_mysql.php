@@ -416,6 +416,7 @@ class Database_mysql extends Database_basic
     public function escape_string(string $str): string
     {
         if (is_string($str)) {
+            TualoApplication::logger('BSC')->warning('Escaping string: ' . $str);
             return $this->mysqli->real_escape_string($str);
         } else {
             return $str;

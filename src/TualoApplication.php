@@ -954,7 +954,7 @@ class TualoApplication
                 return false;
             }
         } catch (\Exception $e) {
-            self::logger('debug')->error($e->getMessage());
+            self::logger('debug')->error($e->getMessage(), []);
         }
         return false;
     }

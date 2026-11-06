@@ -26,7 +26,7 @@ class Route
             TualoApplication::body('Path not found');
             TualoApplication::contenttype('text/plain');
             http_response_code(404);
-            TualoApplication::logger('BSC')->error($logMe);
+            TualoApplication::logger('BSC')->error($logMe, []);
             return false;
         }
         return true;
@@ -83,7 +83,7 @@ class Route
                         // TualoApplication::logger('BSC')->debug("alias $alias for $original added, method: " . $route['method']);
                         array_push(self::$routes, $route);
                     } else {
-                        TualoApplication::logger('BSC')->error("target route $original not found for $alias");
+                        TualoApplication::logger('BSC')->error("target route $original not found for $alias", []);
                     }
                 }
             }
@@ -103,7 +103,7 @@ class Route
         // TualoApplication::logger('BSC')->error("answer OPTIONS: " . strtoupper(implode(', ', self::getAllowedMethods($path))));
 
         if ($method == 'OPTIONS') {
-            TualoApplication::logger('BSC')->error("answer OPTIONS");
+            TualoApplication::logger('BSC')->error("answer OPTIONS", []);
             header("HTTP/1.0 200 OK");
             header('Access-Control-Allow-Origin: ' . TualoApplication::configuration('options_request', 'accessControlAllowOrigin', '*'));
             header('Access-Control-Allow-Methods: ' . strtoupper(implode(', ', self::getAllowedMethods($path))));
@@ -203,7 +203,7 @@ class Route
                     ]
                 );
             } catch (\Exception $e) {
-                TualoApplication::logger('BSC')->error("Could not log route access: " . $e->getMessage());
+                TualoApplication::logger('BSC')->error("Could not log route access: " . $e->getMessage(), []);
             }
         }
     }
@@ -298,7 +298,7 @@ class Route
                         } else {
                             header($_SERVER['SERVER_PROTOCOL'] . " 404 not found");
                             if (TualoApplication::configuration('logger-options', 'ROUTERUN', '0') == '1')
-                                TualoApplication::logger('ROUTERUN')->error("try to reach a path that is not allowed");
+                                TualoApplication::logger('ROUTERUN')->error("try to reach a path that is not allowed", []);
                             exit();
                         }
                     }
@@ -340,9 +340,9 @@ class Route
                             if (TualoApplication::configuration('sanitizer', 'disabled', false)) {
                                 $errors = RouteSantizer::sanitize($input, $route['expected_inputs']['fields'], $sanitized, false,  false);
                                 if (!empty($errors)) {
-                                    TualoApplication::logger('BSC')->error("Route error: Sanitizer is disabled, but errors found for route: " . $route['expression']);
+                                    TualoApplication::logger('BSC')->error("Route error: Sanitizer is disabled, but errors found for route: " . $route['expression'], []);
                                     foreach ($errors as $key => $error) {
-                                        TualoApplication::logger('BSC')->error("Route error: $key - $error");
+                                        TualoApplication::logger('BSC')->error("Route error: $key - $error", []);
                                         // echo "Route error: $key - $error\n";
                                     }
                                 }
@@ -352,7 +352,7 @@ class Route
                         }
                         if (!empty($errors)) {
                             foreach ($errors as $key => $error) {
-                                TualoApplication::logger('BSC')->error("Route error: $key - $error");
+                                TualoApplication::logger('BSC')->error("Route error: $key - $error", []);
                                 TualoApplication::contenttype('application/json');
                                 TualoApplication::result('msg', 'Input validation error');
                                 TualoApplication::result('success', false);

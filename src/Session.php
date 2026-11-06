@@ -287,7 +287,7 @@ class Session
       if ($byPath == 1) {
         TualoApplication::result('success', false);
         TualoApplication::result('msg', 'Anmeldung fehlerhaft');
-        TualoApplication::logger('BSC')->error('Anmeldung fehlerhaft, Token: ' . $token . ' Path: ' . (string)TualoApplication::get('requestPath') . $path . ' URI: ' . $uri);
+        TualoApplication::logger('BSC')->error('Anmeldung fehlerhaft, Token: ' . $token . ' Path: ' . (string)TualoApplication::get('requestPath') . $path . ' URI: ' . $uri, []);
         return;
       }
 
@@ -310,7 +310,7 @@ class Session
       if (is_null($session->getDB())) {
         TualoApplication::result('success', false);
         TualoApplication::result('msg', 'Fehler beim Zugriff auf die Datenbank');
-        TualoApplication::logger('BSC')->error('Fehler beim Zugriff auf die Datenbank (client db)');
+        TualoApplication::logger('BSC')->error('Fehler beim Zugriff auf die Datenbank (client db)', []);
         $session->destroy();
       } else {
         TualoApplication::result('fullname',    $_SESSION['tualoapplication']['fullname']);
@@ -528,7 +528,7 @@ class Session
 
       return $_SESSION['tualoapplication']['scopes'] ?? [];
     } catch (\Exception $e) {
-      TualoApplication::logger('BSC')->error($e->getMessage());
+      TualoApplication::logger('BSC')->error($e->getMessage(), []);
       return ['basic'];
     }
   }

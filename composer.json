@@ -3,10 +3,10 @@
   "description": "Tualo Office Application",
   "type": "library",
   "require": {
-    "phpseclib/phpseclib": "~3.0.41",
+    "phpseclib/phpseclib": "^4.0.3",
     "ramsey/uuid": "~4.9.0",
     "vanilla/garden-cli": "~v4.0",
-    "monolog/monolog": "~3.7.0",
+    "monolog/monolog": "^3.12.1",
     "tualo/server": "^1",
     "tualo/pug": "^1.3"
   },
