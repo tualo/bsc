@@ -90,7 +90,6 @@ class Database_mysql extends Database_basic
             if ($val = TualoApplication::configuration('database', 'lc_time_names', false)) $this->execute('SET SESSION lc_time_names= ' . $val . ';');
 
             if ($val = TualoApplication::configuration('database', 'set_names', false)) {
-                //"SET NAMES 'utf8mb4' COLLATE 'utf8mb4_general_ci'")) 
                 $this->execute($val);
             }
         }
@@ -416,7 +415,6 @@ class Database_mysql extends Database_basic
     public function escape_string(string $str): string
     {
         if (is_string($str)) {
-            TualoApplication::logger('BSC')->warning('Escaping string: ' . $str);
             return $this->mysqli->real_escape_string($str);
         } else {
             return $str;
