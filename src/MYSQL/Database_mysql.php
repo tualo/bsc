@@ -51,18 +51,26 @@ class Database_mysql extends Database_basic
 
         $this->dbname = $db;
         $this->mysqli = new mysqli;
-        $this->mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT,  TualoApplication::configuration('', 'client.mysql.connect_timeout', 10));
+        $this->mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT,  TualoApplication::configuration('database', 'client.mysql.connect_timeout', 10));
         $this->mysqli->options(MYSQLI_OPT_SSL_VERIFY_SERVER_CERT, false);
         $this->mysqli->options(MYSQLI_OPT_INT_AND_FLOAT_NATIVE, false);
         // $this->mysqli->options(MYSQLI_SET_CHARSET_NAME ,"utf8mb4");
         $c = false;
 
+        // Persistent connections avoid the TCP+TLS+auth handshake on every request
+        // (significant with remote/WAN databases). Disable via client.mysql.persistent = 0.
+        $persistent = (bool)TualoApplication::configuration('database', 'client.mysql.persistent', true);
+        // Protocol compression reduces transfer time for large result sets over WAN.
+        $compress = (bool)TualoApplication::configuration('database', 'client.mysql.compress', false);
+        $connectHost = $persistent ? 'p:' . $host : $host;
+        $extraFlags = $compress ? MYSQLI_CLIENT_COMPRESS : 0;
+
         if ($ssl_key !== null && $ssl_key !== '' && $ssl_cert !== null && $ssl_cert !== '' && $ssl_ca !== null && $ssl_ca !== '') {
             $this->mysqli->ssl_set($ssl_key, $ssl_cert, $ssl_ca, NULL, NULL);
-            $c = @$this->mysqli->real_connect($host, ($user), ($pass), $db, $port, NULL, MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT);
+            $c = @$this->mysqli->real_connect($connectHost, ($user), ($pass), $db, $port, NULL, MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT | $extraFlags);
             TualoApplication::timing("db __construct connect ssl");
         } else {
-            $c = @$this->mysqli->real_connect($host, ($user), ($pass), $db, $port, null,  MYSQLI_CLIENT_SSL);
+            $c = @$this->mysqli->real_connect($connectHost, ($user), ($pass), $db, $port, null,  MYSQLI_CLIENT_SSL | $extraFlags);
         }
         if (!$c) {
             TualoApplication::logger("Database")->critical("Database not reachable $host:$port, $user, $db " . gethostname());
@@ -84,10 +92,13 @@ class Database_mysql extends Database_basic
             $this->state = true;
 
             // $this->execute("SET NAMES 'utf8mb4' COLLATE 'utf8mb4_general_ci'");
-            $this->execute('SET collation_connection = @@collation_database;');
-            $this->execute('SET character_set_client = @@character_set_database;');
-
-            if ($val = TualoApplication::configuration('database', 'lc_time_names', false)) $this->execute('SET SESSION lc_time_names= ' . $val . ';');
+            // combine all session variables into a single statement to save network round trips
+            $sessionVars = [
+                'collation_connection = @@collation_database',
+                'character_set_client = @@character_set_database'
+            ];
+            if ($val = TualoApplication::configuration('database', 'lc_time_names', false)) $sessionVars[] = 'SESSION lc_time_names = ' . $val;
+            $this->execute('SET ' . implode(', ', $sessionVars) . ';');
 
             if ($val = TualoApplication::configuration('database', 'set_names', false)) {
                 $this->execute($val);
@@ -130,7 +141,9 @@ class Database_mysql extends Database_basic
     public function reconnect()
     {
         $this->mysqli->close();
-        $this->mysqli = new \mysqli($this->host, ($this->user), ($this->pass), $this->db, $this->port);
+        $persistent = (bool)TualoApplication::configuration('database', 'client.mysql.persistent', true);
+        $connectHost = $persistent ? 'p:' . $this->host : $this->host;
+        $this->mysqli = new \mysqli($connectHost, ($this->user), ($this->pass), $this->db, $this->port);
     }
 
     public function __destruct()
