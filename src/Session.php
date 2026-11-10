@@ -157,8 +157,9 @@ class Session
         TualoApplication::logger('BSC(' . __FILE__ . ')')->error($e->getMessage());
         $is_web = http_response_code() !== FALSE;
         if ($is_web) {
-          echo "Bitte richten Sie die Sitzungsdatenbank ein. *";
-          exit();
+          TualoApplication::set('message', 'Das Sytsem ist derzeit nicht erreichbar');
+          TualoApplication::logger('BSC')->error('Session is empty', []);
+          TualoApplication::set('maintanceMode', 'on');
         }
       }
     } else {

@@ -9,6 +9,12 @@ TualoApplication::use('TualoApplicationSession_Auth', function () {
 
         $session = TualoApplication::get('session');
 
+        if (empty($session)) {
+            TualoApplication::set('message', 'Das Sytsem ist derzeit nicht erreichbar');
+            TualoApplication::logger('BSC')->error('Session is empty', []);
+            TualoApplication::set('maintanceMode', 'on');
+            return;
+        }
 
         TualoApplication::logger('BSC')->debug('Testing Cookie: ' . @session_id());
 

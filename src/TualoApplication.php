@@ -691,10 +691,14 @@ class TualoApplication
     {
         self::timing('run start middlewares');
         $classes = get_declared_classes();
+
         foreach ($classes as $cls) {
             $class = new \ReflectionClass($cls);
             if ($class->implementsInterface('Tualo\Office\Basic\IMiddleware')) {
-                $cls::register();
+                if ($cls::register() === false) {
+                    self::logger('Application')->error('Middleware stopped at ' . $cls, []);
+                    break;
+                }
             }
         }
         $cb = self::class . "::compare_position";
@@ -750,7 +754,10 @@ class TualoApplication
         if ($run === true) {
             self::$called_middlewares[$middleware['key']] = 1;
             try {
-                call_user_func_array($middleware['function'], [$path]);
+                $result = call_user_func_array($middleware['function'], [$path]);
+                if ($result === false) {
+                    self::$runmiddlewares = false; // stop all others
+                }
                 if (self::$output === true) {
                 }
             } catch (\Exception $e) {

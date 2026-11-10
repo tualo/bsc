@@ -9,6 +9,7 @@ class Session implements IMiddleware
 {
     public static function register()
     {
+
         $middlewareOrder = -9000000;
         include __DIR__ . '/session/instance.php';
         $middlewareOrder++;
