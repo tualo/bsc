@@ -35,6 +35,8 @@ BEGIN
     PREPARE stmt FROM @sql;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
+
+    delete from    deferred_sql_tasks where createtime < now() + interval - 3 hour and state = 1 limit 10000; 
 END //
 
 
@@ -60,6 +62,8 @@ BEGIN
         update deferred_sql_tasks set state=1 where taskid=rec.taskid;
         
     END FOR;
+    
+    delete from    deferred_sql_tasks where createtime < now() + interval - 3 hour and state = 1 limit 10000; 
 
 END //
 
