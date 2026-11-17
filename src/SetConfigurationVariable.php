@@ -125,6 +125,6 @@ class SetConfigurationVariable implements ICommandline
             $config[$args->getOpt('key')] = $args->getOpt('value');
         }
         self::write_ini_file(App::get('configurationFile'), $config);
-        PostCheck::formatPrintLn(['green'], "done" . PHP_EOL);
+        PostCheck::formatPrintLn(['green'], "\t" . ($args->getOpt('section') ? $args->getOpt('section') . '.' : '') . $args->getOpt('key') . " done");
     }
 }
