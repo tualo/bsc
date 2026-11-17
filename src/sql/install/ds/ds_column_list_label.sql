@@ -31,7 +31,8 @@ alter table ds_column_list_label add column if not exists `align` varchar(8) DEF
 alter table ds_column_list_label add column if not exists `listfiltertype` varchar(255) DEFAULT '';
 alter table ds_column_list_label add column if not exists `hint` varchar(255) DEFAULT NULL;
 alter table ds_column_list_label add column if not exists `width` int(11) DEFAULT 0;
-
+alter table ds_column_list_label add column if not exists `config` json default '{}';
+update ds_column_list_label set config = '{}' where config is null;
 
 delimiter // 
 
