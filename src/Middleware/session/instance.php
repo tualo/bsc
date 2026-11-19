@@ -7,6 +7,7 @@ TualoApplication::use('TualoApplicationSessionInit', function () {
     try {
         TualoApplication::set('session', Session::getInstance());
     } catch (\Exception $e) {
+        TualoApplication::set('message', 'Das Sytsem ist derzeit nicht erreichbar (SessionInstance)');
         TualoApplication::set('maintanceMode', 'on');
         TualoApplication::addError($e->getMessage());
     }

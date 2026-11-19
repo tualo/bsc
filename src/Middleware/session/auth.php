@@ -18,33 +18,32 @@ TualoApplication::use('TualoApplicationSession_Auth', function () {
 
         TualoApplication::logger('BSC')->debug('Testing Cookie: ' . @session_id());
 
+        $key = TualoApplication::configuration('oauth', 'key', false);
+        if ($key !== false) {
+            if ($session->getHeader('Authorization') !== false) {
 
+                TualoApplication::logger('BSC')->debug('Authorization Header found: ' . $session->getHeader('Authorization'));
+                $authToken = $session->getHeader('Authorization');
+                TualoApplication::logger('BSC')->debug('headers: ' . print_r(getallheaders(), true));
+                TualoApplication::logger('BSC')->debug('request: ' . print_r($_REQUEST, true));
 
-        if ($session->getHeader('Authorization') !== false) {
-
-            TualoApplication::logger('BSC')->debug('Authorization Header found: ' . $session->getHeader('Authorization'));
-            $authToken = $session->getHeader('Authorization');
-            TualoApplication::logger('BSC')->debug('headers: ' . print_r(getallheaders(), true));
-            TualoApplication::logger('BSC')->debug('request: ' . print_r($_REQUEST, true));
-
-            if (strpos($authToken, 'Bearer ') !== false) {
-                $authToken = str_replace('Bearer ', '', $authToken);
-            }
-
-            if (trim($authToken) === '' || $authToken === 'Bearer') {
-                // throw new \Exception("No Authorization Token");
-                TualoApplication::logger('BSC')->warning("No Authorization Token, but bearer found");
-            } else {
-                TualoApplication::logger('BSC')->debug('Authorization using: ' . $authToken);
-
-                if (($key = TualoApplication::configuration('oauth', 'key')) !== false) {
-                    $data = base64_decode($authToken);
-                    $authToken = \Tualo\Office\TualoPGP\TualoApplicationPGP::decrypt(file_get_contents($key), $data);
+                if (strpos($authToken, 'Bearer ') !== false) {
+                    $authToken = str_replace('Bearer ', '', $authToken);
                 }
 
-                $session->loginByToken($authToken);
-                header("Access-Control-Allow-Origin: " . TualoApplication::configuration('oauth', 'accessControlAllowOrigin', '*'));
-                session_commit();
+                if (trim($authToken) === '' || $authToken === 'Bearer') {
+                    // throw new \Exception("No Authorization Token");
+                    TualoApplication::logger('BSC')->warning("No Authorization Token, but bearer found");
+                } else {
+                    TualoApplication::logger('BSC')->debug('Authorization using: ' . $authToken);
+
+                    $data = base64_decode($authToken);
+                    $authToken = \Tualo\Office\TualoPGP\TualoApplicationPGP::decrypt(file_get_contents($key), $data);
+
+                    $session->loginByToken($authToken);
+                    header("Access-Control-Allow-Origin: " . TualoApplication::configuration('oauth', 'accessControlAllowOrigin', '*'));
+                    session_commit();
+                }
             }
         }
 

@@ -31,6 +31,7 @@ class Router implements IMiddleware
             try {
                 Route::run(TualoApplication::get('requestPath'));
             } catch (\Exception $e) {
+                TualoApplication::set('message', 'Das Sytsem ist derzeit nicht erreichbar (Router)');
                 TualoApplication::set('maintanceMode', 'on');
                 TualoApplication::addError($e->getMessage());
             }

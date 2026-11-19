@@ -466,6 +466,10 @@ class TualoApplication
      */
     public static function set($key, $value)
     {
+        if ($key == 'maintanceMode' && $value == 'on') {
+            $trace = debug_backtrace();
+            self::logger('TualoApplication')->warning('Maintaince mode activated', array_shift($trace));
+        }
         self::$vars[$key] = $value;
         return true;
     }

@@ -55,6 +55,10 @@ class Index extends \Tualo\Office\Basic\RouteWrapper
                     dirname(__DIR__) . '/tpl/pages/basic/index.pug'
                 );
 
+                // backtrace
+
+
+
                 if (TualoApplication::get('maintanceMode') == 'on') {
                     $pugfile =  TualoApplication::configuration(
                         'tualo-backend',

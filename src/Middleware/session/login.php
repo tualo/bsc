@@ -125,6 +125,7 @@ TualoApplication::use('TualoApplicationSession_Login', function () {
         } else {
         }
     } catch (\Exception $e) {
+        TualoApplication::set('message', 'Das Sytsem ist derzeit nicht erreichbar (SessionLogin)');
         TualoApplication::logger('BSC')->error($e->getMessage(), []);
         TualoApplication::set('maintanceMode', 'on');
         TualoApplication::addError($e->getMessage());

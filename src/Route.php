@@ -208,12 +208,37 @@ class Route
         }
     }
 
+
+    // liefert alle Sub-Scopes eines gegebenen Scopes, z.B. ["scope:sub1", "scope:sub2"] -> ["sub1", "sub2"]
+    public static function getUserSubScopes(string $scope): array
+    {
+        $parts = [];
+        $session = TualoApplication::get('session');
+        $userScopes = $session->getUserScopes();
+        foreach ($userScopes as $userScope) {
+            if (str_starts_with($userScope, $scope . ':')) {
+                $segments = explode(':', $userScope);
+                if ($segments[0] === $scope) {
+                    $parts = array_merge($parts, array_slice($segments, 1));
+                }
+            }
+        }
+        return array_values(array_unique($parts));
+    }
+
+
     public static function canAccessByScope(string $scope): bool
     {
+        // der scope string kann auch subscopes enthalten, z.B. "scope:subscope"
         $session = TualoApplication::get('session');
         if ($session->isLoggedIn()) {
             $userScopes = $session->getUserScopes();
-            return in_array($scope, $userScopes);
+            foreach ($userScopes as $userScope) {
+                if ($userScope === $scope || str_starts_with($userScope, $scope . ':')) {
+                    return true;
+                }
+            }
+            return false;
         } else {
             if ($scope === 'public') {
                 return true;

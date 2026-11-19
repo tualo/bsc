@@ -31,6 +31,7 @@ class ActiveSessionRouter implements IMiddleware
             try {
                 ActiveSessionRouter::load();
             } catch (\Exception $e) {
+                TualoApplication::set('message', 'Das Sytsem ist derzeit nicht erreichbar (ActiveSessionRouter)');
                 TualoApplication::set('maintanceMode', 'on');
                 TualoApplication::addError($e->getMessage());
             }
