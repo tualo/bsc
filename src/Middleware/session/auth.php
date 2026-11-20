@@ -22,6 +22,7 @@ TualoApplication::use('TualoApplicationSession_Auth', function () {
         if ($key !== false) {
             if ($session->getHeader('Authorization') !== false) {
 
+
                 TualoApplication::logger('BSC')->debug('Authorization Header found: ' . $session->getHeader('Authorization'));
                 $authToken = $session->getHeader('Authorization');
                 TualoApplication::logger('BSC')->debug('headers: ' . print_r(getallheaders(), true));

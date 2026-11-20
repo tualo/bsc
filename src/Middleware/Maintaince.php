@@ -4,6 +4,7 @@ namespace Tualo\Office\Basic\Middleware;
 
 use Tualo\Office\Basic\TualoApplication;
 use Tualo\Office\Basic\IMiddleware;
+use Pug\Pug;
 
 class Maintaince implements IMiddleware
 {
