@@ -35,9 +35,12 @@ class Version
         $result = Version::rsearch(TualoApplication::get('basePath') . '/vendor/', '/.*/');
         $result = array_merge(Version::rsearch(TualoApplication::get('basePath') . '/configuration/', '/.*/'), $result);
         $md5s = [];
+        /*
+        // timeout on docker
         foreach ($result as $key => $value) {
             if (is_file($value)) $md5s[] = md5_file($value);
         }
+            */
         file_put_contents(TualoApplication::get('basePath') . '/.ht_version', md5(implode('', $md5s)));
         return md5(implode('', $md5s));
     }
